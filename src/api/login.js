@@ -8,7 +8,8 @@ export function loginByUsername(username, password) {
   return request({
     url: '/user/login',
     method: 'post',
-    data: Object.entries(data).map(el => el.join('=')).join('&'),
+    params: data
+    // data: Object.entries(data).map(el => el.join('=')).join('&'),
     // data 原来只是data=》data转成按元素传值
   })
 }
@@ -20,11 +21,10 @@ export function logout() {
   })
 }
 
-export function getUserInfo(token) {
+export function getUserInfo() {
   return request({
     url: '/user/info',
     method: 'get',
-    params: { token }
   })
 }
 
