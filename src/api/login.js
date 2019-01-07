@@ -6,9 +6,10 @@ export function loginByUsername(username, password) {
     password
   }
   return request({
-    url: '/login/login',
+    url: '/user/login',
     method: 'post',
-    data
+    data: Object.entries(data).map(el => el.join('=')).join('&'),
+    // data 原来只是data=》data转成按元素传值
   })
 }
 
