@@ -1,13 +1,123 @@
 <template>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-input placeholder="Key" v-model="listQuery.key" style="width: 200px;" class="filter-item"
+                @keyup.enter.native="handleFilter"/>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
+        $t('table.search') }}
+      </el-button>
+    </div>
 
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;">
+      <el-table-column :label="$t('table.id')" prop="id" align="center" width="65">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="GmtCreated" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gmtCreated | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="GmtModified" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gmtModified | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <el-tag type="danger" v-if="scope.row.alertExpired">即将到期</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="DomainName" min-width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.domainName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Description" min-width="150px">
+        <template slot-scope="scope">
+          <p>{{ scope.row.description }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column label="CdnType" min-width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cdnType }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
+                @pagination="getList"/>
+
+    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
+      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
+        <el-table-column prop="key" label="Channel"/>
+        <el-table-column prop="pv" label="Pv"/>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
+      </span>
+    </el-dialog>
+
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "list"
+  import { fetchCdnList } from '@/api/ali'
+  import waves from '@/directive/waves' // Waves directive
+  import { parseTime } from '@/utils'
+  import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+
+  const statusOptionsChoice = [
+    { key: 'Running', display_name: 'Running' },
+    { key: 'Stopped', display_name: 'Stopped' }
+  ]
+
+  export default {
+    name: 'ComplexTable',
+    components: { Pagination },
+    directives: { waves },
+    data() {
+      return {
+        list: null,
+        total: 0,
+        listLoading: true,
+        listQuery: {
+          page: 1,
+          limit: 20,
+          key: undefined,
+          status: undefined,
+          ifExpired: undefined,
+        },
+        statusOptionsChoice,
+        showReviewer: false,
+        dialogPvVisible: false,
+        pvData: [],
+        downloadLoading: false
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      getList() {
+        this.listLoading = true
+        fetchCdnList(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.total = response.data.total
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      },
+      // 搜索
+      handleFilter() {
+        this.listQuery.page = 1
+        this.getList()
+      },
     }
+  }
 </script>
-
-<style scoped>
-
-</style>

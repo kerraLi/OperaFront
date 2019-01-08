@@ -39,3 +39,11 @@ export function fetchEcsList(data) {
     params: data
   })
 }
+
+export function fetchCdnList(data) {
+  return request({
+    url: '/ali/cdn/domain/list',
+    method: 'post',
+    params: data
+  })
+}
