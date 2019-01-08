@@ -1,18 +1,10 @@
 import request from '@/utils/request'
 
 // 数据量少&去掉分页参数
-export function fetchList() {
+export function fetchAccountList() {
   return request({
     url: '/ali/account/list',
     method: 'get'
-  })
-}
-
-export function fetchArticle(id) {
-  return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
   })
 }
 
@@ -38,4 +30,12 @@ export function deleteAliAccount(id) {
     method: 'post'
   })
 
+}
+
+export function fetchEcsList(data) {
+  return request({
+    url: '/ali/ecs/list',
+    method: 'post',
+    params: data
+  })
 }

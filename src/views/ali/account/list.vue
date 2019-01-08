@@ -19,24 +19,24 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('UserName')" min-width="80px">
+      <el-table-column label="UserName" min-width="80px">
         <template slot-scope="scope">
           <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('AccessKeyId')" min-width="100px">
+      <el-table-column label="AccessKeyId" min-width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.accessKeyId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('AccessKeySecret')" min-width="100px">
+      <el-table-column label="AccessKeySecret" min-width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.accessKeySecret }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('Money')" class-name="status-col" min-width="50">
+      <el-table-column label="Money" class-name="status-col" min-width="50">
         <template slot-scope="scope">
-          <span>{{ scope.row.balanceData || '0.00' }}</span>
+          <span>{{ scope.row.balanceData ? scope.row.balanceData.availableAmount : '-' }}</span>
           <el-tag type="danger" v-if="scope.row.alertBalance">余额不足</el-tag>
         </template>
       </el-table-column>
@@ -58,19 +58,20 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px"
                style="width: 800px; margin-left:50px;">
-        <el-form-item :label="$t('UserName')" prop="userName">
+        <el-form-item label="UserName" prop="userName">
           <el-input v-model="temp.userName"/>
         </el-form-item>
-        <el-form-item :label="$t('AccessKeyId')" prop="accessKeyId">
+        <el-form-item label="AccessKeyId" prop="accessKeyId">
           <el-input v-model="temp.accessKeyId"/>
         </el-form-item>
-        <el-form-item :label="$t('AccessKeySecret')" prop="accessKeySecret">
+        <el-form-item label="AccessKeySecret" prop="accessKeySecret">
           <el-input v-model="temp.accessKeySecret"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}
+        <el-button :loading="loading" type="primary" @click="dialogStatus==='create'?createData():updateData()">{{
+          $t('table.confirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -79,7 +80,7 @@
 </template>
 
 <script>
-  import { fetchList, createAliAccount, updateAliAccount, deleteAliAccount } from '@/api/ali'
+  import { fetchAccountList, createAliAccount, updateAliAccount, deleteAliAccount } from '@/api/ali'
   import waves from '@/directive/waves' // Waves directive
 
   const calendarTypeOptions = [
@@ -120,13 +121,16 @@
         calendarTypeOptions,
         statusOptions: ['normal', 'invalid'],
         showReviewer: false,
+        loading: false,
         // 新增&编辑 对象
         temp: {
           id: undefined,
           userName: '',
           accessKeyId: '',
           accessKeySecret: '',
-          balanceData: 0.00,
+          balanceData: {
+            availableAmount: 0.00
+          },
           alertBalance: false,
           status: 'normal',
         },
@@ -151,7 +155,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchList().then(response => {
+        fetchAccountList().then(response => {
           this.list = response.data
           this.total = response.data.length
 
@@ -186,8 +190,11 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.loading = true
             createAliAccount(this.temp).then(() => {
-              this.list.unshift(this.temp)
+              //this.list.unshift(this.temp)
+              this.loading = false
+              this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
@@ -195,6 +202,8 @@
                 type: 'success',
                 duration: 2000
               })
+            }).catch(() => {
+              this.loading = false
             })
           }
         })
@@ -212,8 +221,10 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.loading = true
             const tempData = Object.assign({}, this.temp)
             updateAliAccount(tempData).then(() => {
+              this.loading = false
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
@@ -228,13 +239,14 @@
                 type: 'success',
                 duration: 2000
               })
+            }).catch(() => {
+              this.loading = false
             })
           }
         })
       },
       // 删除账号
       handleDelete(row) {
-        console.log(row)
         deleteAliAccount(row.id).then(() => {
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
