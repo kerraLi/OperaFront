@@ -165,7 +165,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'account/list',
-        component: () => import('@/views/ali/account/list'),
+        component: () => import('@/views/go/account/list'),
         name: 'GoAccountList',
         meta: {
           title: '账号列表',

@@ -8,8 +8,8 @@
         <el-option v-for="item in statusOptionsChoice" :key="item.key" :label="item.display_name"
                    :value="item.key"/>
       </el-select>
-      <el-checkbox v-model="listQuery.ifExpired" class="filter-item" style="margin-left:15px;margin-right: 15px;"
-                   @change="tableKey=tableKey+1">即将过期
+      <el-checkbox v-model="listQuery.ifExpired" class="filter-item" style="margin-left:15px;margin-right: 15px;">
+        即将过期
       </el-checkbox>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
         $t('table.search') }}
