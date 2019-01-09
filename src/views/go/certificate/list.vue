@@ -29,31 +29,55 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="CreatedAt" width="300px" align="center">
+      <el-table-column label="CertificateId" prop="id" align="center" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.createdAt | timeFilters }}</span>
+          <span>{{ scope.row.certificateId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Expires" width="300px" align="center">
+      <el-table-column label="CommonName" prop="id" align="center" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.expires | timeFilters }}</span>
+          <span>{{ scope.row.commonName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Locale" prop="id" align="center" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.locale }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ProductGuid" prop="id" align="center" width="300px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.productGuid }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ProductType" prop="id" align="center" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.productType }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="SerialNumber" prop="id" align="center" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.serialNumber }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="CreatedAt" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createdAt | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ValidStart" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.validStart | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ValidEnd" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.validEnd | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
           <el-tag type="danger" v-if="scope.row.alertExpired">即将到期</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="renewDeadline" width="300px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.renewDeadline | timeFilters }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Domain" class-name="status-col" min-width="300">
-        <template slot-scope="scope">
-          <p>{{ scope.row.domain }}</p>
-          <p>{{ scope.row.domainId }}</p>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <el-tag :type="scope.row.certificateStatus | statusFilter">{{ scope.row.certificateStatus }}</el-tag>
         </template>
       </el-table-column>
     </el-table>

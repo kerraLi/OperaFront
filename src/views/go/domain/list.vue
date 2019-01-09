@@ -31,18 +31,18 @@
       </el-table-column>
       <el-table-column label="CreatedAt" width="300px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createdAt | timeFilters }}</span>
+          <span>{{ scope.row.createdAt | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Expires" width="300px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.expires | timeFilters }}</span>
+          <span>{{ scope.row.expires | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
           <el-tag type="danger" v-if="scope.row.alertExpired">即将到期</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="renewDeadline" width="300px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.renewDeadline | timeFilters }}</span>
+          <span>{{ scope.row.renewDeadline | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Domain" class-name="status-col" min-width="300">
