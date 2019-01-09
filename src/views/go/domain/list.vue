@@ -51,7 +51,7 @@
           <p>{{ scope.row.domainId }}</p>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
+      <el-table-column :label="$t('table.status')" width="100px">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>

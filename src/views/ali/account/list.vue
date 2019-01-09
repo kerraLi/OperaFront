@@ -191,7 +191,13 @@
       },
       // 编辑窗口
       handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
+        this.temp = {
+          id: row.id,
+          userName: row.userName,
+          accessKeyId: row.accessKeyId,
+          accessKeySecret: row.accessKeySecret
+        };
+        // copy obj
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -206,13 +212,7 @@
             const tempData = Object.assign({}, this.temp)
             updateAliAccount(tempData).then(() => {
               this.loading = false
-              for (const v of this.list) {
-                if (v.id === this.temp.id) {
-                  const index = this.list.indexOf(v)
-                  this.list.splice(index, 1, this.temp)
-                  break
-                }
-              }
+              this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
