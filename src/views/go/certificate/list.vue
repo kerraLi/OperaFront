@@ -50,12 +50,12 @@
           <span>{{ scope.row.commonName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Locale" prop="id" align="center" width="150px">
+      <el-table-column label="Locale" prop="id" align="center" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.locale }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="ProductGuid" prop="id" align="center" width="300px">
+      <el-table-column label="ProductGuid" prop="id" align="center" width="200px">
         <template slot-scope="scope">
           <span>{{ scope.row.productGuid }}</span>
         </template>
