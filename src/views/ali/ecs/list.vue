@@ -11,9 +11,13 @@
       <el-checkbox v-model="listQuery.ifExpired" class="filter-item" style="margin-left:15px;margin-right: 15px;">
         即将过期
       </el-checkbox>
+      <el-checkbox v-model="listQuery.ifMarked" class="filter-item" style="margin-left:15px;margin-right: 15px;">
+        标记弃用
+      </el-checkbox>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
         $t('table.search') }}
       </el-button>
+      <span style="margin-left: 8px;font-size: 0.7rem;color: gray;">注：默认不显示被弃用数据 & 弃用数据不会报警</span>
     </div>
 
     <el-table
@@ -26,6 +30,11 @@
       <el-table-column :label="$t('table.id')" prop="id" align="center" width="65">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="AccessKeyId" min-width="100px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.accessKeyId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="CreatedTime" width="150px" align="center">
@@ -48,6 +57,7 @@
         <template slot-scope="scope">
           <p>{{ scope.row.instanceId }}</p>
           <p>{{ scope.row.instanceName }}</p>
+          <el-tag type="danger" v-if="scope.row.alertMarked">弃用数据</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="PublicIps" min-width="150px">
@@ -64,6 +74,16 @@
       <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" width="100" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button v-if="!scope.row.alertMarked" size="mini" type="danger"
+                     @click="handleModifyMarked(scope.row,true)">弃用
+          </el-button>
+          <el-button v-if="scope.row.alertMarked" size="mini" type="success" style="width: 66px"
+                     @click="handleModifyMarked(scope.row,false)">取消弃用
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,6 +106,7 @@
 
 <script>
   import { fetchEcsList } from '@/api/ali'
+  import { mark, unmark } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -119,6 +140,7 @@
           key: undefined,
           status: undefined,
           ifExpired: undefined,
+          ifMarked: undefined
         },
         statusOptionsChoice,
         showReviewer: false,
@@ -136,11 +158,28 @@
         fetchEcsList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
-          // Just to simulate the time of the request
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1.5 * 1000)
+          this.listLoading = false
         })
+      },
+      // 标记弃用
+      handleModifyMarked(row, ifMarked) {
+        if (ifMarked) {
+          mark('ali', 'ecs', row.id).then(response => {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            row.alertMarked = ifMarked
+          })
+        } else {
+          unmark('ali', 'ecs', row.id).then(response => {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
+            row.alertMarked = ifMarked
+          })
+        }
       },
       // 搜索
       handleFilter() {
