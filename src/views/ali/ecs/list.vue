@@ -27,11 +27,12 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column :label="$t('table.id')" prop="id" align="center" width="65">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column :label="$t('table.id')" prop="id" align="center" width="65" type="index"/>
+      <!--<el-table-column :label="$t('table.id')" prop="id" align="center" width="65">-->
+      <!--<template slot-scope="scope">-->
+      <!--<span>{{ scope.row.id }}</span>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="AccessKeyId" min-width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.accessKeyId }}</span>
