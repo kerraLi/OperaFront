@@ -33,9 +33,14 @@
       <!--<span>{{ scope.row.id }}</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column label="AccessKeyId" min-width="100px">
+      <!--<el-table-column label="AccessKeyId" min-width="100px">-->
+      <!--<template slot-scope="scope">-->
+      <!--<span>{{ scope.row.accessKeyId }}</span>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column label="UserName" min-width="60px">
         <template slot-scope="scope">
-          <span>{{ scope.row.accessKeyId }}</span>
+          <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="CreatedTime" width="150px" align="center">
