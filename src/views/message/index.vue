@@ -17,8 +17,14 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      :expand-row-keys="expands"
+      row-key="id"
       style="width: 100%"
     >
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -177,12 +183,23 @@
         showReviewer: false,
         dialogPvVisible: false,
         pvData: [],
-        downloadLoading: false
+        downloadLoading: false,
+        expands: []
       }
     },
     created() {
-      console.log('new')
-      this.getList()
+      // 单独调用方法 设置then
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+        const openId = this.$route.params.openId;
+        if (openId !== undefined) {
+          // list
+          this.expands.push(openId)
+        }
+      })
     },
     methods: {
       getList() {

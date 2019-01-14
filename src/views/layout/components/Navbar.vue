@@ -34,6 +34,11 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
+          <router-link to="/message">
+            <el-dropdown-item>
+              {{ $t('navbar.message') }}
+            </el-dropdown-item>
+          </router-link>
           <!--<a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">-->
           <!--<el-dropdown-item>-->
           <!--{{ $t('navbar.github') }}-->

@@ -24,6 +24,11 @@
       TagsView
     },
     mixins: [ResizeMixin],
+    data() {
+      return {
+        dialogArr: []
+      }
+    },
     computed: {
       // 调用getters中存滴参数
       ...mapGetters([
@@ -45,12 +50,24 @@
       }
     },
     created() {
-      console.log("test web")
       this.initWebSocket(this.id)
     },
     methods: {
       handleClickOutside() {
         this.$store.dispatch('closeSideBar', { withoutAnimation: false })
+      },
+      redirectMessage(id) {
+        for (var i = 0; i < this.dialogArr.length; i++) {
+          this.dialogArr[i].close();
+        }
+        // params 注意大小写正确
+        this.$router.push({
+          path: '/message',
+          name: 'Message',
+          params: {
+            openId: id,
+          }
+        })
       },
       /**
        * websocket
@@ -65,22 +82,28 @@
         this.websock.onclose = this.websocketClose;
       },
       websocketOnopen() { //连接建立之后执行send方法发送数据
-        let actions = { "test": "12345" };
-        this.websocketSend(JSON.stringify(actions));
+        // let actions = { "test": "12345" };
+        // this.websocketSend(JSON.stringify(actions));
       },
       websocketOnerror() {//连接建立失败重连
         this.initWebSocket();
       },
       websocketOnmessage(e) { //数据接收
         const data = JSON.parse(e.data);
-        this.$notify({
+        const h = this.$createElement;
+        this.dialogArr.push(this.$notify({
           title: data.title,
-          message: data.title,
           position: 'bottom-right',
           duration: 0,
           // 点击事件
-          onClick: ''
-        });
+          message: h('div', [
+            h('a', {
+              on: {
+                click: this.redirectMessage.bind(this, data.id)
+              }
+            }, data.message)
+          ]),
+        }));
       },
       websocketSend(Data) {//数据发送
         this.websock.send(Data);

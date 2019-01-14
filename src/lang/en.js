@@ -67,6 +67,7 @@ export default {
   navbar: {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
+    message: 'Message',
     github: 'Github',
     screenfull: 'Screenfull',
     theme: 'Theme',
