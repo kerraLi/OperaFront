@@ -23,6 +23,9 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
+    SET_ID: (state, id) => {
+      state.id = id
+    },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction
     },
@@ -74,6 +77,7 @@ const user = {
             reject('getInfo: roles must be a non-null array !')
           }
 
+          commit('SET_ID', data.id)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
@@ -128,6 +132,7 @@ const user = {
         setToken(role)
         getUserInfo(role).then(response => {
           const data = response.data
+          commit('SET_ID', data.id)
           commit('SET_ROLES', data.roles)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)

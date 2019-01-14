@@ -76,6 +76,19 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/message',
+    component: Layout,
+    redirect: 'message',
+    children: [
+      {
+        path: 'message',
+        component: () => import('@/views/message/index'),
+        name: 'Message',
+        meta: { title: 'Message', icon: 'message', noCache: true }
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,
