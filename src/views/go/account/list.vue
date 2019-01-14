@@ -29,9 +29,10 @@
           <span>{{ scope.row.accessKeyId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="AccessKeySecret" min-width="100px">
+      <el-table-column label="AccessKeySecret" min-width="100px" :render-header="secretHeaderRender">
         <template slot-scope="scope">
-          <span>{{ scope.row.accessKeySecret }}</span>
+          <span v-if="seeSecret">{{ scope.row.accessKeySecret }}</span>
+          <span v-if="!seeSecret">************************</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
@@ -59,7 +60,9 @@
           <el-input v-model="temp.accessKeyId"/>
         </el-form-item>
         <el-form-item label="AccessKeySecret" prop="accessKeySecret">
-          <el-input v-model="temp.accessKeySecret"/>
+          <el-input :type="passwordType" v-model="temp.accessKeySecret">
+            <i slot="suffix" class="el-icon-view" @click="openSeeSecret" style="margin-right:10px;cursor:pointer;"></i>
+          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -97,6 +100,8 @@
         listLoading: true,
         showReviewer: false,
         loading: false,
+        seeSecret: false,
+        passwordType: 'password',
         // 新增&编辑 对象
         temp: {
           id: undefined,
@@ -128,6 +133,26 @@
       this.getList()
     },
     methods: {
+      secretHeaderRender(h, { column }) {
+        return (
+          h('span', [
+            h('span', column.label),
+            h('i', {
+              class: 'el-icon-view',
+              style: 'margin-left:20px;cursor:pointer;',
+              on: {
+                click: () => {
+                  this.openSeeSecret()
+                }
+              }
+            })
+          ])
+        )
+      },
+      openSeeSecret() {
+        this.seeSecret = !(this.seeSecret);
+        this.passwordType = this.passwordType === 'password' ? '' : 'password';
+      },
       getList() {
         this.listLoading = true
         fetchAccountList().then(response => {
