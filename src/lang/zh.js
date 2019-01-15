@@ -128,7 +128,9 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    allFinish: '批量完成',
+    allDeprecated: '批量弃用'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

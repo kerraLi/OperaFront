@@ -11,6 +11,9 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
         $t('table.search') }}
       </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-check" @click="modifyAllStatus('finish')">{{
+        $t('table.allFinish') }}
+      </el-button>
     </div>
 
 
@@ -20,13 +23,16 @@
       :expand-row-keys="expands"
       row-key="id"
       style="width: 100%"
+      @selection-change="handleChecked"
     >
       <el-table-column
         type="selection"
-        width="55">
+        width="55"
+      >
       </el-table-column>
       <el-table-column type="expand">
         <template slot-scope="props">
+          <div style="line-height: 30px;font-size: initial;" v-html="props.row.message"></div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="消息ID">
               <span>{{ props.row.id }}</span>
@@ -46,17 +52,12 @@
             <el-form-item label="主体数据">
               <span>{{ props.row.themeId }}</span>
             </el-form-item>
-            <el-form-item label="消息内容" style="width: 100%">
-              <span>{{ props.row.message }}</span>
-            </el-form-item>
-            <el-form-item v-if="props.row.status !=='finish'" label="操作" style="width: 100%">
-              <el-button v-if="props.row.status ==='new'" size="mini" type="primary"
-                         @click="modifyStatus(scope.row,'active')">开始
-              </el-button>
-              <el-button v-if="props.row.status !=='finish'" size="mini" type="success"
-                         @click="modifyStatus(scope.row,'finish')">完成
-              </el-button>
-            </el-form-item>
+            <el-button v-if="props.row.status ==='new'" size="mini" type="primary"
+                       @click="modifyStatus(scope.row,'active')">开始
+            </el-button>
+            <el-button v-if="props.row.status !=='finish'" size="mini" type="success"
+                       @click="modifyStatus(scope.row,'finish')">完成
+            </el-button>
           </el-form>
         </template>
       </el-table-column>
@@ -95,7 +96,8 @@
         prop="message"
       >
         <template slot-scope="scope">
-          <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ scope.row.message }}</span>
+          <span
+            style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ scope.row.message | filterHtml }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -136,7 +138,7 @@
 </template>
 
 <script>
-  import { fetchList, modifyStatus } from '@/api/message'
+  import { fetchList, modifyStatus, modifyAllStatus } from '@/api/message'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -164,8 +166,12 @@
         const typeMap = {
           '续费': 'default',
           '过期': 'success',
+          '报警': 'danger'
         };
         return typeMap[type]
+      },
+      filterHtml(message) {
+        return message.replace(/<[^>]+>/g, "")
       }
     },
     data() {
@@ -184,12 +190,16 @@
         dialogPvVisible: false,
         pvData: [],
         downloadLoading: false,
-        expands: []
+        expands: [],
+        checkList: []
       }
     },
     created() {
       // 单独调用方法 设置then
       this.listLoading = true
+      if (this.$route.params.themeId !== undefined) {
+        this.listQuery.key = this.$route.params.themeId
+      }
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -210,6 +220,10 @@
           this.listLoading = false
         })
       },
+      // 切换标记
+      handleChecked(val) {
+        this.checkList = val;
+      },
       // 标记使用
       modifyStatus(row, status) {
         modifyStatus(status, row.id).then(response => {
@@ -218,6 +232,18 @@
             type: 'success'
           })
           row.status = status
+        })
+      },
+      // 批量标记完成
+      modifyAllStatus(status) {
+        modifyAllStatus(this.checkList.map((c) => {
+          return c.id;
+        }), status).then(response => {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          this.getList()
         })
       },
       // 搜索

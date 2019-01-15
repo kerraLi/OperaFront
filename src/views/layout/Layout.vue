@@ -56,7 +56,7 @@
       handleClickOutside() {
         this.$store.dispatch('closeSideBar', { withoutAnimation: false })
       },
-      redirectMessage(id) {
+      redirectMessage(id, themeId) {
         for (var i = 0; i < this.dialogArr.length; i++) {
           this.dialogArr[i].close();
         }
@@ -66,6 +66,7 @@
           name: 'Message',
           params: {
             openId: id,
+            themeId: themeId
           }
         })
       },
@@ -82,8 +83,8 @@
         this.websock.onclose = this.websocketClose;
       },
       websocketOnopen() { //连接建立之后执行send方法发送数据
-        // let actions = { "test": "12345" };
-        // this.websocketSend(JSON.stringify(actions));
+        let actions = { "test": "12345" };
+        this.websocketSend(JSON.stringify(actions));
       },
       websocketOnerror() {//连接建立失败重连
         this.initWebSocket();
@@ -91,6 +92,8 @@
       websocketOnmessage(e) { //数据接收
         const data = JSON.parse(e.data);
         const h = this.$createElement;
+        // 去除html标签
+        const message = data.message.replace(/<[^>]+>/g, "");
         this.dialogArr.push(this.$notify({
           title: data.title,
           position: 'bottom-right',
@@ -98,10 +101,21 @@
           // 点击事件
           message: h('div', [
             h('a', {
+              style: {
+                float: 'left',
+              },
               on: {
-                click: this.redirectMessage.bind(this, data.id)
+                click: this.redirectMessage.bind(this, data.id, data.themeId)
               }
-            }, data.message)
+            }, message),
+            h('img', {
+              style: {
+                width: '100%',
+              },
+              attrs: {
+                src: data.imageUrl
+              }
+            })
           ]),
         }));
       },

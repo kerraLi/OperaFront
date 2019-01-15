@@ -14,3 +14,14 @@ export function modifyStatus(status, id) {
     method: 'post'
   })
 }
+
+
+export function modifyAllStatus(ids, status) {
+  let data = new URLSearchParams();
+  data.append("ids", ids);
+  return request({
+    url: '/message/status/' + status,
+    method: 'post',
+    data
+  })
+}
