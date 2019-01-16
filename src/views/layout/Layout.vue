@@ -92,6 +92,8 @@
         this.initWebSocket();
       },
       websocketOnmessage(e) { //数据接收
+        const messageMusic = new Audio("../../static/audio/message.mp3");
+        messageMusic.play();
         const data = JSON.parse(e.data);
         const h = this.$createElement;
         // 去除html标签
