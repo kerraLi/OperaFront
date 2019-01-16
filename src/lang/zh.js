@@ -130,7 +130,8 @@ export default {
     cancel: '取 消',
     confirm: '确 定',
     allFinish: '批量完成',
-    allDeprecated: '批量弃用'
+    allDeprecated: '批量弃用',
+    allNoDeprecated: '取消弃用'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

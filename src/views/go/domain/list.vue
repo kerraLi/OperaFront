@@ -14,8 +14,15 @@
       <el-checkbox v-model="listQuery.ifMarked" class="filter-item" style="margin-left:15px;margin-right: 15px;">
         标记弃用
       </el-checkbox>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
-        $t('table.search') }}
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        {{ $t('table.search') }}
+      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-check" @click="handleModifyMarkedAll(true)">
+        {{ $t('table.allDeprecated') }}
+      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-close"
+                 @click="handleModifyMarkedAll(false)">
+        {{ $t('table.allNoDeprecated') }}
       </el-button>
       <span style="margin-left: 8px;font-size: 0.7rem;color: gray;">注：默认不显示被弃用数据 & 弃用数据不会报警</span>
     </div>
@@ -27,7 +34,14 @@
       border
       fit
       highlight-current-row
+      row-key="id"
+      @selection-change="handleChecked"
       style="width: 100%;">
+      <el-table-column
+        type="selection"
+        width="40"
+      >
+      </el-table-column>
       <el-table-column :label="$t('table.id')" prop="id" align="center" width="65" type="index"/>
       <!--<el-table-column :label="$t('table.id')" prop="id" align="center" width="65">-->
       <!--<template slot-scope="scope">-->
@@ -102,7 +116,7 @@
 
 <script>
   import { fetchDomainList } from '@/api/go'
-  import { mark, unmark } from '@/api/common'
+  import { mark, unmark, markAll, unmarkAll } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -154,13 +168,19 @@
         showReviewer: false,
         dialogPvVisible: false,
         pvData: [],
-        downloadLoading: false
+        downloadLoading: false,
+        checkList: []
       }
     },
     created() {
       this.getList()
     },
     methods: {
+      // 切换标记
+      handleChecked(val) {
+        this.checkList = val;
+      },
+      // 列表数据
       getList() {
         this.listLoading = true
         fetchDomainList(this.listQuery).then(response => {
@@ -172,7 +192,7 @@
       // 标记弃用
       handleModifyMarked(row, ifMarked) {
         if (ifMarked) {
-          mark('go', 'certificate', row.id).then(response => {
+          mark('go', 'domain', row.id).then(response => {
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -180,12 +200,35 @@
             row.alertMarked = ifMarked
           })
         } else {
-          unmark('go', 'certificate', row.id).then(response => {
+          unmark('go', 'domain', row.id).then(response => {
             this.$message({
               message: '操作成功',
               type: 'success'
             })
             row.alertMarked = ifMarked
+          })
+        }
+      },
+      // 批量标记
+      handleModifyMarkedAll(ifMarked) {
+        const ids = this.checkList.map((c) => {
+          return c.id;
+        });
+        if (ifMarked) {
+          markAll('go', 'domain', ids).then(response => {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+            this.getList()
+          })
+        } else {
+          unmarkAll('go', 'domain', ids).then(response => {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+            this.getList()
           })
         }
       },

@@ -159,7 +159,6 @@
           this.list = response.data
           this.total = response.data.length
 
-          console.log(this.list)
           // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false

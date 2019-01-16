@@ -130,7 +130,8 @@ export default {
     cancel: 'Cancel',
     confirm: 'Confirm',
     allFinish: 'AllFinish',
-    allDeprecated: 'AllDeprecated'
+    allDeprecated: 'AllDeprecated',
+    allNoDeprecated: 'AllNoDeprecated'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
