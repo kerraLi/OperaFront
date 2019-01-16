@@ -61,13 +61,15 @@
           this.dialogArr[i].close();
         }
         // params 注意大小写正确
-        this.$router.push({
-          path: '/message',
-          name: 'Message',
-          params: {
-            openId: id,
-            themeId: themeId
-          }
+        this.$nextTick(() => {
+          this.$router.push({
+            path: '/redirect/message',
+            name: 'Message',
+            params: {
+              openId: id,
+              themeId: themeId
+            }
+          })
         })
       },
       /**

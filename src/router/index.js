@@ -79,10 +79,10 @@ export const constantRouterMap = [
   {
     path: '/message',
     component: Layout,
-    redirect: 'message',
+    redirect: '/message/index',
     children: [
       {
-        path: '',
+        path: 'index',
         component: () => import('@/views/message/index'),
         name: 'Message',
         meta: { title: 'Message', icon: 'message', noCache: true }
