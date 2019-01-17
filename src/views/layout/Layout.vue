@@ -89,7 +89,8 @@
         this.websocketSend(JSON.stringify(actions));
       },
       websocketOnerror() {//连接建立失败重连
-        this.initWebSocket();
+        console.log("webSocket连接关闭");
+        //this.initWebSocket();
       },
       websocketOnmessage(e) { //数据接收
         const messageMusic = new Audio("../../static/audio/message.mp3");

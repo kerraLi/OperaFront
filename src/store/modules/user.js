@@ -7,7 +7,8 @@ const user = {
     status: '',
     code: '',
     token: getToken(),
-    name: '',
+    username: '',
+    nickname: '',
     avatar: '',
     introduction: '',
     roles: [],
@@ -37,6 +38,9 @@ const user = {
     },
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    SET_NICKNAME: (state, name) => {
+      state.nickname = name
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -78,7 +82,8 @@ const user = {
           }
 
           commit('SET_ID', data.id)
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.username)
+          commit('SET_NICKNAME', data.nickname)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
           resolve(response)
@@ -134,7 +139,8 @@ const user = {
           const data = response.data
           commit('SET_ID', data.id)
           commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.username)
+          commit('SET_NICKNAME', data.nickname)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
           dispatch('GenerateRoutes', data) // 动态修改权限后 重绘侧边菜单
