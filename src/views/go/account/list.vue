@@ -44,7 +44,9 @@
       <el-table-column :label="$t('table.actions')" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
+          <el-button size="mini" type="danger"
+                     :loading="btnLoading === 'delete-'+ scope.row.id"
+                     @click="handleDelete(scope.row)">{{ $t('table.delete') }}
           </el-button>
         </template>
       </el-table-column>
@@ -101,6 +103,7 @@
         listLoading: true,
         showReviewer: false,
         loading: false,
+        btnLoading: '',
         seeSecret: false,
         passwordType: 'password',
         // 新增&编辑 对象
@@ -161,9 +164,7 @@
           this.total = response.data.length
 
           // Just to simulate the time of the request
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1.5 * 1000)
+          this.listLoading = false
         })
       },
       handleFilter() {
@@ -242,15 +243,17 @@
       },
       // 删除账号
       handleDelete(row) {
+        this.btnLoading = 'delete-' + row.id;
         deleteAccount(row.id).then(() => {
-          const index = this.list.indexOf(row)
-          this.list.splice(index, 1)
+          const index = this.list.indexOf(row);
+          this.list.splice(index, 1);
           this.$notify({
             title: '成功',
             message: '删除成功',
             type: 'success',
             duration: 2000
           })
+          this.btnLoading = ''
         })
       },
     }

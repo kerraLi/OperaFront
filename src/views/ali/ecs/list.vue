@@ -14,14 +14,18 @@
       <el-checkbox v-model="listQuery.ifMarked" class="filter-item" style="margin-left:15px;margin-right: 15px;">
         标记弃用
       </el-checkbox>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search"
+                 :loading="btnLoading === 'search'"
+                 @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
       <el-button v-waves v-loading="" class="filter-item" type="primary" icon="el-icon-check"
+                 :loading="btnLoading === 'allDeprecated'"
                  @click="handleModifyMarkedAll(true)">
         {{ $t('table.allDeprecated') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-close"
+                 :loading="btnLoading === 'allNoDeprecated'"
                  @click="handleModifyMarkedAll(false)">
         {{ $t('table.allNoDeprecated') }}
       </el-button>
@@ -100,9 +104,11 @@
       <el-table-column :label="$t('table.actions')" align="center" width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-if="!scope.row.alertMarked" size="mini" type="danger"
+                     :loading="btnLoading === 'deprecated-'+ scope.row.id"
                      @click="handleModifyMarked(scope.row,true)">弃用
           </el-button>
           <el-button v-if="scope.row.alertMarked" size="mini" type="success" style="width: 66px"
+                     :loading="btnLoading === 'noDeprecated-'+ scope.row.id"
                      @click="handleModifyMarked(scope.row,false)">取消弃用
           </el-button>
         </template>
@@ -155,6 +161,7 @@
         list: null,
         total: 0,
         listLoading: true,
+        btnLoading: '',
         listQuery: {
           page: 1,
           limit: 20,
@@ -186,25 +193,34 @@
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
+          this.btnLoading = '';
         })
       },
       // 标记弃用
       handleModifyMarked(row, ifMarked) {
         if (ifMarked) {
+          this.btnLoading = 'deprecated-' + row.id;
           mark('ali', 'ecs', row.id).then(response => {
             this.$message({
               message: '操作成功',
               type: 'success'
             })
-            row.alertMarked = ifMarked
+            row.alertMarked = ifMarked;
+            setTimeout(() => {
+              this.btnLoading = '';
+            }, 1000);
           })
         } else {
+          this.btnLoading = 'noDeprecated-' + row.id;
           unmark('ali', 'ecs', row.id).then(response => {
             this.$message({
               message: '操作成功',
               type: 'success'
             })
-            row.alertMarked = ifMarked
+            row.alertMarked = ifMarked;
+            setTimeout(() => {
+              this.btnLoading = '';
+            }, 1000);
           })
         }
       },
@@ -215,6 +231,7 @@
           return c.id;
         });
         if (ifMarked) {
+          this.btnLoading = 'allDeprecated';
           markAll('ali', 'ecs', ids).then(response => {
             this.$message({
               message: '操作成功',
@@ -223,6 +240,7 @@
             this.getList()
           })
         } else {
+          this.btnLoading = 'allNoDeprecated';
           unmarkAll('ali', 'ecs', ids).then(response => {
             this.$message({
               message: '操作成功',
@@ -234,7 +252,8 @@
       },
       // 搜索
       handleFilter() {
-        this.listQuery.page = 1
+        this.btnLoading = 'search';
+        this.listQuery.page = 1;
         this.getList()
       },
     }
