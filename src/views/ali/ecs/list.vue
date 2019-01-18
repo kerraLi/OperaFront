@@ -17,7 +17,8 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-check" @click="handleModifyMarkedAll(true)">
+      <el-button v-waves v-loading="" class="filter-item" type="primary" icon="el-icon-check"
+                 @click="handleModifyMarkedAll(true)">
         {{ $t('table.allDeprecated') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-close"
@@ -209,6 +210,7 @@
       },
       // 批量标记
       handleModifyMarkedAll(ifMarked) {
+        this.listLoading = true;
         const ids = this.checkList.map((c) => {
           return c.id;
         });

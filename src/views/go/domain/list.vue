@@ -211,6 +211,7 @@
       },
       // 批量标记
       handleModifyMarkedAll(ifMarked) {
+        this.listLoading = true
         const ids = this.checkList.map((c) => {
           return c.id;
         });
