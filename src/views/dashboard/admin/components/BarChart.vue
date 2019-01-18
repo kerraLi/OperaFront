@@ -74,7 +74,7 @@
           title: {
             text: '资源总计',
             textStyle: {
-              color:"#5ab1ef",
+              color: "#5ab1ef",
               fontWeight: "bolder",
               fontSize: 20
             },
@@ -134,10 +134,10 @@
             stack: 'vistors',
             barWidth: '60%',
             data: expired,
-            label: {
-              show: true,
-              formatter: '{a} - {c}'
-            },
+            // label: {
+            //   show: true,
+            //   formatter: '{a} - {c}'
+            // },
             animationDuration
           }, {
             name: '弃用',
@@ -145,10 +145,10 @@
             stack: 'vistors',
             barWidth: '60%',
             data: deprecated,
-            label: {
-              show: true,
-              formatter: '{a} - {c}'
-            },
+            // label: {
+            //   show: true,
+            //   formatter: '{a} - {c}'
+            // },
             animationDuration
           }]
         })

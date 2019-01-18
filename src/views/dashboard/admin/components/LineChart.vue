@@ -119,23 +119,24 @@
             data: ['Ali-续费', 'Ali-过期', 'Godaddy-过期', 'Webhook-报警']
             // data: ['expected', 'actual']
           },
-          series: [{
-            name: 'Ali-续费',
-            itemStyle: {
-              normal: {
-                color: '#FF005A',
-                lineStyle: {
+          series: [
+            {
+              name: 'Ali-续费',
+              itemStyle: {
+                normal: {
                   color: '#FF005A',
-                  width: 2
+                  lineStyle: {
+                    color: '#FF005A',
+                    width: 2
+                  }
                 }
-              }
+              },
+              smooth: true,
+              type: 'line',
+              data: aliMoney,
+              animationEasing: 'cubicInOut',
+              animationDuration
             },
-            smooth: true,
-            type: 'line',
-            data: aliMoney,
-            animationEasing: 'cubicInOut',
-            animationDuration
-          },
             {
               name: 'Ali-过期',
               smooth: true,

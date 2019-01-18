@@ -70,12 +70,12 @@
             text: theme,
             subtext: type + '-' + username + '资源',
             textStyle: {
-              color:"#5ab1ef",
+              color: "#5ab1ef",
               fontWeight: "bolder",
               fontSize: 13
             },
             subtextStyle: {
-              color:"#5ab1ef",
+              color: "#5ab1ef",
               fontWeight: "bolder",
               fontSize: 20
             },
@@ -107,7 +107,7 @@
                     show: true,
                     formatter: '{b} : {c} ({d}%)'
                   },
-                  labelLine: { show: true }
+                  labelLine: { show: true, length: 10 }
                 }
               },
               animationEasing: 'cubicInOut',
