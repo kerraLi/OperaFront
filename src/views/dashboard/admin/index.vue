@@ -18,13 +18,13 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="32" v-if="showChart==='accounts'">
-      <el-col v-for="pie in accountPieData" :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart :pie-data="pie"/>
-        </div>
-      </el-col>
-    </el-row>
+    <!--<el-row :gutter="32" v-if="showChart==='accounts'">-->
+    <!--<el-col v-for="pie in accountPieData" :xs="24" :sm="24" :lg="8">-->
+    <!--<div class="chart-wrapper">-->
+    <!--<pie-chart :pie-data="pie"/>-->
+    <!--</div>-->
+    <!--</el-col>-->
+    <!--</el-row>-->
 
     <!--*****message 任务消息列表*****-->
     <el-row :gutter="8" v-if="showChart==='messages'">
@@ -128,7 +128,7 @@
         fetchAccount().then(response => {
           const data = response.data;
           this.accountChartData = data.total;
-          this.accountPieData = data.divide;
+          // this.accountPieData = data.divide;
           this.dashLoading = false;
         })
       },

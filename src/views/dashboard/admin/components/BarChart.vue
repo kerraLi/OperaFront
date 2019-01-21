@@ -112,10 +112,10 @@
             stack: 'vistors',
             barWidth: '60%',
             data: normal,
-            label: {
-              show: true,
-              formatter: '{a} - {c}'
-            },
+            //label: {
+            //  show: true,
+            //  formatter: '{a} - {c}'
+            //},
             animationDuration
           }, {
             name: '异常',
@@ -123,10 +123,10 @@
             stack: 'vistors',
             barWidth: '60%',
             data: invalid,
-            label: {
-              show: true,
-              formatter: '{a} - {c}'
-            },
+            //label: {
+            //  show: true,
+            //  formatter: '{a} - {c}'
+            //},
             animationDuration
           }, {
             name: '即将过期',

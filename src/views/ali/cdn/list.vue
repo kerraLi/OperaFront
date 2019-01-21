@@ -76,7 +76,7 @@
           <el-tag type="danger" v-if="scope.row.alertMarked">弃用数据</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="DomainName" min-width="150px">
+      <el-table-column label="Cname" min-width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.cname }}</span>
         </template>

@@ -26,7 +26,6 @@
     mixins: [ResizeMixin],
     data() {
       return {
-        dialogArr: []
       }
     },
     computed: {
@@ -50,85 +49,12 @@
       }
     },
     created() {
-      this.initWebSocket(this.id)
+      // 创建websocket
+      this.$store.dispatch('initWebSocket', this.id)
     },
     methods: {
       handleClickOutside() {
         this.$store.dispatch('closeSideBar', { withoutAnimation: false })
-      },
-      redirectMessage(id, themeId) {
-        for (var i = 0; i < this.dialogArr.length; i++) {
-          this.dialogArr[i].close();
-        }
-        // params 注意大小写正确
-        this.$nextTick(() => {
-          this.$router.push({
-            path: '/redirect/message',
-            name: 'Message',
-            params: {
-              openId: id,
-              themeId: themeId
-            }
-          })
-        })
-      },
-      /**
-       * websocket
-       */
-      initWebSocket(userId) {
-        //初始化weosocket
-        const wsuri = process.env.WEBSOCKET_URL + '/' + userId;
-        this.websock = new WebSocket(wsuri);
-        this.websock.onmessage = this.websocketOnmessage;
-        this.websock.onopen = this.websocketOnopen;
-        this.websock.onerror = this.websocketOnerror;
-        this.websock.onclose = this.websocketClose;
-      },
-      websocketOnopen() { //连接建立之后执行send方法发送数据
-        let actions = { "test": "12345" };
-        this.websocketSend(JSON.stringify(actions));
-      },
-      websocketOnerror() {//连接建立失败重连
-        console.log("webSocket连接关闭");
-        //this.initWebSocket();
-      },
-      websocketOnmessage(e) { //数据接收
-        const messageMusic = new Audio("../../static/audio/message.mp3");
-        messageMusic.play();
-        const data = JSON.parse(e.data);
-        const h = this.$createElement;
-        // 去除html标签
-        const message = data.message.replace(/<[^>]+>/g, "");
-        this.dialogArr.push(this.$notify({
-          title: data.title,
-          position: 'bottom-right',
-          duration: 0,
-          // 点击事件
-          message: h('div', [
-            h('a', {
-              style: {
-                float: 'left',
-              },
-              on: {
-                click: this.redirectMessage.bind(this, data.id, data.themeId)
-              }
-            }, message),
-            h('img', {
-              style: {
-                width: '100%',
-              },
-              attrs: {
-                src: data.imageUrl
-              }
-            })
-          ]),
-        }));
-      },
-      websocketSend(Data) {//数据发送
-        this.websock.send(Data);
-      },
-      websocketClose(e) {  //关闭
-        console.log('断开连接', e);
       },
     },
   }

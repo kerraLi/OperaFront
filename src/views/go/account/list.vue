@@ -91,7 +91,7 @@
         const statusMap = {
           normal: 'success',
           invalid: 'danger'
-        }
+        };
         return statusMap[status]
       },
     },
