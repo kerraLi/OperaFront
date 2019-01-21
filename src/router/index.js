@@ -130,7 +130,7 @@ export const asyncRouterMap = [
     redirect: '/ali/index',
     alwaysShow: true,
     meta: {
-      title: '阿里云',
+      title: 'Ali',
       icon: 'guide',
       roles: ['admin']
     },
@@ -138,27 +138,36 @@ export const asyncRouterMap = [
       {
         path: 'account/list',
         component: () => import('@/views/ali/account/list'),
-        name: 'AliAccountList',
+        name: 'AccountList',
         meta: {
-          title: '账号列表',
+          title: 'AccountList',
           roles: ['admin']
         }
       },
       {
         path: 'ecs/list',
         component: () => import('@/views/ali/ecs/list'),
-        name: 'AliEcsList',
+        name: 'EcsList',
         meta: {
-          title: 'ECS列表',
+          title: 'EcsList',
           roles: ['admin']
         }
       },
       {
         path: 'cdn/list',
         component: () => import('@/views/ali/cdn/list'),
-        name: 'AliCdnList',
+        name: 'CdnList',
         meta: {
-          title: 'CDN列表',
+          title: 'CdnList',
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'cdn/refresh',
+        component: () => import('@/views/ali/cdn/refresh'),
+        name: 'CdnRefresh',
+        meta: {
+          title: 'CdnRefresh',
           roles: ['admin']
         }
       }
@@ -179,27 +188,27 @@ export const asyncRouterMap = [
       {
         path: 'account/list',
         component: () => import('@/views/go/account/list'),
-        name: 'GoAccountList',
+        name: 'AccountList',
         meta: {
-          title: '账号列表',
+          title: 'AccountList',
           roles: ['admin']
         }
       },
       {
         path: 'domain/list',
         component: () => import('@/views/go/domain/list'),
-        name: 'GoDomainList',
+        name: 'DomainList',
         meta: {
-          title: '域名列表',
+          title: 'DomainList',
           roles: ['admin']
         }
       },
       {
         path: 'certificate/list',
         component: () => import('@/views/go/certificate/list'),
-        name: 'GoCertificateList',
+        name: 'CertificateList',
         meta: {
-          title: '证书列表',
+          title: 'CertificateList',
           roles: ['admin']
         }
       }

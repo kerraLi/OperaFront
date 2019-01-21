@@ -62,7 +62,16 @@ export default {
     theme: '换肤',
     clipboardDemo: 'Clipboard',
     i18n: '国际化',
-    externalLink: '外链'
+    externalLink: '外链',
+    Message: '消息中心',
+    Ali: '阿里云',
+    AccountList: '账户列表',
+    EcsList: 'ECS列表',
+    CdnList: 'CDN列表',
+    CdnRefresh: 'CDN刷新',
+    Godaddy: 'GODADDY',
+    DomainList: '域名列表',
+    CertificateList: '证书列表'
   },
   navbar: {
     logOut: '退出登录',
@@ -131,7 +140,15 @@ export default {
     confirm: '确 定',
     allFinish: '批量完成',
     allDeprecated: '批量弃用',
-    allNoDeprecated: '取消弃用'
+    allNoDeprecated: '取消弃用',
+    refreshCache: '刷新缓存',
+    operLog: '操作记录',
+    operContent: '操作内容',
+    operType: '操作类型',
+    operTime: '操作时间',
+    refreshType: '刷新类型',
+    progress: '进 度',
+    url: '路 由'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

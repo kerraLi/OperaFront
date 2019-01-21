@@ -40,10 +40,35 @@ export function fetchEcsList(data) {
   })
 }
 
+/**
+ * cdn
+ */
+
 export function fetchCdnList(data) {
   return request({
     url: '/ali/cdn/list',
     method: 'post',
     params: data
+  })
+}
+
+// 刷新 & 预热
+export function createCdnRefresh(tempData) {
+  let data = new URLSearchParams();
+  for (let i in tempData) {
+    data.append(i, tempData[i]);
+  }
+  return request({
+    url: '/ali/cdn/refresh',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchCdnRefreshList(data) {
+  return request({
+    url: '/ali/cdn/refresh/list',
+    method: 'post',
+    data
   })
 }

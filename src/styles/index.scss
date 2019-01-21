@@ -180,6 +180,12 @@ code {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: 10px;
+    // 日期选择框中字符单独设置
+    .el-range-input, .el-range-separator {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 10px;
+    }
   }
 }
 

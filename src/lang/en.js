@@ -62,7 +62,16 @@ export default {
     theme: 'Theme',
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
-    externalLink: 'External Link'
+    externalLink: 'External Link',
+    Message: 'Message',
+    Ali: 'AliCloud',
+    AccountList: 'AccountList',
+    EcsList: 'EcsList',
+    CdnList: 'CdnList',
+    CdnRefresh: 'CdnRefresh',
+    Godaddy: 'Godaddy',
+    DomainList: 'DomainList',
+    CertificateList: 'CertificateList'
   },
   navbar: {
     logOut: 'Log Out',
@@ -131,7 +140,15 @@ export default {
     confirm: 'Confirm',
     allFinish: 'AllFinish',
     allDeprecated: 'AllDeprecated',
-    allNoDeprecated: 'AllNoDeprecated'
+    allNoDeprecated: 'AllNoDeprecated',
+    refreshCache: 'RefreshCache',
+    operLog: 'OperateLog',
+    operContent: 'OperateContent',
+    operType: 'OperateType',
+    operTime: 'OperateTime',
+    refreshType: 'RefreshType',
+    progress: 'Progress',
+    url: 'URL'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
