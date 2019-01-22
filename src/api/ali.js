@@ -57,7 +57,6 @@ export function deleteAliAccount(id) {
     url: '/ali/account/delete/' + id,
     method: 'post'
   })
-
 }
 
 export function fetchEcsList(data) {
@@ -112,5 +111,13 @@ export function fetchCdnRefreshList(tempData) {
     url: '/ali/cdn/refresh/task/list',
     method: 'post',
     data
+  })
+}
+
+// 更新task状态
+export function updateCdnRefreshTask(id) {
+  return request({
+    url: '/ali/cdn/refresh/task/update/' + id,
+    method: 'get'
   })
 }

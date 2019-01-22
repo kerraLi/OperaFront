@@ -91,17 +91,22 @@
           </el-table-column>
           <el-table-column :label="$t('table.operType')" width="150px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.objectType }}</span>
+              <span>{{ scope.row.objectType| objectTypeFilter }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('table.progress')" min-width="30px" align="center">
+          <el-table-column :label="$t('table.progress')" min-width="50px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.process }}</span>
+              <el-progress :percentage="scope.row.process | processFilter" :stroke-width="18" text-inside
+                           style="display: inline-block;width: 80%;"/>
+              <i v-if="scope.row.status !== 'Complete' && scope.row.status !== 'Failed'"
+                 @click="handleFreshTask(scope.row)"
+                 style="cursor: pointer;"
+                 class="el-icon-refresh"></i>
             </template>
           </el-table-column>
           <el-table-column :label="$t('table.status')" min-width="30px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.status }}</span>
+              <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -112,7 +117,7 @@
 </template>
 
 <script>
-  import { createCdnRefresh, fetchCdnRefreshList } from '@/api/ali'
+  import { createCdnRefresh, fetchCdnRefreshList, updateCdnRefreshTask } from '@/api/ali'
 
   const operOptions = [{
     value: 'refresh',
@@ -180,6 +185,28 @@
 
   export default {
     name: "CdnRefresh",
+    filters: {
+      objectTypeFilter(objectType) {
+        const objectTypeMap = {
+          file: 'URL刷新',
+          path: '目录刷新',
+          preload: 'URL预热'
+        };
+        return objectTypeMap[objectType]
+      },
+      processFilter(process) {
+        return parseInt(process.substring(0, process.length - 1));
+      },
+      statusFilter(status) {
+        const statusMap = {
+          Complete: 'success',
+          Refreshing: 'warning',
+          Failed: 'danger',
+          Pending: 'default'
+        };
+        return statusMap[status]
+      }
+    },
     data() {
       return {
         listLoading: false,
@@ -267,6 +294,20 @@
         this.listQuery.page = 1;
         this.getList()
       },
+      // 刷新task
+      handleFreshTask(row) {
+        this.listLoading = true;
+        updateCdnRefreshTask(row.id).then(response => {
+          let data = response.data;
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          row.process = data.process;
+          row.status = data.status;
+          this.listLoading = false;
+        })
+      }
     }
   }
 </script>
