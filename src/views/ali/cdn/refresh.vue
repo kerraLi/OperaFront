@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="tabActiveName">
+    <el-tabs v-model="tabActiveName" @tab-click="handleTabs">
 
       <!--fresh tab-->
       <el-tab-pane class="refresh-tab" :label="$t('table.refreshCache')" name="refresh">
         <el-form ref="form" :model="operForm" label-width="100px">
           <el-form-item :label="$t('table.operType')">
-            <el-select v-model="operForm.operateType" @change="handleOper" placeholder="请选择操作类型">
+            <el-select v-model="operForm.operateType" @change="handleOperType" placeholder="请选择操作类型">
               <el-option v-for="item in operOptions" :key="item.index" :label="item.label" :value="item.value"/>
             </el-select>
           </el-form-item>
@@ -20,7 +20,7 @@
             <el-input
               type="textarea"
               rows="5"
-              placeholder=""
+              placeholder="多个DOMAIN，请换行输入；请输入同一个账号下URL路径。"
               v-model="operForm.content"
             ></el-input>
           </el-form-item>
@@ -39,6 +39,7 @@
         <div class="filter-container">
           <el-date-picker
             v-model="listQuery.operDate"
+            value-format="yyyy-MM-dd"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -67,30 +68,40 @@
           highlight-current-row
           row-key="id"
           style="width: 100%;">
-          <el-table-column :label="$t('table.id')" prop="id" align="center" width="65" type="index"/>
-          <el-table-column :label="$t('table.operContent')" min-width="60px" align="center">
+          <el-table-column :label="$t('table.id')" prop="id" align="center" width="50px" type="index"/>
+          <el-table-column label="UserName" min-width="60px" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.userName }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('table.operType')" width="150px" align="center">
+          <el-table-column label="TaskId" min-width="30px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.gmtCreated | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+              <span>{{ scope.row.taskId }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('table.operTime')" width="150px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.gmtModified | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+              <span>{{ scope.row.creationTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('table.status')" min-width="100px" align="center">
+          <el-table-column :label="$t('table.operContent')" min-width="150px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.domainName }}</span>
+              <span>{{ scope.row.objectPath }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('table.progress')" min-width="150px" align="center">
+          <el-table-column :label="$t('table.operType')" width="150px" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.cname }}</span>
+              <span>{{ scope.row.objectType }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('table.progress')" min-width="30px" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.process }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('table.status')" min-width="30px" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.status }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -189,6 +200,8 @@
         operDatePickMin: '',
         operDatePickMax: '',
         listQuery: {
+          page: 1,
+          limit: 20,
           url: undefined,
           operDate: [
             new Date(new Date().getTime() - 3600 * 1000 * 24 * 3),
@@ -200,6 +213,31 @@
       }
     },
     methods: {
+      // 列表数据
+      getList() {
+        this.listLoading = true;
+        fetchCdnRefreshList(this.listQuery).then(response => {
+          this.list = response.data.items;
+          this.total = response.data.total;
+          this.listLoading = false;
+          this.btnLoading = '';
+        })
+      },
+      // 重置表单
+      resetOperForm() {
+        this.operForm = {
+          operateType: operOptions[0].value,
+          refreshType: operOptions[0].second[0].value,
+          content: ''
+        }
+      },
+      // 切换tab
+      handleTabs(tab) {
+        if (tab.label === 'OperateLog') {
+          this.getList();
+        }
+      },
+      // 表单提交
       handleSubmitOper() {
         this.btnLoading = 'submit';
         // 刷新
@@ -210,30 +248,24 @@
           });
           setTimeout(() => {
             this.btnLoading = '';
+            this.resetOperForm();
           }, 1000);
         })
       },
-      handleOper(value) {
-        this.operActiveName = value;
+      // 切换操作类型
+      handleOperType(value) {
+        this.operForm.operateType = value;
         const arr = operOptions.filter((data) => {
           return data.value === value
         });
         this.operSecondOptions = arr[0].second;
         this.operSecondActiveName = arr[0].second[0].value
       },
+      // 搜索
       handleFilter() {
         this.btnLoading = 'search';
-        this.listLoading = true;
-        // 刷新
-        createCdnRefresh(this.operForm).then(response => {
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
-          setTimeout(() => {
-            this.btnLoading = '';
-          }, 1000);
-        })
+        this.listQuery.page = 1;
+        this.getList()
       },
     }
   }

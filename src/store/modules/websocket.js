@@ -23,6 +23,17 @@ function message(e) { //数据接收
   const data = JSON.parse(e.data);
   // 去除html标签
   const message = data.message.replace(/<[^>]+>/g, "");
+  let mHtml = '';
+  if (data.imageUrl !== undefined) {
+    mHtml = "<div style='cursor: pointer;'>" +
+      "<p style='float: left'>" + message + "</p>" +
+      "<img style='width: 100%' src='" + data.imageUrl + "'/>" +
+      "</div>";
+  } else {
+    mHtml = "<div style='cursor: pointer;'>" +
+      "<p style='float: left'>" + message + "</p>" +
+      "</div>";
+  }
   // Notification =》 this.$notify
   dialogArr.push(Vue.prototype.$notify({
     title: data.title,
@@ -30,10 +41,7 @@ function message(e) { //数据接收
     duration: 0,
     // 点击事件
     dangerouslyUseHTMLString: true,
-    message: "<div style='cursor: pointer;'>" +
-      "<p style='float: left'>" + message + "</p>" +
-      "<img style='width: 100%' src='" + data.imageUrl + "'/>" +
-      "</div>",
+    message: mHtml,
     // * 对比redirectMessage(data.id, data.themeId)
     onClick: redirectMessage.bind(this, data.id, data.themeId)
   }));
