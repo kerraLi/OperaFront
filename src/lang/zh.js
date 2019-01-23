@@ -130,12 +130,12 @@ export default {
     date: '时间',
     author: '作者',
     readings: '阅读数',
-    status: '状态',
-    actions: '操作',
-    edit: '编辑',
+    status: '状 态',
+    actions: '操 作',
+    edit: '编 辑',
     publish: '发布',
     draft: '草稿',
-    delete: '删除',
+    delete: '删 除',
     cancel: '取 消',
     confirm: '确 定',
     allFinish: '批量完成',
@@ -148,7 +148,41 @@ export default {
     operTime: '操作时间',
     refreshType: '刷新类型',
     progress: '进 度',
-    url: '路 由'
+    url: '路 由',
+    alarm: '报 警',
+    deprecated: '弃 用',
+    unDeprecated: '取消弃用',
+    deprecatedData: '弃用数据',
+    deprecatedMessage: '注：默认不显示被弃用数据 & 弃用数据不会报警',
+    expiring: '即将过期',
+    open: '开 启',
+    close: '关 闭',
+    ali: {
+      username: '账户名',
+      accessKeyId: '密钥ID',
+      accessKeySecret: '密钥密码',
+      account: {
+        noMoney: '余额不足',
+        update: '编辑账号',
+        create: '创建账号'
+      },
+      ecs: {
+        createdTime: '创建时间',
+        expiredTime: '过期时间',
+        hostName: '主机名称',
+        instance: '实 例',
+        publicIps: '公网IP',
+        regionId: '地 区',
+        stop: '停 止',
+        run: '启 动',
+        rerun: '重 启',
+        free: '释 放',
+        actionConfirmT1: '此操作将 ',
+        actionConfirmT2: ' 该ECS服务器, 是否继续?',
+        ifForce: '强制模式',
+        forceTip: '强制模式，会导致云服务器实例当前未保存的数据丢失。',
+      }
+    }
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -177,5 +211,13 @@ export default {
     close: '关闭',
     closeOthers: '关闭其它',
     closeAll: '关闭所有'
+  },
+  message: {
+    success: '成 功',
+    operSuccess: '操作成功',
+    confirmTitle: '提 示',
+    confirm: '确 认',
+    cancel: '取 消',
+    doing: '执行中...',
   }
 }

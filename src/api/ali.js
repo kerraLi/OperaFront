@@ -59,11 +59,23 @@ export function deleteAliAccount(id) {
   })
 }
 
+/**
+ * ecs
+ */
+
 export function fetchEcsList(data) {
   return request({
     url: '/ali/ecs/list',
     method: 'post',
     params: data
+  })
+}
+
+// 操作ecs
+export function actionEcsStatus(id, action) {
+  return request({
+    url: '/ali/ecs/status/' + action + '/' + id,
+    method: 'get',
   })
 }
 

@@ -142,7 +142,7 @@
     { key: 'online', display_name: 'online' },
     { key: 'offline', display_name: 'offline' },
     { key: 'others', display_name: 'others' }
-  ]
+  ];
 
   export default {
     name: 'ComplexTable',

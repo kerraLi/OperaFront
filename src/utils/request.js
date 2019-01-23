@@ -44,7 +44,7 @@ service.interceptors.response.use(
         message: res.message,
         type: 'error',
         duration: 5 * 1000
-      })
+      });
       // 用户过期
       if (res.message === '401') {
         // 请自行在引入 MessageBox

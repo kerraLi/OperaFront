@@ -148,7 +148,41 @@ export default {
     operTime: 'OperateTime',
     refreshType: 'RefreshType',
     progress: 'Progress',
-    url: 'URL'
+    url: 'URL',
+    alarm: 'Alarm',
+    deprecated: 'Deprecated',
+    unDeprecated: 'UnDeprecated',
+    deprecatedData: 'Deprecated Data',
+    deprecatedMessage: 'TIPS : Deprecated data is not displayed by default & deprecated data does not alarm.',
+    expiring: 'Expiring',
+    open: 'Open',
+    close: 'Close',
+    ali: {
+      username: 'NAME',
+      accessKeyId: 'ACCESS ID',
+      accessKeySecret: 'ACCESS SECRET',
+      account: {
+        noMoney: 'No Enough',
+        update: 'UPDATE',
+        create: 'CREATE'
+      },
+      ecs: {
+        createdTime: 'CreatedTime',
+        expiredTime: 'ExpiredTime',
+        hostName: 'HostName',
+        instance: 'Instance',
+        publicIps: 'PublicIps',
+        regionId: 'RegionId',
+        stop: 'STOP',
+        run: 'START',
+        rerun: 'REBOOT',
+        free: 'DELETE',
+        actionConfirmT1: 'Confirm to ',
+        actionConfirmT2: ' the ECS ?',
+        ifForce: 'Force Mode',
+        forceTip: 'Forced mode causes data that is not currently saved by the cloud server instance to be lost.',
+      }
+    }
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
@@ -177,5 +211,13 @@ export default {
     close: 'Close',
     closeOthers: 'Close Others',
     closeAll: 'Close All'
+  },
+  message: {
+    success: 'SUCCESS',
+    operSuccess: 'OPERATE SUCCESS',
+    confirmTitle: 'CONFIRM?',
+    confirm: 'CONFIRM',
+    cancel: 'CANCEL',
+    doing: 'DOING...',
   }
 }
