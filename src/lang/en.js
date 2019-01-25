@@ -71,7 +71,9 @@ export default {
     CdnRefresh: 'CdnRefresh',
     Godaddy: 'Godaddy',
     DomainList: 'DomainList',
-    CertificateList: 'CertificateList'
+    CertificateList: 'CertificateList',
+    System: 'System',
+    Parameter: 'Parameter'
   },
   navbar: {
     logOut: 'Log Out',
@@ -159,6 +161,9 @@ export default {
     expiring: 'Expiring',
     open: 'Open',
     close: 'Close',
+    key: 'KEY',
+    systemKey: 'System Key',
+    value: 'VALUE',
     user: {
       username: 'Username',
       oldPwd: 'Old Password',
@@ -227,5 +232,9 @@ export default {
     confirm: 'CONFIRM',
     cancel: 'CANCEL',
     doing: 'DOING...',
+    parameter: {
+      fixedNoEdit: 'System fixed parameters cannot be edited.',
+      fixedNoRemove: 'System fixed parameters cannot be removed.'
+    }
   }
 }

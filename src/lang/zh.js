@@ -71,7 +71,9 @@ export default {
     CdnRefresh: 'CDN刷新',
     Godaddy: 'GODADDY',
     DomainList: '域名列表',
-    CertificateList: '证书列表'
+    CertificateList: '证书列表',
+    System: '系统设置',
+    Parameter: '参数设置'
   },
   navbar: {
     logOut: '退出登录',
@@ -159,6 +161,9 @@ export default {
     expiring: '即将过期',
     open: '开 启',
     close: '关 闭',
+    key: '参数键值',
+    systemKey: '系统变量',
+    value: '参数值',
     user: {
       username: '用户名',
       oldPwd: '旧的密码',
@@ -227,5 +232,9 @@ export default {
     confirm: '确 认',
     cancel: '取 消',
     doing: '执行中...',
+    parameter: {
+      fixedNoEdit: '系统固定参数不能编辑.',
+      fixedNoRemove: '系统固定参数不能删除.'
+    }
   }
 }

@@ -121,18 +121,6 @@
             return false
           }
         })
-        // this.btnLoading = 'submit';
-        // 刷新
-        // createCdnRefresh(this.operForm).then(response => {
-        //   this.$message({
-        //     message: '操作成功',
-        //     type: 'success'
-        //   });
-        //   setTimeout(() => {
-        //     this.btnLoading = '';
-        //     this.resetOperForm();
-        //   }, 1000);
-        // })
       }
     }
   }

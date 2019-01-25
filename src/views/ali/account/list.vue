@@ -57,7 +57,6 @@
       <el-table-column :label="$t('table.actions')" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
-          <el-button type="warning" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.close') }}</el-button>
           <el-button size="mini" type="danger"
                      :loading="btnLoading === 'delete-'+ scope.row.id"
                      @click="handleDelete(scope.row)">{{ $t('table.delete') }}
@@ -106,7 +105,7 @@
         const statusMap = {
           normal: 'success',
           invalid: 'danger'
-        }
+        };
         return statusMap[status]
       },
     },
@@ -142,8 +141,8 @@
         // 校验规则
         rules: {
           userName: [{ required: true, message: 'userName is required', trigger: 'change' }],
-          accessKeyId: [{ required: true, message: 'userName is required', trigger: 'change' }],
-          accessKeySecret: [{ required: true, message: 'userName is required', trigger: 'change' }],
+          accessKeyId: [{ required: true, message: 'accessKeyId is required', trigger: 'change' }],
+          accessKeySecret: [{ required: true, message: 'accessKeySecret is required', trigger: 'change' }],
         },
         downloadLoading: false
       }
@@ -243,11 +242,11 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.loading = true;
-            const tempData = Object.assign({}, this.temp)
+            const tempData = Object.assign({}, this.temp);
             updateAliAccount(tempData).then(() => {
               this.loading = false;
               this.getList();
-              this.dialogFormVisible = false
+              this.dialogFormVisible = false;
               this.$notify({
                 title: this.$t('message.success'),
                 message: this.$t('message.operSuccess'),
