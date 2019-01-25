@@ -300,7 +300,7 @@
         updateCdnRefreshTask(row.id).then(response => {
           let data = response.data;
           this.$message({
-            message: '操作成功',
+            message: this.$t('message.operSuccess'),
             type: 'success'
           });
           row.process = data.process;

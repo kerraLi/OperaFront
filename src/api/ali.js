@@ -79,6 +79,14 @@ export function actionEcsStatus(id, action) {
   })
 }
 
+// 更新ecs状态
+export function updateEcsStatue(id) {
+  return request({
+    url: '/ali/ecs/status/update/' + id,
+    method: 'get'
+  })
+}
+
 /**
  * cdn
  */

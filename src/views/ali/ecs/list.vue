@@ -89,6 +89,10 @@
       <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <i v-if="scope.row.status === 'Starting' || scope.row.status === 'Stopping'"
+             @click="handleUpdateStatue(scope.row)"
+             style="cursor: pointer;"
+             class="el-icon-refresh"></i>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="120"
@@ -148,7 +152,7 @@
 </template>
 
 <script>
-  import { fetchEcsList, actionEcsStatus } from '@/api/ali'
+  import { fetchEcsList, actionEcsStatus, updateEcsStatue } from '@/api/ali'
   import { mark, unmark, markAll, unmarkAll } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
@@ -157,7 +161,7 @@
   const statusOptionsChoice = [
     { key: 'Running', display_name: 'Running' },
     { key: 'Stopped', display_name: 'Stopped' }
-  ]
+  ];
 
   export default {
     name: 'ComplexTable',
@@ -402,6 +406,19 @@
             return false;
         }
       },
+      // 刷新ecs状态
+      handleUpdateStatue(row) {
+        this.listLoading = true;
+        updateEcsStatue(row.id).then(response => {
+          let data = response.data;
+          this.$message({
+            message: this.$t('message.operSuccess'),
+            type: 'success'
+          });
+          row.status = data.status;
+          this.listLoading = false;
+        })
+      }
     }
   }
 </script>
