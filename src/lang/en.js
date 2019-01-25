@@ -77,6 +77,7 @@ export default {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
     message: 'Message',
+    restPwd: 'Reset Password',
     github: 'Github',
     screenfull: 'Screenfull',
     theme: 'Theme',
@@ -138,6 +139,7 @@ export default {
     delete: 'Delete',
     cancel: 'Cancel',
     confirm: 'Confirm',
+    reset: 'Reset',
     allFinish: 'AllFinish',
     allDeprecated: 'AllDeprecated',
     allNoDeprecated: 'AllNoDeprecated',
@@ -157,6 +159,12 @@ export default {
     expiring: 'Expiring',
     open: 'Open',
     close: 'Close',
+    user: {
+      username: 'Username',
+      oldPwd: 'Old Password',
+      newPwd: 'New Password',
+      confirmPwd: 'Confirm Password'
+    },
     ali: {
       username: 'NAME',
       accessKeyId: 'ACCESS ID',

@@ -77,6 +77,7 @@ export default {
     logOut: '退出登录',
     dashboard: '首页',
     message: '消息',
+    restPwd: '重置密码',
     github: '项目地址',
     screenfull: '全屏',
     theme: '换肤',
@@ -138,6 +139,7 @@ export default {
     delete: '删 除',
     cancel: '取 消',
     confirm: '确 定',
+    reset: '重 置',
     allFinish: '批量完成',
     allDeprecated: '批量弃用',
     allNoDeprecated: '取消弃用',
@@ -157,6 +159,12 @@ export default {
     expiring: '即将过期',
     open: '开 启',
     close: '关 闭',
+    user: {
+      username: '用户名',
+      oldPwd: '旧的密码',
+      newPwd: '新的密码',
+      confirmPwd: '确认密码'
+    },
     ali: {
       username: '账户名',
       accessKeyId: '密钥ID',

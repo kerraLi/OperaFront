@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { loginByUsername, logout, getUserInfo, resetPassword } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -87,6 +87,22 @@ const user = {
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
           resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 修改密码
+    resetPassword({ commit }, resetInfo) {
+      const oldPwd = resetInfo.oldPwd;
+      const newPwd = resetInfo.newPwd;
+      return new Promise((resolve, reject) => {
+        resetPassword(oldPwd, newPwd).then(response => {
+          commit('SET_TOKEN', '');
+          commit('SET_ROLES', []);
+          removeToken();
+          resolve()
         }).catch(error => {
           reject(error)
         })

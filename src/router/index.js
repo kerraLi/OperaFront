@@ -72,7 +72,7 @@ export const constantRouterMap = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+        meta: { title: 'dashboard', icon: 'dashboard' }
       }
     ]
   },
@@ -85,7 +85,31 @@ export const constantRouterMap = [
         path: 'index',
         component: () => import('@/views/message/index'),
         name: 'Message',
-        meta: { title: 'Message', icon: 'message', noCache: true }
+        meta: { title: 'Message', icon: 'message' }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user/index'),
+        name: 'User',
+        meta: {
+          title: 'User'
+        }
+      },
+      {
+        path: 'reset/pwd',
+        component: () => import('@/views/user/password/reset'),
+        name: 'PasswordReset',
+        meta: {
+          title: 'PasswordReset'
+        }
       }
     ]
   },

@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
+
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -47,9 +48,7 @@ service.interceptors.response.use(
       });
       // 用户过期
       if (res.message === '401') {
-        // 请自行在引入 MessageBox
-        // import { Message, MessageBox } from 'element-ui'
-        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        MessageBox.confirm('你的登陆已失效，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'

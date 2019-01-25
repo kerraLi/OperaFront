@@ -28,3 +28,13 @@ export function getUserInfo() {
   })
 }
 
+export function resetPassword(oldPwd, newPwd) {
+  let data = new URLSearchParams();
+  data.append('oldPwd', oldPwd);
+  data.append('newPwd', newPwd);
+  return request({
+    url: '/user/reset/password',
+    method: 'post',
+    data
+  })
+}
