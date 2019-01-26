@@ -178,10 +178,11 @@
       // 确认编辑
       confirmEdit(row) {
         this.listLoading = true;
+        row.value = row.value.trim();
         update(row.id, row.value).then(() => {
           this.listLoading = false;
           row.edit = false;
-          row.originalValue = row.title;
+          row.originalValue = row.value;
           this.$notify({
             title: this.$t('message.success'),
             message: this.$t('message.operSuccess'),
