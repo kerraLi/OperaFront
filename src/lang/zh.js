@@ -164,6 +164,8 @@ export default {
     key: '参数键值',
     systemKey: '系统变量',
     value: '参数值',
+    off: '关闭',
+    on: '开启',
     user: {
       username: '用户名',
       oldPwd: '旧的密码',
@@ -234,7 +236,8 @@ export default {
     doing: '执行中...',
     parameter: {
       fixedNoEdit: '系统固定参数不能编辑.',
-      fixedNoRemove: '系统固定参数不能删除.'
+      fixedNoRemove: '系统固定参数不能删除.',
+      valueToOrigin: '参数值恢复成原始值..'
     }
   }
 }

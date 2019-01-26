@@ -12,35 +12,39 @@
         :key="tableKey"
         :data="list"
         fit
+        border
         highlight-current-row
         style="width: 100%;">
-        <el-table-column :label="$t('table.id')" prop="id" align="center" type="index"/>
-        <el-table-column :label="$t('table.actions')" align="center" class-name="small-padding fixed-width" width="65">
-          <template slot-scope="scope">
-            <span @click="handleUpdate(scope.row)" style="cursor: pointer;">
-              <svg-icon icon-class="edit"/>
-            </span>
-            <span v-if="scope.row.status !=='fixed'" @click="handleDelete(scope.row)" style="cursor: pointer;">
-              <svg-icon icon-class="delete"/>
-            </span>
-            <!--<el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>-->
-            <!--<el-button size="mini" type="danger"-->
-            <!--:loading="btnLoading === 'delete-'+ scope.row.id"-->
-            <!--@click="handleDelete(scope.row)">{{ $t('table.delete') }}-->
-            <!--</el-button>-->
-          </template>
-        </el-table-column>
+        <!--<el-table-column :label="$t('table.id')" prop="id" align="center" type="index"/>-->
         <el-table-column :label="$t('table.key')">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status ==='fixed'" type="success" style="margin-right: 10px;">{{
-              $t('table.systemKey') }}
+            <el-tag v-if="scope.row.status ==='fixed'" type="success" style="margin-right: 10px;">
+              {{ $t('table.systemKey') }}
             </el-tag>
+            <span v-if="scope.row.status !=='fixed'" @click="handleDelete(scope.row)"
+                  style="cursor: pointer;margin-right: 10px;">
+              <svg-icon icon-class="delete"/>
+            </span>
             <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.key }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.value')">
           <template slot-scope="scope">
-            <span>{{ scope.row.value }}</span>
+            <template v-if="scope.row.edit">
+              <el-input v-model="scope.row.value" class="edit-input" size="small" style="width: 90%;"/>
+              <span @click="cancelEdit(scope.row)" style="cursor: pointer;margin-left: 5px;margin-right: 5px;">
+                <svg-icon icon-class="cancel"/>
+              </span>
+              <span @click="confirmEdit(scope.row)" style="cursor: pointer;">
+                <svg-icon icon-class="confirm"/>
+              </span>
+            </template>
+            <template v-else>
+              <span>{{ scope.row.value }}</span>
+              <span @click="scope.row.edit=!scope.row.edit" style="cursor: pointer;margin-left: 10px;">
+                <svg-icon icon-class="edit"/>
+              </span>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -113,8 +117,12 @@
       getList() {
         this.listLoading = true;
         fetchList().then(response => {
-          this.list = response.data;
           this.listLoading = false;
+          this.list = response.data.map(v => {
+            this.$set(v, 'edit', false); // https://vuejs.org/v2/guide/reactivity.html
+            v.originalValue = v.value;//  will be used when user click the cancel botton
+            return v
+          })
         })
       },
       // 重置temp
@@ -135,27 +143,14 @@
           this.$refs['dataForm'].clearValidate()
         })
       },
-      // 编辑窗口
-      handleUpdate(row) {
-        this.temp = {
-          id: row.id,
-          key: row.key,
-          value: row.value,
-          status: row.status
-        };
-        // copy obj
-        this.dialogStatus = 'update';
-        this.dialogFormVisible = true;
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
       // 新建
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.loading = true;
             create(this.temp.key, this.temp.value).then((response) => {
+              this.$set(response.data, 'edit', false);
+              response.data.originalValue = response.data.value;
               this.list.push(response.data);
               this.dialogFormVisible = false;
               this.loading = false;
@@ -171,35 +166,37 @@
           }
         })
       },
-      // 编辑value
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.loading = true;
-            update(this.temp.id, this.temp.value).then(() => {
-              for (const v of this.list) {
-                if (v.id === this.temp.id) {
-                  const index = this.list.indexOf(v);
-                  this.list.splice(index, 1, this.temp);
-                  break
-                }
-              }
-              this.dialogFormVisible = false;
-              this.loading = false;
-              this.$notify({
-                title: this.$t('message.success'),
-                message: this.$t('message.operSuccess'),
-                type: 'success',
-                duration: 2000
-              })
-            }).catch(() => {
-              this.loading = false
-            })
-          }
+      // 取消编辑
+      cancelEdit(row) {
+        row.value = row.originalValue;
+        row.edit = false;
+        this.$message({
+          message: this.$t('message.parameter.valueToOrigin'),
+          type: 'warning'
         })
+      },
+      // 确认编辑
+      confirmEdit(row) {
+        this.listLoading = true;
+        update(row.id, row.value).then(() => {
+          this.listLoading = false;
+          row.edit = false;
+          row.originalValue = row.title;
+          this.$notify({
+            title: this.$t('message.success'),
+            message: this.$t('message.operSuccess'),
+            type: 'success',
+            duration: 2000
+          })
+        }).catch(() => {
+          this.listLoading = false;
+        });
       },
       // 删除
       handleDelete(row) {
+        if (this.btnLoading === 'delete-' + row.id) {
+          return;
+        }
         if (row.status === 'fixed') {
           this.$message({
             message: this.$t('message.parameter.fixedNoRemove'),

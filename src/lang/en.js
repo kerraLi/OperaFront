@@ -164,6 +164,8 @@ export default {
     key: 'KEY',
     systemKey: 'System Key',
     value: 'VALUE',
+    off: 'OFF',
+    on: 'ON',
     user: {
       username: 'Username',
       oldPwd: 'Old Password',
@@ -234,7 +236,8 @@ export default {
     doing: 'DOING...',
     parameter: {
       fixedNoEdit: 'System fixed parameters cannot be edited.',
-      fixedNoRemove: 'System fixed parameters cannot be removed.'
+      fixedNoRemove: 'System fixed parameters cannot be removed.',
+      valueToOrigin: 'The value has been restored to the original value.'
     }
   }
 }

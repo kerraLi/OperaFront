@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.alarm')" class-name="status-col" width="100">
         <template slot-scope="scope">
-          <el-tooltip :content="'Switch value: ' + scope.row.alertMarked" placement="top">
+          <el-tooltip :content="alertFilter(scope.row.alertMarked)" placement="top">
             <el-switch
               :value="!scope.row.alertMarked"
               @change="handleSwitchMark(scope.row)"
@@ -151,6 +151,9 @@
       this.getList()
     },
     methods: {
+      alertFilter(alert) {
+        return alert ? this.$t('table.off') : this.$t('table.on');
+      },
       secretHeaderRender(h, { column }) {
         return (
           h('span', [
