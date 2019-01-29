@@ -157,6 +157,7 @@ export default {
     operType: 'OperateType',
     operTime: 'OperateTime',
     refreshType: 'RefreshType',
+    taskId: 'TaskId',
     progress: 'Progress',
     url: 'URL',
     alarm: 'Alarm',

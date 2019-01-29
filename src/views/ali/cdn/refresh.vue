@@ -69,12 +69,12 @@
           row-key="id"
           style="width: 100%;">
           <el-table-column :label="$t('table.id')" prop="id" align="center" width="50px" type="index"/>
-          <el-table-column label="UserName" min-width="60px" align="center">
+          <el-table-column :label="$t('table.ali.username')" min-width="60px" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.userName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="TaskId" min-width="30px" align="center">
+          <el-table-column :label="$t('table.taskId')" min-width="30px" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.taskId }}</span>
             </template>
@@ -277,6 +277,8 @@
             this.btnLoading = '';
             this.resetOperForm();
           }, 1000);
+        }).catch(() => {
+          this.btnLoading = '';
         })
       },
       // 切换操作类型

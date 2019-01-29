@@ -157,6 +157,7 @@ export default {
     operType: '操作类型',
     operTime: '操作时间',
     refreshType: '刷新类型',
+    taskId: '任务ID',
     progress: '进 度',
     url: '路 由',
     alarm: '报 警',
