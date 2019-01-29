@@ -214,6 +214,37 @@ export const asyncRouterMap = [
 
   },
   {
+    path: '/resource',
+    component: Layout,
+    redirect: '/resource/index',
+    alwaysShow: true,
+    meta: {
+      title: 'Resource',
+      icon: 'resource',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'hardware/list',
+        component: () => import('@/views/resource/hardware'),
+        name: 'Hardware',
+        meta: {
+          title: 'Hardware',
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'hardware/upload',
+        component: () => import('@/views/resource/hardwareUpload'),
+        name: 'HardwareUpload',
+        meta: {
+          title: 'HardwareUpload',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',

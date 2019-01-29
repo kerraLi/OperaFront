@@ -73,7 +73,10 @@ export default {
     DomainList: '域名列表',
     CertificateList: '证书列表',
     System: '系统设置',
-    Parameter: '参数设置'
+    Parameter: '参数设置',
+    Resource: '其他资源',
+    Hardware: '硬件',
+    HardwareUpload: '硬件上传'
   },
   navbar: {
     logOut: '退出登录',
@@ -117,6 +120,8 @@ export default {
     imageUploadTips: '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
   },
   table: {
+    create: '创 建',
+    update: '编 辑',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
@@ -145,6 +150,7 @@ export default {
     allFinish: '批量完成',
     allDeprecated: '批量弃用',
     allNoDeprecated: '取消弃用',
+    allDelete: '批量删除',
     refreshCache: '刷新缓存',
     operLog: '操作记录',
     operContent: '操作内容',
@@ -166,6 +172,9 @@ export default {
     value: '参数值',
     off: '关闭',
     on: '开启',
+    upload: '上 传',
+    clear: '清 空',
+    downloadExample: '下载示例',
     user: {
       username: '用户名',
       oldPwd: '旧的密码',
@@ -197,6 +206,33 @@ export default {
         ifForce: '强制模式',
         forceTip: '强制模式，会导致云服务器实例当前未保存的数据丢失。',
       }
+    },
+    resource: {
+      username: '用户名',
+      password: '密码',
+      cabinet: '机柜',
+      model: '型号',
+      assetNumber: '资产编号',
+      sn: 'SN',
+      operateSystem: '操作系统',
+      effect: '作用',
+      externalIp: '外网/专线IP',
+      externalMainLine: '外网主线',
+      externalBackupLine: '外网备线',
+      intranetIp: '内网IP',
+      manageCardIp: '管理卡IP',
+      mask: '掩码',
+      remotePort: '远程端口',
+      intranetPort: '内网端口',
+      managePort: '管理端口',
+      externalPort: '外网/专线端口',
+      cpu: 'CPU',
+      memory: '内存',
+      raid: 'RAID',
+      hardDisk: '硬盘',
+      power: '电源',
+      uNumber: 'U数量',
+      remark: '备注'
     }
   },
   errorLog: {
@@ -238,6 +274,11 @@ export default {
       fixedNoEdit: '系统固定参数不能编辑.',
       fixedNoRemove: '系统固定参数不能删除.',
       valueToOrigin: '参数值恢复成原始值..'
+    },
+    hardware: {
+      fileTooMuch: '请不要上传1M以上大小得文件.',
+      dataEmpty: '数据为空,请上传文件.',
+      needCabinet: '机柜号不能为空.'
     }
   }
 }

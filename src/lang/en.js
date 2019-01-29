@@ -73,7 +73,10 @@ export default {
     DomainList: 'DomainList',
     CertificateList: 'CertificateList',
     System: 'System',
-    Parameter: 'Parameter'
+    Parameter: 'Parameter',
+    Resource: 'Resource',
+    Hardware: 'Hardware',
+    HardwareUpload: 'HardwareUpload'
   },
   navbar: {
     logOut: 'Log Out',
@@ -117,6 +120,8 @@ export default {
     imageUploadTips: 'Since I was using only the vue@1 version, and it is not compatible with mockjs at the moment, I modified it myself, and if you are going to use it, it is better to use official version.'
   },
   table: {
+    create: 'Create',
+    update: 'Update',
     dynamicTips1: 'Fixed header, sorted by header order',
     dynamicTips2: 'Not fixed header, sorted by click order',
     dragTips1: 'The default order',
@@ -145,6 +150,7 @@ export default {
     allFinish: 'AllFinish',
     allDeprecated: 'AllDeprecated',
     allNoDeprecated: 'AllNoDeprecated',
+    allDelete: 'AllDelete',
     refreshCache: 'RefreshCache',
     operLog: 'OperateLog',
     operContent: 'OperateContent',
@@ -166,6 +172,9 @@ export default {
     value: 'VALUE',
     off: 'OFF',
     on: 'ON',
+    upload: 'Upload',
+    clear: 'Clear',
+    downloadExample: 'Download Example',
     user: {
       username: 'Username',
       oldPwd: 'Old Password',
@@ -197,6 +206,33 @@ export default {
         ifForce: 'Force Mode',
         forceTip: 'Forced mode causes data that is not currently saved by the cloud server instance to be lost.',
       }
+    },
+    resource: {
+      username: 'Username',
+      password: 'Password',
+      cabinet: 'Cabinet',
+      model: 'Model',
+      assetNumber: 'AssetNumber',
+      sn: 'SN',
+      operateSystem: 'OperateSystem',
+      effect: 'Effect',
+      externalIp: 'ExternalIp',
+      externalMainLine: 'ExternalMainLine',
+      externalBackupLine: 'ExternalBackupLine',
+      intranetIp: 'IntranetIp',
+      manageCardIp: 'ManageCardIp',
+      mask: 'Mask',
+      remotePort: 'RemotePort',
+      intranetPort: 'IntranetPort',
+      managePort: 'ManagePort',
+      externalPort: 'ExternalPort',
+      cpu: 'CPU',
+      memory: 'Memory',
+      raid: 'RAID',
+      hardDisk: 'HardDisk',
+      power: 'Power',
+      uNumber: 'UNumber',
+      remark: 'Remark'
     }
   },
   errorLog: {
@@ -238,6 +274,11 @@ export default {
       fixedNoEdit: 'System fixed parameters cannot be edited.',
       fixedNoRemove: 'System fixed parameters cannot be removed.',
       valueToOrigin: 'The value has been restored to the original value.'
+    },
+    hardware: {
+      fileTooMuch: 'Please do not upload files larger than 1m in size.',
+      dataEmpty: 'Hardware data is empty, please upload.',
+      needCabinet: 'Cabinet can not be empty.'
     }
   }
 }

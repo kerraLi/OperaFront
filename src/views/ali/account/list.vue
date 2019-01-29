@@ -83,8 +83,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button :loading="loading" type="primary" @click="dialogStatus==='create'?createData():updateData()">{{
-          $t('table.confirm') }}
+        <el-button :loading="loading" type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          {{ $t('table.confirm') }}
         </el-button>
       </div>
     </el-dialog>
