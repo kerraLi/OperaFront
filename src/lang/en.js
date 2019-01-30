@@ -72,6 +72,7 @@ export default {
     Godaddy: 'Godaddy',
     DomainList: 'DomainList',
     CertificateList: 'CertificateList',
+    Aws: 'AwsCloud',
     System: 'System',
     Parameter: 'Parameter',
     Resource: 'Resource',

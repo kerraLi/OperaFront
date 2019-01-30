@@ -72,6 +72,7 @@ export default {
     Godaddy: 'GODADDY',
     DomainList: '域名列表',
     CertificateList: '证书列表',
+    Aws: '亚马逊',
     System: '系统设置',
     Parameter: '参数设置',
     Resource: '其他资源',

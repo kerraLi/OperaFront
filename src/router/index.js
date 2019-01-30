@@ -214,6 +214,28 @@ export const asyncRouterMap = [
 
   },
   {
+    path: '/aws',
+    component: Layout,
+    redirect: '/aws/index',
+    alwaysShow: true,
+    meta: {
+      title: 'Aws',
+      icon: 'aws',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'account/list',
+        component: () => import('@/views/aws/account/list'),
+        name: 'AccountList',
+        meta: {
+          title: 'AccountList',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
     path: '/resource',
     component: Layout,
     redirect: '/resource/index',

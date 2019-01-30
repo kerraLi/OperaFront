@@ -98,7 +98,7 @@
   import waves from '@/directive/waves' // Waves directive
 
   export default {
-    name: 'ComplexTable',
+    name: 'AliAccountList',
     directives: { waves },
     filters: {
       statusFilter(status) {

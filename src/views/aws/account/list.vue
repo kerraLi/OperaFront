@@ -75,11 +75,11 @@
 </template>
 
 <script>
-  import { fetchAccountList, createAccount, updateAccount, deleteAccount } from '@/api/go'
+  import { fetchAccountList, createAccount, updateAccount, deleteAccount } from '@/api/aws'
   import waves from '@/directive/waves' // Waves directive
 
   export default {
-    name: 'GoAccountList',
+    name: "AwsAccountList",
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -254,3 +254,7 @@
     }
   }
 </script>
+
+<style scoped>
+
+</style>
