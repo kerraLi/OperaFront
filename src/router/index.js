@@ -232,7 +232,16 @@ export const asyncRouterMap = [
           title: 'AccountList',
           roles: ['admin']
         }
-      }
+      },
+      {
+        path: 'ec2/list',
+        component: () => import('@/views/aws/ec2/list'),
+        name: 'Ec2List',
+        meta: {
+          title: 'Ec2List',
+          roles: ['admin']
+        }
+      },
     ]
   },
   {

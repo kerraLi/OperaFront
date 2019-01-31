@@ -31,3 +31,16 @@ export function deleteAccount(id) {
   })
 
 }
+
+
+/**
+ * ec2
+ */
+
+export function fetchEc2List(data) {
+  return request({
+    url: '/aws/ec2/list',
+    method: 'post',
+    params: data
+  })
+}
