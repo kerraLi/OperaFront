@@ -103,6 +103,7 @@
               {{ $t('table.actions') }}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
+              <!-- 弃用 -->
               <el-dropdown-item v-if="filterAction(scope.row,'deprecated')"
                                 @click.native="handleModifyMarked(scope.row,true)">
                 {{ $t('table.deprecated') }}
@@ -111,6 +112,18 @@
                                 @click.native="handleModifyMarked(scope.row,false)">
                 {{ $t('table.unDeprecated') }}
               </el-dropdown-item>
+              <!-- 续费 -->
+              <el-dropdown-item v-if="filterAction(scope.row,'free')"
+                                divided
+                                @click.native="handlePayInfo(scope.row)">
+                {{ $t('table.ali.ecs.payInfo') }}
+              </el-dropdown-item>
+              <el-dropdown-item v-if="filterAction(scope.row,'free')"
+                                :disabled="scope.row.instanceChargeType!=='PrePaid'"
+                                @click.native="handlePerPay(scope.row)">
+                {{ $t('table.ali.ecs.perPay') }}
+              </el-dropdown-item>
+              <!-- 服务器状态 -->
               <el-dropdown-item v-if="filterAction(scope.row,'run')"
                                 :divided="filterAction(scope.row,'run')"
                                 @click.native="handleStatus(scope.row,'run')">
@@ -138,11 +151,79 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
                 @pagination="getList"/>
 
+    <!-- 费用信息 -->
+    <el-dialog class="pay-info" :title="$t('table.ali.ecs.payInfo')" :visible.sync="showPayInfo">
+      <el-form :model="temp" label-position="left" label-width="150px">
+        <el-form-item :label="$t('table.ali.ecs.instanceId')" prop="instanceId">
+          <span>{{ temp.instanceId }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.instanceName')" prop="instanceName">
+          <span>{{ temp.instanceName }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.createdTime')" prop="creationTime">
+          <span>{{ temp.creationTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.expiredTime')" prop="expiredTime">
+          <span>{{ temp.expiredTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <el-tag type="danger" v-if="temp.alertExpired">{{ $t('table.expiring') }}</el-tag>
+          <el-button size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-goods"
+                     :disabled="temp.instanceChargeType!=='PrePaid'"
+                     @click="handlePerPay(temp)">
+            {{ $t('table.ali.ecs.perPay') }}
+          </el-button>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.internetChargeType')" prop="internetChargeType">
+          <span>{{ temp.internetChargeType | internetChargeTypeFilter }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.instanceChargeType')" prop="instanceChargeType">
+          <span>{{ temp.instanceChargeType | instanceChargeTypeFilter }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.stoppedMode')" prop="stoppedMode">
+          <span>{{ temp.stoppedMode | stoppedModeFilter }}</span>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 预付费 -->
+    <el-dialog :title="$t('table.ali.ecs.perPay')" :visible.sync="showPerPay">
+      <el-form :model="temp" label-position="left" label-width="100px">
+        <el-form-item :label="$t('table.ali.ecs.instanceId')" prop="instanceId">
+          <span>{{ temp.instanceId }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.instanceName')" prop="instanceName">
+          <span>{{ temp.instanceName }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.createdTime')" prop="creationTime">
+          <span>{{ temp.creationTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.expiredTime')" prop="expiredTime">
+          <span>{{ temp.expiredTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <el-tag type="danger" v-if="temp.alertExpired">{{ $t('table.expiring') }}</el-tag>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.periodUnit')">
+          <el-radio-group v-model="tempPay.periodUnit">
+            <el-radio-button label="Week"/>
+            <el-radio-button label="Month"/>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('table.ali.ecs.period')">
+          <el-radio-group v-model="tempPay.period">
+            <el-radio-button v-for="v in payPeriods[tempPay.periodUnit]" :label="v"/>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showPerPay = false">{{ $t('table.cancel') }}</el-button>
+        <el-button :loading="loading" type="primary" @click="confirmPerPay">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { fetchEcsList, actionEcsStatus, updateEcsStatue } from '@/api/ali'
+  import { fetchEcsList, actionEcsStatus, updateEcsStatue, perPayEcs } from '@/api/ali'
   import { mark, unmark, markAll, unmarkAll } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
@@ -152,6 +233,11 @@
     { key: 'Running', display_name: 'Running' },
     { key: 'Stopped', display_name: 'Stopped' }
   ];
+
+  const payPeriods = {
+    'Week': ['1', '2', '3', '4'],
+    'Month': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '12', '24', '36', '48', '60'],
+  };
 
   export default {
     name: 'ComplexTable',
@@ -164,6 +250,28 @@
           Stopped: 'danger'
         };
         return statusMap[status]
+      },
+      internetChargeTypeFilter(internetChargeType) {
+        const internetChargeTypeMap = {
+          PayByTraffic: '按流量计费',
+          PayByBandwidth: '按宽带计费'
+        };
+        return internetChargeTypeMap[internetChargeType]
+      },
+      instanceChargeTypeFilter(instanceChargeType) {
+        const instanceChargeTypeMap = {
+          PrePaid: '预付费（包年包月）',
+          PostPaid: '按量付费'
+        };
+        return instanceChargeTypeMap[instanceChargeType]
+      },
+      stoppedModeFilter(stoppedMode) {
+        const stoppedModeMap = {
+          KeepCharging: '停机后继续收费、保留资源',
+          StopCharging: '停机后释放资源不收费',
+          'Not-applicable': '本实例支持停机不收费功能'
+        };
+        return stoppedModeMap[stoppedMode]
       }
     },
     data() {
@@ -187,9 +295,28 @@
           ifForce: false
         },
         statusOptionsChoice,
-        showReviewer: false,
-        pvData: [],
-        downloadLoading: false,
+        // 显示支付数据
+        showPayInfo: false,
+        temp: {
+          instanceId: '',
+          instanceName: '',
+          creationTime: '',
+          expiredTime: '',
+          internetChargeType: '',
+          instanceChargeType: '',
+          stoppedMode: '',
+          alertExpired: false,
+        },
+        tempPay: {
+          // 续费单位
+          periodUnit: 'Month',
+          // 续费期数
+          period: '1',
+        },
+        loading: false,
+        payPeriods,
+        // 预付费
+        showPerPay: false,
         checkList: []
       }
     },
@@ -203,13 +330,70 @@
       },
       // 列表数据
       getList() {
-        this.listLoading = true
+        this.listLoading = true;
         fetchEcsList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
+          this.list = response.data.items;
+          this.total = response.data.total;
+          this.listLoading = false;
           this.btnLoading = '';
         })
+      },
+      // 费用信息窗口
+      handlePayInfo(row) {
+        this.showPayInfo = true;
+        this.temp = row;
+      },
+      // 预付费窗口
+      handlePerPay(row) {
+        this.showPerPay = true;
+        this.temp = row;
+      },
+      // 确认付费
+      confirmPerPay() {
+        this.loading = true;
+        const actionPay = {
+          instanceId: this.temp.instanceId,
+          periodUnit: this.tempPay.periodUnit,
+          period: this.tempPay.period,
+        };
+        const h = this.$createElement;
+        this.$msgbox({
+          title: this.$t('message.confirmTitle'),
+          type: 'warning',
+          message: h('p', null, [
+            h('span', null, this.$t('table.ali.ecs.actionConfirmT1')),
+            h('span', { style: 'color: red' }, this.$t('table.ali.ecs.perPay')),
+            h('span', null, this.$t('table.ali.ecs.actionConfirmT2')),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: this.$t('message.confirm'),
+          cancelButtonText: this.$t('message.cancel'),
+          beforeClose: (type, instance, done) => {
+            if (type === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = this.$t('message.doing');
+              perPayEcs(actionPay).then(response => {
+                this.$message({
+                  message: this.$t('message.operSuccess'),
+                  type: 'success'
+                });
+                done();
+                setTimeout(() => {
+                  this.loading = false;
+                  this.showPerPay = false;
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              }).catch(() => {
+                instance.confirmButtonLoading = false;
+                instance.confirmButtonText = this.$t('message.confirm');
+              });
+            } else {
+              this.loading = false;
+              done();
+            }
+          }
+        }).catch(() => {
+        });
       },
       // 标记弃用
       handleModifyMarked(row, ifMarked) {
@@ -219,7 +403,7 @@
             this.$message({
               message: this.$t('message.operSuccess'),
               type: 'success'
-            })
+            });
             row.alertMarked = ifMarked;
             setTimeout(() => {
               this.btnLoading = '';
@@ -231,7 +415,7 @@
             this.$message({
               message: this.$t('message.operSuccess'),
               type: 'success'
-            })
+            });
             row.alertMarked = ifMarked;
             setTimeout(() => {
               this.btnLoading = '';
@@ -411,3 +595,10 @@
     }
   }
 </script>
+
+
+<style>
+  .pay-info .el-dialog {
+    width: 30%;
+  }
+</style>

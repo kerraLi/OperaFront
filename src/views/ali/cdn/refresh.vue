@@ -308,6 +308,8 @@
           row.process = data.process;
           row.status = data.status;
           this.listLoading = false;
+        }).catch(() => {
+          this.listLoading = false;
         })
       }
     }

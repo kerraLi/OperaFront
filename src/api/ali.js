@@ -87,6 +87,15 @@ export function updateEcsStatue(id) {
   })
 }
 
+// 预付费服务器
+export function perPayEcs(data) {
+  return request({
+    url: '/ali/ecs/perpay',
+    method: 'post',
+    data
+  })
+}
+
 /**
  * cdn
  */
