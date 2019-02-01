@@ -373,6 +373,15 @@
               instance.confirmButtonLoading = true;
               instance.confirmButtonText = this.$t('message.doing');
               perPayEcs(actionPay).then(response => {
+                // 替换数据
+                this.temp = response.data;
+                for (const v of this.list) {
+                  if (v.id === this.temp.id) {
+                    const index = this.list.indexOf(v);
+                    this.list.splice(index, 1, this.temp);
+                    break
+                  }
+                }
                 this.$message({
                   message: this.$t('message.operSuccess'),
                   type: 'success'
