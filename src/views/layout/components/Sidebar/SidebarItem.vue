@@ -4,7 +4,10 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" :title="generateTitle(onlyOneChild.meta.title)" />
+          <item v-if="onlyOneChild.meta"
+                :icon="onlyOneChild.meta.icon||item.meta.icon"
+                :title="generateTitle(onlyOneChild.meta.title)"
+                :message="message"/>
         </el-menu-item>
       </app-link>
     </template>
@@ -41,6 +44,7 @@ import { isExternal } from '@/utils'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SidebarItem',
@@ -65,6 +69,11 @@ export default {
     return {
       onlyOneChild: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'message',
+    ]),
   },
   methods: {
     hasOneShowingChild(children, parent) {

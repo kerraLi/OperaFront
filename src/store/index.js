@@ -6,6 +6,7 @@ import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import websocket from './modules/websocket'
+import message from './modules/message'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -17,9 +18,10 @@ const store = new Vuex.Store({
     permission,
     tagsView,
     user,
-    websocket
+    websocket,
+    message
   },
   getters
-})
+});
 
 export default store

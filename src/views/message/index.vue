@@ -205,6 +205,7 @@
       getList() {
         this.listLoading = true
         fetchList(this.listQuery).then(response => {
+          this.$store.dispatch('GetMessageNum');
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
@@ -220,7 +221,8 @@
           this.$message({
             message: '操作成功',
             type: 'success'
-          })
+          });
+          this.$store.dispatch('SubMessageNum', 1);
           row.status = status
         })
       },

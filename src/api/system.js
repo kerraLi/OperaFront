@@ -10,10 +10,11 @@ export function fetchList() {
 }
 
 
-export function create(key, value) {
+export function create(key, value, introduce) {
   let data = new URLSearchParams();
   data.append('key', key);
   data.append('value', value);
+  data.append('introduce', introduce);
   return request({
     url: '/parameter/create',
     method: 'post',

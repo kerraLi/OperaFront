@@ -151,6 +151,15 @@ export const asyncRouterMap = [
           roles: ['admin']
         }
       },
+      // {
+      //   path: 'ecs/buy',
+      //   component: () => import('@/views/ali/ecs/buy'),
+      //   name: 'EcsBuy',
+      //   meta: {
+      //     title: 'EcsBuy',
+      //     roles: ['admin']
+      //   }
+      // },
       {
         path: 'cdn/list',
         component: () => import('@/views/ali/cdn/list'),

@@ -50,7 +50,7 @@
     },
     created() {
       // 创建websocket
-      this.$store.dispatch('initWebSocket', this.id)
+      this.$store.dispatch('initWebSocket', this.id);
     },
     methods: {
       handleClickOutside() {

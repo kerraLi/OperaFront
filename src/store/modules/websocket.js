@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import router from '@/router'
+import store from '../../store'
 
 
 // import { Message, Notification } from 'element-ui'
@@ -45,6 +46,8 @@ function message(e) { //数据接收
     // * 对比redirectMessage(data.id, data.themeId)
     onClick: redirectMessage.bind(this, data.id, data.themeId)
   }));
+  // 增加消息数量
+  store.dispatch('AddMessageNum', 1);
 }
 
 function open(e) {

@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getNewNumber() {
+  return request({
+    url: '/message/number/new',
+    method: 'get'
+  })
+}
+
 export function fetchList(data) {
   return request({
     url: '/message/list',

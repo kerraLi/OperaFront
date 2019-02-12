@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div style="width: 60%;">
+    <div style="width: 80%;">
       <div class="filter-container">
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                    @click="handleCreate">{{ $t('table.add') }}
@@ -25,13 +25,13 @@
                   style="cursor: pointer;margin-right: 10px;">
               <svg-icon icon-class="delete"/>
             </span>
-            <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.key }}</span>
+            <span class="link-type" @click="scope.row.edit=!scope.row.edit">{{ scope.row.key }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.value')">
           <template slot-scope="scope">
             <template v-if="scope.row.edit">
-              <el-input v-model="scope.row.value" class="edit-input" size="small" style="width: 90%;"/>
+              <el-input v-model="scope.row.value" class="edit-input" size="small" style="width: 80%;"/>
               <span @click="cancelEdit(scope.row)" style="cursor: pointer;margin-left: 5px;margin-right: 5px;">
                 <svg-icon icon-class="cancel"/>
               </span>
@@ -47,6 +47,11 @@
             </template>
           </template>
         </el-table-column>
+        <el-table-column :label="$t('table.introduce')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.introduce }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -59,6 +64,9 @@
         </el-form-item>
         <el-form-item :label="$t('table.value')" prop="value">
           <el-input v-model="temp.value"/>
+        </el-form-item>
+        <el-form-item :label="$t('table.introduce')" prop="introduce">
+          <el-input v-model="temp.introduce"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -95,6 +103,7 @@
           key: '',
           value: '',
           status: '',
+          introduce: '',
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -148,7 +157,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.loading = true;
-            create(this.temp.key, this.temp.value).then((response) => {
+            create(this.temp.key.trim(), this.temp.value.trim(), this.temp.introduce.trim()).then((response) => {
               this.$set(response.data, 'edit', false);
               response.data.originalValue = response.data.value;
               this.list.push(response.data);
