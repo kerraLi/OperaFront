@@ -25,14 +25,14 @@ function message(e) { //数据接收
   // 去除html标签
   const message = data.message.replace(/<[^>]+>/g, "");
   let mHtml = '';
-  if (data.imageUrl !== undefined) {
+  if (data.imageUrl === undefined || data.imageUrl === 'null') {
     mHtml = "<div style='cursor: pointer;'>" +
       "<p style='float: left'>" + message + "</p>" +
-      "<img style='width: 100%' src='" + data.imageUrl + "'/>" +
       "</div>";
   } else {
     mHtml = "<div style='cursor: pointer;'>" +
       "<p style='float: left'>" + message + "</p>" +
+      "<img style='width: 100%' src='" + data.imageUrl + "'/>" +
       "</div>";
   }
   // Notification =》 this.$notify
