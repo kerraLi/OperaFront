@@ -334,6 +334,15 @@ export const asyncRouterMap = [
           title: 'Parameter',
           roles: ['admin']
         }
+      },
+      {
+        path: 'log/handle',
+        component: () => import('@/views/system/log/handle'),
+        name: 'LogHandle',
+        meta: {
+          title: 'LogHandle',
+          roles: ['admin']
+        }
       }
     ]
   },

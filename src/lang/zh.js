@@ -77,6 +77,7 @@ export default {
     Ec2List: 'EC2列表',
     System: '系统设置',
     Parameter: '参数设置',
+    LogHandle: '操作日志',
     Resource: '其他资源',
     Hardware: '硬件',
     HardwareUpload: '硬件上传'
@@ -269,6 +270,16 @@ export default {
       power: '电源',
       uNumber: 'U数量',
       remark: '备注'
+    },
+    log: {
+      username: '用户名',
+      path: 'PATH路径',
+      time: '执行时间',
+      inParam: '入参',
+      outParam: '出参',
+      ip: 'IP',
+      selectFilterCondition: '请选择筛选条件.',
+      inputFilterValue: '请输入筛选值.'
     }
   },
   errorLog: {

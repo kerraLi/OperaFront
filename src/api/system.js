@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function fetchHandleLog(data) {
+  return request({
+    url: '/log/handle/list',
+    method: 'get',
+    params: data
+  })
+}
 
 // 数据量少&去掉分页参数
 export function fetchList() {

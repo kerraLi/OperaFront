@@ -77,6 +77,7 @@ export default {
     Ec2List: 'Ec2List',
     System: 'System',
     Parameter: 'Parameter',
+    LogHandle: 'HandleLog',
     Resource: 'Resource',
     Hardware: 'Hardware',
     HardwareUpload: 'HardwareUpload'
@@ -269,6 +270,16 @@ export default {
       power: 'Power',
       uNumber: 'UNumber',
       remark: 'Remark'
+    },
+    log: {
+      username: 'Username',
+      path: 'Path',
+      time: 'Time',
+      inParam: 'InParam',
+      outParam: 'OutParam',
+      ip: 'IP',
+      selectFilterCondition: 'Select Filter Condition.',
+      inputFilterValue: 'Input Filter Value.'
     }
   },
   errorLog: {
