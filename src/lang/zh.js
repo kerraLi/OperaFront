@@ -80,7 +80,9 @@ export default {
     LogHandle: '操作日志',
     Resource: '其他资源',
     Hardware: '硬件',
-    HardwareUpload: '硬件上传'
+    ResourceIndex: '资源',
+    ResourceCate: '资源分类',
+    ResourceUpload: '资源上传'
   },
   navbar: {
     logOut: '退出登录',
@@ -245,6 +247,17 @@ export default {
       rootDeviceType: '管理设备类型',
     },
     resource: {
+      parentNode: '父节点',
+      path: '编 码',
+      pathName: '名 称',
+      type: '类 型',
+      createCate: '创建分类',
+      updateCate: '编辑分类',
+      resourceCate: '资源分类',
+      resourceType: '资源类型',
+      select: '请选择',
+      selectCate: '选择分类',
+      selectFile: '选择文件',
       username: '用户名',
       password: '密码',
       cabinet: '机柜',
@@ -321,6 +334,9 @@ export default {
       fixedNoEdit: '系统固定参数不能编辑.',
       fixedNoRemove: '系统固定参数不能删除.',
       valueToOrigin: '参数值恢复成原始值..'
+    },
+    resource: {
+      needCategory: '请先选择有效资源分类.',
     },
     hardware: {
       fileTooMuch: '请不要上传1M以上大小得文件.',

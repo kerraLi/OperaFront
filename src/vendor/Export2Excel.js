@@ -175,7 +175,7 @@ export function export_json_to_excel({
         };
       } else {
         return {
-          'wch': val.toString().length
+          'wch': val.toString().length * 1.5
         };
       }
     }))

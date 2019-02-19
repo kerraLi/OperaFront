@@ -1,5 +1,57 @@
 import request from '@/utils/request'
 
+/**
+ * category 分类
+ * @param data
+ */
+export function fetchCateList() {
+  return request({
+    url: '/resource/category/list',
+    method: 'get',
+  })
+}
+
+export function saveCate(data) {
+  return request({
+    url: '/resource/category/save',
+    method: 'post',
+    params: data
+  })
+}
+
+export function removeCate(id) {
+  return request({
+    url: '/resource/category/delete/' + id,
+    method: 'post'
+  })
+}
+
+/**
+ * type 类型
+ * @param data
+ */
+export function fetchTypeList() {
+  return request({
+    url: '/resource/type/list',
+    method: 'get'
+  })
+}
+
+export function saveType(data) {
+  return request({
+    url: '/resource/type/save',
+    method: 'post',
+    params: data
+  })
+}
+
+export function removeType(id) {
+  return request({
+    url: '/resource/type/delete/' + id,
+    method: 'get'
+  })
+}
+
 // 列表
 export function fetchHardwareList(data) {
   return request({

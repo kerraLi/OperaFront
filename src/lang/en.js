@@ -80,7 +80,9 @@ export default {
     LogHandle: 'HandleLog',
     Resource: 'Resource',
     Hardware: 'Hardware',
-    HardwareUpload: 'HardwareUpload'
+    ResourceIndex: 'Resource',
+    ResourceCate: 'ResourceCate',
+    ResourceUpload: 'ResourceUpload'
   },
   navbar: {
     logOut: 'Log Out',
@@ -245,6 +247,17 @@ export default {
       rootDeviceType: 'RootDeviceType',
     },
     resource: {
+      parentNode: 'Parent Node',
+      path: 'Path',
+      pathName: 'Name',
+      type: 'Type',
+      createCate: 'Create Category',
+      updateCate: 'Update Category',
+      resourceCate: 'Resource Category',
+      resourceType: 'Resource Type',
+      select: 'Select',
+      selectCate: 'Select Category',
+      selectFile: 'Select File',
       username: 'Username',
       password: 'Password',
       cabinet: 'Cabinet',
@@ -321,6 +334,9 @@ export default {
       fixedNoEdit: 'System fixed parameters cannot be edited.',
       fixedNoRemove: 'System fixed parameters cannot be removed.',
       valueToOrigin: 'The value has been restored to the original value.'
+    },
+    resource: {
+      needCategory: 'Please select useful category first.',
     },
     hardware: {
       fileTooMuch: 'Please do not upload files larger than 1m in size.',
