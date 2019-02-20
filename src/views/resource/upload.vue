@@ -49,9 +49,8 @@
 </template>
 
 <script>
-  import { fetchTypeList, fetchCateList } from '@/api/resource'
+  import { fetchTypeList, fetchCateList, uploadData } from '@/api/resource'
   import UploadExcelComponent from '@/components/UploadExcel/index.vue'
-  import { uploadHardware } from '@/api/resource'
 
   const typeTrees = [
     {
@@ -124,6 +123,7 @@
           // 数据树形格式化(按照父子关系)
           tempList.forEach((v) => {
             v.children = [];
+            v.disabled = false;
             if (v.parentId === 0) {
               this.cateTreeOptions.push(v);
             } else {
@@ -131,6 +131,7 @@
                 return c.id === v.parentId;
               });
               parent.children.push(v);
+              parent.disabled = true;
             }
           });
         });
@@ -168,41 +169,7 @@
         }
         this.dialogFormVisible = true;
       },
-      // upload-清空
-      handleClear() {
-        this.tableData = [];
-      },
-      // upload-确认上传
-      handleUpload() {
-        if (this.tableData.length === 0) {
-          this.$message({
-            message: this.$t('message.hardware.dataEmpty'),
-            type: 'warning'
-          });
-          return false
-        }
-        for (let obj in this.tableData) {
-          if (this.tableData[obj]['机柜'] === undefined || this.tableData[obj]['机柜'] === '') {
-            this.$message({
-              message: this.$t('message.hardware.needCabinet'),
-              type: 'warning'
-            });
-            return false
-          }
-        }
-        // 上传数据库
-        this.btnLoading = 'upload';
-        uploadHardware(this.tableData).then(response => {
-          this.$message({
-            message: this.$t('message.operSuccess'),
-            type: 'success'
-          });
-          this.btnLoading = '';
-        }).catch(() => {
-          this.btnLoading = '';
-        })
-      },
-      // upload
+      // upload-文件上传前校验
       beforeUpload(file) {
         const isLt1M = file.size / 1024 / 1024 < 1;
 
@@ -230,7 +197,46 @@
         });
         this.dialogFormVisible = false;
         this.tableData = results;
-        this.tableHeader = header;
+      },
+      // upload-清空
+      handleClear() {
+        this.tableData = [];
+      },
+      // upload-确认上传
+      handleUpload() {
+        if (this.tableData.length === 0) {
+          this.$message({
+            message: this.$t('message.hardware.dataEmpty'),
+            type: 'warning'
+          });
+          return false
+        }
+        // 上传数据库
+        let data = this.handleDataUpload();
+        let cateId = this.$refs.tree.getCheckedKeys()[0];
+        console.log(cateId);
+
+        this.btnLoading = 'upload';
+        uploadData(cateId, data).then(response => {
+          this.$message({
+            message: this.$t('message.operSuccess'),
+            type: 'success'
+          });
+          this.btnLoading = '';
+        }).catch(() => {
+          this.btnLoading = '';
+        })
+      },
+      handleDataUpload() {
+        let tmp = [];
+        this.tableData.forEach((data) => {
+          let tmpData = [];
+          this.tableHeader.forEach((value) => {
+            tmpData.push(data[value] ? data[value] : '');
+          });
+          tmp.push(tmpData);
+        });
+        return tmp;
       }
     }
   }

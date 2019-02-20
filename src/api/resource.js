@@ -1,9 +1,68 @@
 import request from '@/utils/request'
 
 /**
- * category 分类
- * @param data
+ * data
  */
+export function uploadData(cateId, data) {
+  return request({
+    url: '/resource/data/upload/' + cateId,
+    method: 'post',
+    data
+  })
+}
+
+export function fetchDataList(cateId, data) {
+  return request({
+    url: '/resource/data/list/' + cateId,
+    method: 'post',
+    params: data
+  })
+}
+
+export function createData(data) {
+  return request({
+    url: '/resource/data/save',
+    method: 'post',
+    data
+  })
+}
+
+export function updateData(data) {
+  return request({
+    url: '/resource/data/save',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteData(id) {
+  return request({
+    url: '/hardware/remove/' + id,
+    method: 'get'
+  })
+}
+
+export function deleteAllData(ids) {
+  let data = new URLSearchParams();
+  data.append("ids", ids);
+  return request({
+    url: '/hardware/remove',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * category 分类
+ */
+
+export function getCateInfo(path) {
+  return request({
+    url: '/resource/category/info/' + path,
+    method: 'get'
+  })
+}
+
 export function fetchCateList() {
   return request({
     url: '/resource/category/list',
@@ -28,8 +87,14 @@ export function removeCate(id) {
 
 /**
  * type 类型
- * @param data
  */
+export function getTypeInfo(code) {
+  return request({
+    url: '/resource/type/info/' + code,
+    method: 'get'
+  })
+}
+
 export function fetchTypeList() {
   return request({
     url: '/resource/type/list',

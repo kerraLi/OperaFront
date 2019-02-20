@@ -67,7 +67,7 @@ const permission = {
           });
           // 数据排序格式化（按id排序后）
           tempList.forEach((v) => {
-            v.component = () => import('@/views/resource/hardware');
+            v.component = () => import('@/views/resource/data');
             v.name = v.pathName;
             v.meta = {
               title: v.pathName
