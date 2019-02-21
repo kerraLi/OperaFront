@@ -214,7 +214,6 @@
         // 上传数据库
         let data = this.handleDataUpload();
         let cateId = this.$refs.tree.getCheckedKeys()[0];
-        console.log(cateId);
 
         this.btnLoading = 'upload';
         uploadData(cateId, data).then(response => {

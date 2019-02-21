@@ -57,6 +57,7 @@
             :data="listTree"
             :props="dialogTreeProps"
             :expand-on-click-node="dialogExpand"
+            v-if="listTree && listTree.length>0"
             show-checkbox
             default-expand-all
             node-key="id"
@@ -153,6 +154,7 @@
         dialogTreeProps: {
           children: 'children',
           label: 'pathName',
+          disabled: this.disableTree
         },
         dialogExpand: false,
         dialogTreeSelect: [],
@@ -177,6 +179,7 @@
     },
     methods: {
       getTypeList() {
+        this.listLoading = true;
         fetchTypeList().then(response => {
           this.dialogTypeSelection = this.dialogTypeSelection.concat(response.data);
           this.getList();
@@ -190,63 +193,52 @@
           tempList.sort((a, b) => {
             return a.id - b.id;
           });
-          // 数据排序格式化（按id排序后）
-          let tmp = [];
-          tempList.forEach((v) => {
-            v._expanded = true;
-            v._level = this.getLevel(tempList, v);
-            if (v.parentId === 0) {
-              tmp.push(v);
-            } else {
-              let hasChildCount = tmp.filter((c) => {
-                return c.parentId === v.parentId
-              }).length;
-              let parentIndex = tmp.findIndex((c) => {
-                return c.id === v.parentId;
-              });
-              v.parent = tmp.find((c) => {
-                return c.id === v.parentId;
-              });
-              tmp.splice(parentIndex + 1 + hasChildCount, 0, v);
-            }
-          });
-          this.list = tmp;
-          // 数据树形格式化(按照父子关系)
+          // // 数据树形格式化(按照父子关系)
           let tmpTree = [];
-          this.list.forEach((v) => {
+          tempList.forEach((v) => {
             v.children = [];
             if (v.parentId === 0) {
               tmpTree.push(v);
             } else {
-              let parent = this.list.find((c) => {
+              let parent = tempList.find((c) => {
                 return c.id === v.parentId;
               });
               parent.children.push(v);
             }
           });
           this.listTree = tmpTree;
+          this.list = this.treeToArr(tmpTree);
           this.listLoading = false;
         });
       },
+      // 数据排序格式化
+      treeToArr(data, parent = null, level = null) {
+        let tmp = [];
+        Array.from(data).forEach((v) => {
+          if (v._expanded === undefined) {
+            v._expanded = true;
+          }
+          let _level = 1;
+          if (level !== undefined && level !== null) {
+            _level = level + 1
+          }
+          v._level = _level;
+          if (parent) {
+            v.parent = parent
+          }
+          tmp.push(v);
+          if (v.children && v.children.length > 0) {
+            tmp = tmp.concat(this.treeToArr(v.children, v, _level))
+          }
+        });
+        return tmp;
+      },
+      // type-name处理
       typeNameComputed(type) {
         let tmp = this.dialogTypeSelection.filter((c) => {
           return c.code === type;
         });
         return tmp.length > 0 ? tmp[0].name : '';
-      },
-      // 数据-获取每个记录层数
-      getLevel(data, record) {
-        if (record.parentId === 0) {
-          return 1;
-        } else {
-          let tmp = 1;
-          let parentId = record.parentId;
-          while (data.filter((v) => (v.id === parentId)).length !== 0) {
-            parentId = data.filter((v) => (v.id === parentId))[0].parentId;
-            tmp++;
-          }
-          return tmp;
-        }
       },
       // table-行展示形式
       showRow: function (row) {
@@ -284,6 +276,7 @@
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys([]);
           this.$refs['dataForm'].clearValidate()
         })
       },
@@ -374,6 +367,10 @@
           this.btnLoading = ''
         })
       },
+      // tree-设置禁用
+      disableTree(data) {
+        return data.id === this.temp.id;
+      }
     }
   }
 </script>

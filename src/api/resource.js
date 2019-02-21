@@ -19,15 +19,7 @@ export function fetchDataList(cateId, data) {
   })
 }
 
-export function createData(data) {
-  return request({
-    url: '/resource/data/save',
-    method: 'post',
-    data
-  })
-}
-
-export function updateData(data) {
+export function saveData(data) {
   return request({
     url: '/resource/data/save',
     method: 'post',
@@ -37,7 +29,7 @@ export function updateData(data) {
 
 export function deleteData(id) {
   return request({
-    url: '/hardware/remove/' + id,
+    url: '/resource/data/remove/' + id,
     method: 'get'
   })
 }
@@ -46,7 +38,7 @@ export function deleteAllData(ids) {
   let data = new URLSearchParams();
   data.append("ids", ids);
   return request({
-    url: '/hardware/remove',
+    url: '/resource/data/remove',
     method: 'post',
     data
   })

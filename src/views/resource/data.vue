@@ -19,7 +19,9 @@
       </el-button>
     </div>
 
+    <el-table v-if="this.typeCode==='menu'"/>
     <el-table
+      v-else
       v-loading="listLoading"
       :key="tableKey"
       :data="list"
@@ -54,11 +56,13 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px"
                style="width: 800px; margin-left:50px;">
+        <el-form-item v-for="item of columns" :label="item" :prop="item">
+          <el-input v-model="temp[item]"/>
+        </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button :loading="loading" type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button :loading="loading" type="primary" @click="saveData()">
           {{ $t('table.confirm') }}
         </el-button>
       </div>
@@ -69,7 +73,7 @@
 <script>
   import {
     getCateInfo, getTypeInfo,
-    fetchDataList, deleteData, deleteAllData, createData, updateData
+    fetchDataList, deleteData, deleteAllData, saveData
   } from '@/api/resource'
   import waves from '@/directive/waves' // Waves directive
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -86,6 +90,7 @@
         cateCode: '',
         // type
         type: undefined,
+        typeCode: '',
         columns: [],
         tableKey: 0,
         // 列表
@@ -102,6 +107,9 @@
         // add&edit
         temp: {
           id: undefined,
+          categoryId: this.cateId,
+          typeCode: this.typeCode,
+          data: '',
         },
         // dialog
         loading: false,
@@ -111,9 +119,7 @@
         },
         dialogStatus: '',
         dialogFormVisible: false,
-        rules: {
-          cabinet: [{ required: true, message: 'cabinet is required', trigger: 'change' }],
-        },
+        rules: {},
         // 页码
         pvData: [],
         // 多选标记
@@ -132,11 +138,18 @@
         getCateInfo(this.cateCode).then(response => {
           this.cate = response.data;
           this.cateId = this.cate.id;
-          getTypeInfo(this.cate.type).then(response => {
-            this.type = response.data;
-            this.columns = JSON.parse(this.type.column);
-            this.getList();
-          });
+          if (this.cate.type === "menu") {
+            this.typeCode = "menu";
+            this.columns = [];
+            this.listLoading = false;
+          } else {
+            getTypeInfo(this.cate.type).then(response => {
+              this.type = response.data;
+              this.typeCode = this.type.code;
+              this.columns = JSON.parse(this.type.column);
+              this.getList();
+            });
+          }
         });
       },
       // 切换标记
@@ -161,6 +174,13 @@
       },
       // 重置temp
       resetTemp() {
+        // add&edit
+        this.temp = {
+          id: undefined,
+          categoryId: this.cateId,
+          typeCode: this.typeCode,
+          data: '',
+        };
       },
       // 删除
       handleDelete(row) {
@@ -182,6 +202,9 @@
       },
       // 批量删除
       handleDeleteAll() {
+        if (this.checkList.length <= 0) {
+          return;
+        }
         this.listLoading = true;
         const ids = this.checkList.map((c) => {
           return c.id;
@@ -223,12 +246,13 @@
           this.$refs['dataForm'].clearValidate()
         })
       },
-      // 新建账号
-      createData() {
+      // 新增|编辑数据
+      saveData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.loading = true;
-            createHardware(this.temp).then(() => {
+            this.handleDataSave();
+            saveData(this.temp).then(() => {
               this.loading = false;
               this.getList();
               this.dialogFormVisible = false;
@@ -244,28 +268,14 @@
           }
         })
       },
-      // 编辑账号
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.loading = true;
-            const tempData = Object.assign({}, this.temp);
-            updateHardware(tempData).then(() => {
-              this.loading = false;
-              this.getList();
-              this.dialogFormVisible = false;
-              this.$notify({
-                title: this.$t('message.success'),
-                message: this.$t('message.operSuccess'),
-                type: 'success',
-                duration: 2000
-              })
-            }).catch(() => {
-              this.loading = false
-            })
-          }
-        })
-      },
+      // 处理temp数据格式
+      handleDataSave() {
+        let tmpData = [];
+        this.columns.forEach((value) => {
+          tmpData.push(this.temp[value] ? this.temp[value] : '');
+        });
+        this.temp.data = JSON.stringify(tmpData);
+      }
     }
   }
 </script>
