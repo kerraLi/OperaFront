@@ -8,6 +8,13 @@
         <el-option v-for="item in statusOptionsChoice" :key="item.key" :label="item.display_name"
                    :value="item.key"/>
       </el-select>
+      <el-select v-model="listQuery.lockReason" multiple placeholder="LockReason" class="filter-item">
+        <el-option
+          v-for="item in lockReasonOptionsChoice"
+          :key="item.key"
+          :label="item.value"
+          :value="item.value"/>
+      </el-select>
       <el-checkbox v-model="listQuery.ifExpired" class="filter-item" style="margin-left:15px;margin-right: 15px;">
         {{ $t('table.expiring') }}
       </el-checkbox>
@@ -86,13 +93,20 @@
           <p>{{ scope.row.zoneId }}</p>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
+      <el-table-column :label="$t('table.status')" class-name="status-col" min-width="100">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-          <i v-if="scope.row.status === 'Starting' || scope.row.status === 'Stopping'"
-             @click="handleUpdateStatue(scope.row)"
-             style="cursor: pointer;"
-             class="el-icon-refresh"></i>
+          <p>
+            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+            <i v-if="scope.row.status === 'Starting' || scope.row.status === 'Stopping'"
+               @click="handleUpdateStatue(scope.row)"
+               style="cursor: pointer;"
+               class="el-icon-refresh"></i>
+          </p>
+          <p v-if="scope.row.lockReason" v-for="lock in scope.row.lockReason.split('|')">
+            <el-tag type="danger">
+            {{ lock }}
+            </el-tag>
+          </p>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="120"
@@ -234,6 +248,13 @@
     { key: 'Stopped', display_name: 'Stopped' }
   ];
 
+  const lockReasonOptionsChoice = [
+    { key: 'financial', value: 'financial', context: '因欠费被锁定' },
+    { key: 'security', value: 'security', context: '因安全原因被锁定' },
+    { key: 'recycling', value: 'recycling', context: '抢占式实例的待释放锁定状态' },
+    { key: 'dedicatedhostfinancial', value: 'dedicatedhostfinancial', context: '因为专有宿主机欠费导致 ECS 实例被锁定\n' }
+  ];
+
   const payPeriods = {
     'Week': ['1', '2', '3', '4'],
     'Month': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '12', '24', '36', '48', '60'],
@@ -285,6 +306,7 @@
           limit: 20,
           key: undefined,
           status: undefined,
+          lockReason: undefined,
           ifExpired: undefined,
           ifMarked: undefined
         },
@@ -295,6 +317,7 @@
           ifForce: false
         },
         statusOptionsChoice,
+        lockReasonOptionsChoice,
         // 显示支付数据
         showPayInfo: false,
         temp: {
@@ -331,12 +354,21 @@
       // 列表数据
       getList() {
         this.listLoading = true;
-        fetchEcsList(this.listQuery).then(response => {
+        fetchEcsList(this.beforeFetch(this.listQuery)).then(response => {
           this.list = response.data.items;
           this.total = response.data.total;
           this.listLoading = false;
           this.btnLoading = '';
         })
+      },
+      // 数据转换
+      beforeFetch(obj) {
+        // 深度赋值：解决引用赋值问题=》不改变原有this.listQuery
+        let tmp = Object.assign({}, obj);
+        if (tmp.lockReason) {
+          tmp.lockReason = tmp.lockReason.join(',');
+        }
+        return tmp;
       },
       // 费用信息窗口
       handlePayInfo(row) {
