@@ -83,7 +83,9 @@ const websocket = {
       state.wsConnect.send(data)
     },
     CLOSE_WS: (state) => {
-      state.wsConnect.close();
+      if (state.wsConnect) {
+        state.wsConnect.close();
+      }
       state.wsConnect = null;
     }
   },
