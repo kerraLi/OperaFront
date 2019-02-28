@@ -115,7 +115,6 @@
         list: null,
         total: 0,
         listLoading: true,
-        showReviewer: false,
         loading: false,
         btnLoading: '',
         seeSecret: false,
@@ -144,7 +143,6 @@
           accessKeyId: [{ required: true, message: 'accessKeyId is required', trigger: 'change' }],
           accessKeySecret: [{ required: true, message: 'accessKeySecret is required', trigger: 'change' }],
         },
-        downloadLoading: false
       }
     },
     created() {

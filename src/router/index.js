@@ -251,37 +251,50 @@ export const asyncRouterMap = [
     ]
   },
   resourceRouter,
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission/index',
-  //   alwaysShow: true, // will always show the root menu
-  //   meta: {
-  //     title: '账户设置',
-  //     icon: 'lock',
-  //     roles: ['admin', 'editor'] // you can set roles in root nav
-  //   },
-  //   children: [
-  //     {
-  //       path: 'page',
-  //       component: () => import('@/views/permission/page'),
-  //       name: 'PagePermission',
-  //       meta: {
-  //         title: 'pagePermission',
-  //         roles: ['admin'] // or you can only set roles in sub nav
-  //       }
-  //     },
-  //     {
-  //       path: 'directive',
-  //       component: () => import('@/views/permission/directive'),
-  //       name: 'DirectivePermission',
-  //       meta: {
-  //         title: 'directivePermission'
-  //         // if do not set roles, means: this page does not require permission
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/monitor',
+    component: Layout,
+    redirect: '/monitor/index',
+    alwaysShow: true,
+    meta: {
+      title: 'Monitor',
+      icon: 'monitor',
+    },
+    children: [
+      {
+        path: 'point',
+        component: () => import('@/views/monitor/point'),
+        name: 'MonitorPoint',
+        meta: {
+          title: 'MonitorPoint',
+        }
+      },
+      {
+        path: 'domain',
+        component: () => import('@/views/system/parameter/index'),
+        name: 'MonitorDomain',
+        meta: {
+          title: 'MonitorDomain',
+        }
+      },
+      {
+        path: 'index',
+        component: () => import('@/views/system/parameter/index'),
+        name: 'MonitorIndex',
+        meta: {
+          title: 'MonitorIndex',
+        }
+      },
+      {
+        path: 'speed',
+        component: () => import('@/views/monitor/speed'),
+        name: 'SpeedTest',
+        meta: {
+          title: 'SpeedTest',
+        }
+      }
+    ]
+  },
   {
     path: '/system',
     component: Layout,

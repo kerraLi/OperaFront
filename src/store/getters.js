@@ -17,6 +17,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs,
   wsConnect: state => state.websocket.wsConnect,
+  wsMsg: state => state.websocket.wsMsg,
   message: state => state.message.number
 }
 export default getters

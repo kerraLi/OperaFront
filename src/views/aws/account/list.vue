@@ -96,7 +96,6 @@
         list: null,
         total: 0,
         listLoading: true,
-        showReviewer: false,
         loading: false,
         btnLoading: '',
         seeSecret: false,
@@ -116,8 +115,8 @@
         dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
-          update: '编辑账号',
-          create: '新建账号'
+          update: this.$t('table.ali.account.update'),
+          create: this.$t('table.ali.account.create'),
         },
         // 校验规则
         rules: {
@@ -125,7 +124,6 @@
           accessKeyId: [{ required: true, message: 'userName is required', trigger: 'change' }],
           accessKeySecret: [{ required: true, message: 'userName is required', trigger: 'change' }],
         },
-        downloadLoading: false
       }
     },
     created() {

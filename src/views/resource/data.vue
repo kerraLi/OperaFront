@@ -12,7 +12,7 @@
                  @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
                  :loading="btnLoading === 'allDelete'"
                  @click="handleDeleteAll">
         {{ $t('table.allDelete') }}
@@ -120,8 +120,6 @@
         dialogStatus: '',
         dialogFormVisible: false,
         rules: {},
-        // 页码
-        pvData: [],
         // 多选标记
         checkList: []
       }

@@ -48,10 +48,6 @@
         }
       }
     },
-    created() {
-      // 创建websocket
-      this.$store.dispatch('initWebSocket', this.id);
-    },
     methods: {
       handleClickOutside() {
         this.$store.dispatch('closeSideBar', { withoutAnimation: false })

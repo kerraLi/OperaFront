@@ -82,7 +82,12 @@ export default {
     Hardware: '硬件',
     ResourceIndex: '资源',
     ResourceCate: '资源分类',
-    ResourceUpload: '资源上传'
+    ResourceUpload: '资源上传',
+    Monitor: '实时监控',
+    MonitorPoint: '监控点',
+    MonitorDomain: '监控域名',
+    MonitorIndex: '实时监控',
+    SpeedTest: '速度检测'
   },
   navbar: {
     logOut: '退出登录',
@@ -137,6 +142,7 @@ export default {
     type: '类型',
     remark: '点评',
     search: '搜索',
+    find: '查 询',
     add: '添加',
     export: '导出',
     reviewer: '审核人',
@@ -293,6 +299,24 @@ export default {
       ip: 'IP',
       selectFilterCondition: '请选择筛选条件.',
       inputFilterValue: '请输入筛选值.'
+    },
+    monitor: {
+      location: '地区',
+      address: '地理位置',
+      path: '调用路由',
+      operator: '运营商',
+      inputFindPath: '请输入查询域名.',
+      point: '监测点',
+      parseIP: '解析IP',
+      ipLocation: '解析地址',
+      httpStatus: '网络状态',
+      totalTime: '总时间',
+      parseTime: '解析时间',
+      conTime: '连接时间',
+      downloadTime: '下载时间',
+      headTime: '首字节时间',
+      downloadSize: '下载大小',
+      downloadSpeed: '下载速度'
     }
   },
   errorLog: {

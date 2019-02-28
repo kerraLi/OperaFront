@@ -5,7 +5,7 @@
 <script>
   import echarts from 'echarts'
 
-  require('echarts/theme/macarons') // echarts theme
+  require('echarts/theme/macarons'); // echarts theme
   import { debounce } from '@/utils'
 
   export default {
@@ -43,7 +43,7 @@
       }
     },
     mounted() {
-      this.initChart()
+      this.initChart();
       this.__resizeHandler = debounce(() => {
         if (this.chart) {
           this.chart.resize()

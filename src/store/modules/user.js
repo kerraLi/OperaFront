@@ -56,9 +56,9 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
+          const data = response.data;
+          commit('SET_TOKEN', data.token);
+          setToken(response.data.token);
           resolve()
         }).catch(error => {
           reject(error)
@@ -67,7 +67,7 @@ const user = {
     },
 
     // 获取用户信息
-    GetUserInfo({ commit, state }) {
+    GetUserInfo({ commit, dispatch, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
@@ -81,11 +81,12 @@ const user = {
             reject('getInfo: roles must be a non-null array !')
           }
 
-          commit('SET_ID', data.id)
-          commit('SET_NAME', data.username)
-          commit('SET_NICKNAME', data.nickname)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+          commit('SET_ID', data.id);
+          commit('SET_NAME', data.username);
+          commit('SET_NICKNAME', data.nickname);
+          commit('SET_AVATAR', data.avatar);
+          commit('SET_INTRODUCTION', data.introduction);
+          dispatch('initWebSocket', data.id);
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -101,6 +102,7 @@ const user = {
         resetPassword(oldPwd, newPwd).then(response => {
           commit('SET_TOKEN', '');
           commit('SET_ROLES', []);
+          commit('CLOSE_WS');
           removeToken();
           resolve()
         }).catch(error => {
@@ -127,9 +129,10 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
+          commit('SET_TOKEN', '');
+          commit('SET_ROLES', []);
+          commit('CLOSE_WS');
+          removeToken();
           resolve()
         }).catch(error => {
           reject(error)
@@ -140,8 +143,9 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeToken()
+        commit('CLOSE_WS');
+        commit('SET_TOKEN', '');
+        removeToken();
         resolve()
       })
     },
@@ -152,14 +156,14 @@ const user = {
         commit('SET_TOKEN', role)
         setToken(role)
         getUserInfo(role).then(response => {
-          const data = response.data
-          commit('SET_ID', data.id)
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.username)
-          commit('SET_NICKNAME', data.nickname)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          dispatch('GenerateRoutes', data) // 动态修改权限后 重绘侧边菜单
+          const data = response.data;
+          commit('SET_ID', data.id);
+          commit('SET_ROLES', data.roles);
+          commit('SET_NAME', data.username);
+          commit('SET_NICKNAME', data.nickname);
+          commit('SET_AVATAR', data.avatar);
+          commit('SET_INTRODUCTION', data.introduction);
+          dispatch('GenerateRoutes', data); // 动态修改权限后 重绘侧边菜单
           resolve()
         })
       })

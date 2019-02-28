@@ -82,7 +82,12 @@ export default {
     Hardware: 'Hardware',
     ResourceIndex: 'Resource',
     ResourceCate: 'ResourceCate',
-    ResourceUpload: 'ResourceUpload'
+    ResourceUpload: 'ResourceUpload',
+    Monitor: 'Monitor',
+    MonitorPoint: 'MonitorPoint',
+    MonitorDomain: 'MonitorDomain',
+    MonitorIndex: 'Monitor',
+    SpeedTest: 'SpeedTest'
   },
   navbar: {
     logOut: 'Log Out',
@@ -137,6 +142,7 @@ export default {
     type: 'Type',
     remark: 'Remark',
     search: 'Search',
+    find: 'Find',
     add: 'Add',
     export: 'Export',
     reviewer: 'reviewer',
@@ -293,6 +299,24 @@ export default {
       ip: 'IP',
       selectFilterCondition: 'Select Filter Condition.',
       inputFilterValue: 'Input Filter Value.'
+    },
+    monitor: {
+      location: 'Location',
+      address: 'Address',
+      operator: 'Operator',
+      path: 'Path',
+      inputFindPath: 'Please input path.',
+      point: 'Monitor Point',
+      parseIP: 'Parse IP',
+      ipLocation: 'Parse Location',
+      httpStatus: 'Http Status',
+      totalTime: 'Total Time',
+      parseTime: 'Parse Time',
+      conTime: 'Connection Time',
+      downloadTime: 'Download Time',
+      headTime: 'Head Time',
+      downloadSize: 'Download Size',
+      downloadSpeed: 'Download Speed'
     }
   },
   errorLog: {

@@ -3,14 +3,8 @@ import router from '@/router'
 import store from '../../store'
 
 
-// import { Message, Notification } from 'element-ui'
-
-function error() {//连接建立失败重连
-  console.log("errorerrorerror")
-  //this.initWebSocket();
-}
-
-function message(e) { //数据接收
+function message(data) {
+  // 全局消息处理
   let playPromise = messageMusic.play();
   if (playPromise !== undefined) {
     playPromise.then(() => {
@@ -21,7 +15,7 @@ function message(e) { //数据接收
       })
     });
   }
-  const data = JSON.parse(e.data);
+
   // 去除html标签
   const message = data.message.replace(/<[^>]+>/g, "");
   let mHtml = '';
@@ -50,16 +44,6 @@ function message(e) { //数据接收
   store.dispatch('AddMessageNum', 1);
 }
 
-function open(e) {
-  console.log('链接成功', e);
-}
-
-//关闭
-function close(e) {
-  console.log('断开连接', e);
-}
-
-
 function redirectMessage(id, themeId) {
   for (let i = 0; i < dialogArr.length; i++) {
     dialogArr[i].close();
@@ -82,19 +66,25 @@ const messageMusic = new Audio("../../static/audio/message.mp3");
 
 const websocket = {
   state: {
+    wsMsg: '',
     wsConnect: undefined,
   },
-
+  watch: {
+    wsConnect: {}
+  },
   mutations: {
+    SET_WS_MSG(state, msg) {
+      state.wsMsg = msg;
+    },
     SET_WS: (state, wsConnect) => {
       state.wsConnect = wsConnect;
-      state.wsConnect.onmessage = message;
-      state.wsConnect.onopen = open;
-      state.wsConnect.onerror = error;
-      state.wsConnect.onclose = close;
     },
     SEND_WS: (state, data) => {
       state.wsConnect.send(data)
+    },
+    CLOSE_WS: (state) => {
+      state.wsConnect.close();
+      state.wsConnect = null;
     }
   },
 
@@ -104,12 +94,51 @@ const websocket = {
         //初始化weosocket
         const wsUrl = process.env.WEBSOCKET_URL + '/' + userId;
         const ws = new WebSocket(wsUrl);
+        ws.onmessage = function (e) {
+          const data = JSON.parse(e.data);
+          if (data.action === 'speed-test') {
+            commit('SET_WS_MSG', data);
+          } else if (data.action === 'message') {
+            message(data)
+          }
+        };
+        // open
+        ws.onopen = function open(e) {
+          ws.send(JSON.stringify({ 'action': 'message' }));
+          let socket = e.target;
+          let timer = null;
+          if (socket.readyState === 0) {
+            // 如果延时器不等于null就先清除定时器
+            if (timer) {
+              clearTimeout(timer)
+            }
+            timer = setTimeout(function () {
+              console.log('尝试重新连接', e);
+              this.initWebSocket(userId);
+              timer = null
+            }, 500)
+          }
+        };
+        // error
+        ws.onerror = function error() {
+          self.initWebSocket(userId);
+        };
+        // close
+        ws.onclose = function close(e) {
+          // 1000代码：主动断开连接
+          if (e.code !== 1000) {
+            self.initWebSocket(userId);
+          }
+          console.log('断开连接', e);
+        };
         commit('SET_WS', ws);
         resolve()
       })
     },
-    send({ commit }, data) {
-      commit('SEND_WS', data);
+    sendWebSocket({ commit }, data) {
+      commit('SEND_WS', JSON.stringify(data), function (bbb) {
+        console.log(bbb)
+      });
     }
   }
 };
