@@ -38,6 +38,42 @@ export function deleteAllPoint(ids) {
 }
 
 /**
+ * domain
+ */
+export function fetchDomainList(data) {
+  return request({
+    url: '/monitor/domain/list',
+    method: 'post',
+    params: data
+  })
+}
+
+export function saveDomain(data) {
+  return request({
+    url: '/monitor/domain/save',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteDomain(id) {
+  return request({
+    url: '/monitor/domain/remove/' + id,
+    method: 'get'
+  })
+}
+
+export function deleteAllDomain(ids) {
+  let data = new URLSearchParams();
+  data.append("ids", ids);
+  return request({
+    url: '/monitor/domain/remove',
+    method: 'post',
+    data
+  })
+}
+
+/**
  * speed
  */
 export function connPoints(url) {

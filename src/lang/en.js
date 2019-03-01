@@ -305,6 +305,7 @@ export default {
       address: 'Address',
       operator: 'Operator',
       path: 'Path',
+      domain: 'Domain',
       inputFindPath: 'Please input path.',
       point: 'Monitor Point',
       parseIP: 'Parse IP',
@@ -318,7 +319,7 @@ export default {
       downloadSize: 'Download Size',
       downloadSpeed: 'Download Speed',
       buildButton: 'Build Information',
-      buildInfo:'Build Information'
+      buildInfo: 'Build Information'
     }
   },
   errorLog: {

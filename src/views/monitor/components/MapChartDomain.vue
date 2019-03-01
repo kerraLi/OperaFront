@@ -12,7 +12,7 @@
   const animationDuration = 2000;
 
   export default {
-    name: "MapDomainChart",
+    name: "MapChartDomain",
     props: {
       className: {
         type: String,

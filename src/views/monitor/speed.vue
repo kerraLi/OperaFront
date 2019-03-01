@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <map-domain-chart v-if="showChart" :chart-data="chartData"/>
+      <map-chart-domain v-if="showChart" :chart-data="chartData"/>
       <el-table
         v-loading="listLoading"
         ref="pointList"
@@ -148,12 +148,12 @@
 <script>
   import { mapGetters } from 'vuex'
   import { connPoints } from '@/api/monitor'
-  import MapDomainChart from './components/MapDomainChart'
+  import MapChartDomain from './components/MapChartDomain'
 
   export default {
     name: "SpeedTest",
     components: {
-      MapDomainChart
+      MapChartDomain
     },
     data() {
       return {
