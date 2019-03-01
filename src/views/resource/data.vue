@@ -47,7 +47,14 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-for="item of columns" :prop="item" :label="item" :key="item"/>
+      <el-table-column v-for="item of columns" :prop="item" :label="item" :key="item">
+        <template slot-scope="scope">
+          <el-tag v-if="item === '状态' && scope.row[item]!==''" :type="scope.row[item] | statusFilter">
+            {{ scope.row[item] }}
+          </el-tag>
+          <span v-else>{{ scope.row[item] }}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
@@ -82,6 +89,15 @@
     name: 'Hardware',
     components: { Pagination },
     directives: { waves },
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          running: 'success',
+          stop: 'danger'
+        };
+        return statusMap[status]
+      },
+    },
     data() {
       return {
         // cate
