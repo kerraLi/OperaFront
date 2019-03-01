@@ -30,12 +30,17 @@ const message = {
     },
     // 减少newMessage数量
     SubMessageNum({ commit }, number) {
-      console.log('sub', number);
-      commit('SUB_NUM', number);
+      return new Promise((resolve) => {
+        commit('SUB_NUM', number);
+        resolve()
+      });
     },
     // 增加newMessage数量
     AddMessageNum({ commit }, number) {
-      commit('ADD_NUM', number);
+      return new Promise((resolve) => {
+        commit('ADD_NUM', number);
+        resolve()
+      });
     }
   }
 };

@@ -18,6 +18,7 @@ const getters = {
   errorLogs: state => state.errorLog.logs,
   wsConnect: state => state.websocket.wsConnect,
   wsMsg: state => state.websocket.wsMsg,
+  wsCount: state => state.websocket.wsCount,
   message: state => state.message.number
 }
 export default getters

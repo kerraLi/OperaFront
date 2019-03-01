@@ -9,6 +9,10 @@
                  @click="handleDeleteAll">
         {{ $t('table.allDelete') }}
       </el-button>
+      <span @click="openHowToBuild" style="cursor:pointer;margin-left: 8px;font-size: 0.7rem;color: gray;">
+        <i class="el-icon-question"></i>
+        {{ $t('table.monitor.buildButton') }}
+      </span>
     </div>
 
     <el-table
@@ -81,6 +85,17 @@
       </div>
     </el-dialog>
 
+    <el-dialog
+      :title="$t('table.monitor.buildInfo')"
+      :visible.sync="dialogBuildVisible"
+      width="30%"
+      center>
+      <markdown-viewer v-model="content"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogBuildVisible = false">{{ $t('table.confirm') }}</el-button>
+      </span>
+    </el-dialog>
+
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
                 @pagination="getList"/>
 
@@ -90,7 +105,40 @@
 <script>
   import { fetchPointList, savePoint, deletePoint, deleteAllPoint } from '@/api/monitor'
   import waves from '@/directive/waves' // Waves directive
-  import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+  import Pagination from '@/components/Pagination'
+  import Icons from "../svg-icons/index"; // Secondary package based on el-pagination
+  import MarkdownViewer from '@/components/MarkdownViewer'
+
+  const content = `
+
+### **环境要求**
+* python 2.7.12
+* linux
+* 防火墙开启端口：2019
+### **git**
+\`\`\`
+sudo apt-get update
+sudo apt-get install git
+git clone http://git.laji.in/kerra/testspeed.git
+\`\`\`
+### **建议安装目录**
+\`\`\`
+/var/www/testspeed
+\`\`\`
+### **安装pycurl模块**
+\`\`\`
+sudo apt-get install libssl-dev libcurl4-openssl-dev python-dev
+pip install pycurl
+\`\`\`
+### **安装geoip2**
+\`\`\`
+pip install geoip2
+\`\`\`
+### **后台执行命令**
+\`\`\`
+pip install geoip2
+\`\`\`
+`;
 
   const operatorsChoice = [
     { key: '移动', value: '移动' },
@@ -137,7 +185,7 @@
   ];
   export default {
     name: "MonitorPoint",
-    components: { Pagination },
+    components: { Icons, Pagination, MarkdownViewer },
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -150,6 +198,7 @@
     },
     data() {
       return {
+        content: content,
         operatorsChoice,
         locationChoice,
         tableKey: 0,
@@ -183,7 +232,9 @@
           path: [{ required: true, message: 'path is required', trigger: 'change' }],
         },
         // 多选标记
-        checkList: []
+        checkList: [],
+        // dialog-build
+        dialogBuildVisible: false
       }
     },
     created() {
@@ -290,6 +341,9 @@
           this.btnLoading = '';
         })
       },
+      openHowToBuild() {
+        this.dialogBuildVisible = true;
+      }
     }
   }
 </script>

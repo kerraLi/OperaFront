@@ -12,7 +12,7 @@ import Editor from 'tui-editor'
 import defaultOptions from './defaultOptions'
 
 export default {
-  name: 'MarddownEditor',
+  name: 'MarkdownEditor',
   props: {
     value: {
       type: String,

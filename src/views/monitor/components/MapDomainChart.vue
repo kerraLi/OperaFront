@@ -99,7 +99,7 @@
               { min: 3000, max: 5000, label: '3000-5000ms', color: 'rgb(246, 152, 51)' },
               { min: 2000, max: 3000, label: '2000-3000ms', color: 'rgb(246, 237, 68)' },
               { min: 1000, max: 2000, label: '1000-2000ms', color: 'rgb(190, 246, 99)' },
-              { min: 400, max: 1000, label: '400-800ms', color: 'rgb(66, 221, 63)' },
+              { min: 400, max: 1000, label: '400-1000ms', color: 'rgb(66, 221, 63)' },
               { max: 400, label: '<400ms', color: 'rgb(36, 170, 29)' },
             ]
           },

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import router from '@/router'
 import store from '../../store'
+import { MessageBox } from "element-ui";
 
 
 function message(data) {
@@ -68,6 +69,7 @@ const websocket = {
   state: {
     wsMsg: '',
     wsConnect: undefined,
+    wsCount: 0,
   },
   watch: {
     wsConnect: {}
@@ -87,11 +89,31 @@ const websocket = {
         state.wsConnect.close();
       }
       state.wsConnect = null;
+    },
+    ADD_WS_COUNT: (state) => {
+      state.wsCount = state.wsCount + 1;
+    },
+    SET_WS_COUNT: (state, count) => {
+      state.wsCount = count;
     }
   },
 
   actions: {
-    initWebSocket({ commit }, userId) {
+    initWebSocket({ commit, dispatch }, userId) {
+      // 重连次数限制
+      if (this.state.websocket.wsCount >= 10) {
+        MessageBox.confirm('您的消息连接中心已断开(Websocket)，且重连已超过10次；请确认网络及服务器是否正常。',
+          '确认', {
+            confirmButtonText: '刷新',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+          location.reload()
+        });
+        return new Promise((resolve) => {
+          resolve()
+        });
+      }
       return new Promise((resolve) => {
         //初始化weosocket
         const wsUrl = process.env.WEBSOCKET_URL + '/' + userId;
@@ -108,39 +130,31 @@ const websocket = {
         ws.onopen = function open(e) {
           ws.send(JSON.stringify({ 'action': 'message' }));
           let socket = e.target;
-          let timer = null;
-          if (socket.readyState === 0) {
-            // 如果延时器不等于null就先清除定时器
-            if (timer) {
-              clearTimeout(timer)
-            }
-            timer = setTimeout(function () {
-              console.log('尝试重新连接', e);
-              this.initWebSocket(userId);
-              timer = null
-            }, 500)
+          // 连接失败重连
+          if (socket.readyState !== 0) {
+            commit('SET_WS_COUNT', 0)
           }
-        };
-        // error
-        ws.onerror = function error() {
-          self.initWebSocket(userId);
         };
         // close
         ws.onclose = function close(e) {
+          console.log(self, '断开连接', e);
           // 1000代码：主动断开连接
           if (e.code !== 1000) {
-            self.initWebSocket(userId);
+            setTimeout(function () {
+              commit('ADD_WS_COUNT');
+              dispatch('initWebSocket', userId);
+            }, 3000);
           }
-          console.log('断开连接', e);
         };
         commit('SET_WS', ws);
         resolve()
       })
     },
     sendWebSocket({ commit }, data) {
-      commit('SEND_WS', JSON.stringify(data), function (bbb) {
-        console.log(bbb)
-      });
+      return new Promise((resolve) => {
+        commit('SEND_WS', JSON.stringify(data));
+        resolve()
+      })
     }
   }
 };
