@@ -120,7 +120,9 @@ const websocket = {
         const ws = new WebSocket(wsUrl);
         ws.onmessage = function (e) {
           const data = JSON.parse(e.data);
-          if (data.action === 'speed-test') {
+          if (data.action === 'speed-test'
+            || data.action === 'speed-monitor'
+          ) {
             commit('SET_WS_MSG', data);
           } else if (data.action === 'message') {
             message(data)

@@ -146,8 +146,7 @@
   }
 </style>
 <script>
-  import { mapGetters } from 'vuex'
-  import { connPoints } from '@/api/monitor'
+  import { speedTest } from '@/api/monitor'
   import MapChartDomain from './components/MapChartDomain'
 
   export default {
@@ -174,18 +173,13 @@
         chartData: undefined
       }
     },
-    computed: {
-      ...mapGetters([
-        'id'
-      ])
-    },
     methods: {
       handleFindUrl() {
         this.findLoading = true;
         this.listLoading = true;
         this.showChart = false;
         this.average = undefined;
-        connPoints(this.url).then(response => {
+        speedTest(this.url).then(response => {
           const data = response.data;
           this.list = data.points;
           this.total = data.points.length;
@@ -210,7 +204,9 @@
         this.wsWatch = this.$store.watch((state, getters) => {
           return getters.wsMsg
         }, wsMsg => {
-          this.wsMessage(wsMsg)
+          if (wsMsg.action === 'speed-test') {
+            this.wsMessage(wsMsg)
+          }
         })
       },
       // 接收消息

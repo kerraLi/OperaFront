@@ -76,10 +76,17 @@ export function deleteAllDomain(ids) {
 /**
  * speed
  */
-export function connPoints(url) {
+export function speedTest(url) {
   return request({
     url: '/monitor/speed/test',
     method: 'post',
     params: { 'url': url }
+  })
+}
+
+export function speedMonitor() {
+  return request({
+    url: '/monitor/speed/monitor',
+    method: 'post',
   })
 }

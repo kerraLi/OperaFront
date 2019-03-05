@@ -279,7 +279,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'index',
-        component: () => import('@/views/system/parameter/index'),
+        component: () => import('@/views/monitor/monitor'),
         name: 'MonitorIndex',
         meta: {
           title: 'MonitorIndex',
