@@ -33,8 +33,7 @@
     },
     data() {
       return {
-        chart: null,
-        nowLegend: null
+        chart: null
       }
     },
     watch: {
@@ -72,10 +71,6 @@
       initChart() {
         this.chart = echarts.init(this.$el, 'macarons');
         this.setOptions(this.chartData)
-        // 图例开关的行为只会触发 legendselectchanged 事件
-        this.chart.on('legendselectchanged', function (params) {
-          this.nowLegend = params.selected;
-        });
       },
       setOptions(list) {
         let series = [];

@@ -85,19 +85,22 @@
         <el-table-column :label="$t('table.monitor.httpStatus')" min-width="150px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else-if="average !== undefined && scope.$index===0 && scope.row.has_error">
+            <span v-else-if="average !== undefined && scope.$index===0 && scope.row.has_error"
+                  style="color: red;">
               有非200状态
             </span>
-            <span v-else-if="average !== undefined && scope.$index===0 && !scope.row.has_error">
+            <span v-else-if="average !== undefined && scope.$index===0 && !scope.row.has_error"
+                  style="color:rgb(36, 170, 29);">
               200
             </span>
-            <span v-else>{{ scope.row.http_code || '-' }}</span>
+            <span v-else :style="scope.row.http_code | styleFilterCode">{{ scope.row.http_code || '-' }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.totalTime')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_total_time || '-' }}</span>
+            <span v-else
+                  :style="scope.row.http_total_time | styleFilterSpeed">{{ scope.row.http_total_time || '-' }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.parseTime')" min-width="100px">
@@ -153,6 +156,31 @@
     name: "SpeedTest",
     components: {
       MapChartDomain
+    },
+    filters: {
+      styleFilterCode(val) {
+        if (val === 200) {
+          return "color:rgb(36, 170, 29);"
+        } else {
+          return "color:red;"
+        }
+      },
+      styleFilterSpeed(val) {
+        let speed = String(val).replace(' ms', '').replace(' kb', '').replace(' mb/s', '');
+        if (speed < 400) {
+          return "color:rgb(36, 170, 29);"
+        } else if (speed >= 400 && speed < 1000) {
+          return "color:rgb(66, 221, 63);"
+        } else if (speed >= 1000 && speed < 2000) {
+          return "color:rgb(190, 246, 99);"
+        } else if (speed >= 2000 && speed < 3000) {
+          return "color:rgb(246, 237, 68);"
+        } else if (speed >= 3000 && speed < 5000) {
+          return "color:rgb(246, 152, 51);"
+        } else {
+          return "color:red;"
+        }
+      },
     },
     data() {
       return {

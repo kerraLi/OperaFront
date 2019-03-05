@@ -19,13 +19,17 @@
         <el-table-column :label="$t('table.monitor.httpStatus')" min-width="150px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else-if="scope.row.has_error">
-              有非200状态
-            </span>
-            <span v-else-if="!scope.row.has_error">
-              200
-            </span>
-            <span v-else>{{ scope.row.http_code || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_code_str"></div>
+                <span v-if="scope.row.has_error" style="color:red;">
+                  有非200状态
+                </span>
+                <span v-else style="color:rgb(36, 170, 29);">
+                  200
+                </span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.totalTime')" min-width="100px">
@@ -34,7 +38,8 @@
             <div v-else>
               <el-tooltip placement="top">
                 <div slot="content" v-html="scope.row.http_total_time_str"></div>
-                <span>{{ scope.row.http_total_time || '-' }}</span>
+                <span
+                  :style="scope.row.http_total_time | styleFilterSpeed">{{ scope.row.http_total_time || '-' }}</span>
               </el-tooltip>
             </div>
           </template>
@@ -42,37 +47,67 @@
         <el-table-column :label="$t('table.monitor.parseTime')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.dns_resolve_time || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.dns_resolve_time_str"></div>
+                <span>{{ scope.row.dns_resolve_time || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.conTime')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_conn_time || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_conn_time_str"></div>
+                <span>{{ scope.row.http_conn_time || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.downloadTime')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_pre_trans || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_pre_trans_str"></div>
+                <span>{{ scope.row.http_pre_trans || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.headTime')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_start_trans || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_start_trans_str"></div>
+                <span>{{ scope.row.http_start_trans || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.downloadSize')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_size_download || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_size_download_str"></div>
+                <span>{{ scope.row.http_size_download || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.monitor.downloadSpeed')" min-width="100px">
           <template slot-scope="scope">
             <span v-if="scope.row.loading"><i class="el-icon-loading"/></span>
-            <span v-else>{{ scope.row.http_speed_download || '-' }}</span>
+            <div v-else>
+              <el-tooltip placement="top">
+                <div slot="content" v-html="scope.row.http_speed_download_str"></div>
+                <span>{{ scope.row.http_speed_download || '-' }}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -93,6 +128,24 @@
     components: {
       MapChartDomains
     },
+    filters: {
+      styleFilterSpeed(val) {
+        let speed = String(val).replace(' ms', '').replace(' kb', '').replace(' mb/s', '');
+        if (speed < 400) {
+          return "color:rgb(36, 170, 29);"
+        } else if (speed >= 400 && speed < 1000) {
+          return "color:rgb(66, 221, 63);"
+        } else if (speed >= 1000 && speed < 2000) {
+          return "color:rgb(190, 246, 99);"
+        } else if (speed >= 2000 && speed < 3000) {
+          return "color:rgb(246, 237, 68);"
+        } else if (speed >= 3000 && speed < 5000) {
+          return "color:rgb(246, 152, 51);"
+        } else {
+          return "color:red;"
+        }
+      },
+    },
     data() {
       return {
         tableKey: 0,
@@ -108,12 +161,18 @@
         wsCode: undefined,
         wsWatch: undefined,
         // 表数据
-        chartData: undefined
+        chartData: undefined,
+        // timer
+        timer: null
       }
     },
     watch: {},
     created() {
       this.init()
+    },
+    beforeDestroy() {
+      clearTimeout(this.timer);
+      this.timer = null;
     },
     methods: {
       init() {
@@ -130,12 +189,23 @@
             };
             tempList.push(temp)
           });
+          if (tempList.length === 0 || data.points.length === 0) {
+            this.list = [];
+            this.$message({
+              showClose: true,
+              message: '请先配置监控域名和监控点。',
+              type: 'warning'
+            });
+            this.list = [];
+            this.listLoading = false;
+            return;
+          }
           this.list = tempList;
           this.total = tempList.length;
           this.wsCode = data.code;
           this.points = data.points;
-          this.handleMonitor();
           this.listLoading = false;
+          this.handleMonitor();
         });
       },
       // 重绘
@@ -183,8 +253,8 @@
               temp.dns_resolve_time_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.dns_resolve_time) + ' ms';
               temp.http_conn_time_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_conn_time) + ' ms';
               temp.http_pre_trans_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_pre_trans) + ' ms';
-              temp.http_size_download_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_size_download) + ' ms';
-              temp.http_speed_download_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_speed_download) + ' ms';
+              temp.http_size_download_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_size_download) + ' kb';
+              temp.http_speed_download_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_speed_download) + ' mb/s';
               temp.http_start_trans_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_start_trans) + ' ms';
               temp.http_total_time_str += '<br/> ' + d.location + ': ' + this.trimUnit(d.http_total_time) + ' ms';
               tempChartVal.data.push({
@@ -192,6 +262,7 @@
                 value: this.trimUnit(d.http_total_time)
               })
             });
+            temp.has_error = totalData.has_error;
             temp.dns_resolve_time = (totalData.dns_resolve_time / length).toFixed(2) + ' ms';
             temp.http_conn_time = (totalData.http_conn_time / length).toFixed(2) + ' ms';
             temp.http_pre_trans = (totalData.http_pre_trans / length).toFixed(2) + ' ms';
@@ -214,23 +285,45 @@
         this.showChart = true;
         this.chartData = tempChartData;
         this.list = tempList;
-        console.log('rrrrrrrrrrrr', this.list)
       },
       handleMonitor() {
-        this.$store.dispatch('sendWebSocket', { 'action': 'speed-monitor', 'code': this.wsCode });
-        this.wsWatch = this.$store.watch((state, getters) => {
+        let self = this;
+        self.$store.dispatch('sendWebSocket', { 'action': 'speed-monitor', 'code': self.wsCode });
+        self.wsWatch = self.$store.watch((state, getters) => {
           return getters.wsMsg
         }, wsMsg => {
           if (wsMsg.action === 'speed-monitor') {
-            this.wsMessage(wsMsg)
+            self.wsMessage(wsMsg)
           }
-        })
+        });
+        this.timer = setInterval(function () {
+          self.$store.dispatch('sendWebSocket', { 'action': 'speed-monitor', 'code': self.wsCode });
+          self.wsWatch = self.$store.watch((state, getters) => {
+            return getters.wsMsg
+          }, wsMsg => {
+            if (wsMsg.action === 'speed-monitor') {
+              self.wsMessage(wsMsg)
+            }
+          })
+        }, 20000);
       },
       // 接收消息
       wsMessage(data) {
         if (data.type === 'end') {
           this.reset();
           this.wsWatch();
+        } else if (data.type === 'start') {
+          for (const v of this.list) {
+            v.data = [];
+            v.http_code_str = '';
+            v.dns_resolve_time_str = '';
+            v.http_conn_time_str = '';
+            v.http_pre_trans_str = '';
+            v.http_size_download_str = '';
+            v.http_speed_download_str = '';
+            v.http_start_trans_str = '';
+            v.http_total_time_str = '';
+          }
         } else if (data.type === 'new') {
           // 节点正常
           if (data.result !== 'error') {

@@ -124,7 +124,7 @@ const websocket = {
             || data.action === 'speed-monitor'
           ) {
             commit('SET_WS_MSG', data);
-          } else if (data.action === 'message') {
+          } else if (data.action === 'message' && data.type !== 'start') {
             message(data)
           }
         };
