@@ -198,42 +198,94 @@
       },
       // 删除
       handleDelete(row) {
-        if (this.btnLoading === 'delete-' + row.id) {
-          return;
-        }
-        this.btnLoading = 'delete-' + row.id;
-        deleteData(row.id).then(() => {
-          const index = this.list.indexOf(row);
-          this.list.splice(index, 1);
-          this.$notify({
-            title: this.$t('message.success'),
-            message: this.$t('message.operSuccess'),
-            type: 'success',
-            duration: 2000
-          });
-          this.btnLoading = ''
-        })
+        const h = this.$createElement;
+        this.$msgbox({
+          title: this.$t('message.confirmTitle'),
+          type: 'warning',
+          message: h('p', null, [
+            h('span', null, '此操作将'),
+            h('span', { style: 'color: red' }, '删除'),
+            h('span', null, '该资源类型，是否确认？'),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: this.$t('message.confirm'),
+          cancelButtonText: this.$t('message.cancel'),
+          beforeClose: (type, instance, done) => {
+            if (type === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = this.$t('message.doing');
+              deleteData(row.id).then(() => {
+                const index = this.list.indexOf(row);
+                this.list.splice(index, 1);
+                this.$notify({
+                  title: this.$t('message.success'),
+                  message: this.$t('message.operSuccess'),
+                  type: 'success',
+                  duration: 2000
+                });
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              }).catch(() => {
+                instance.confirmButtonLoading = false;
+                instance.confirmButtonText = this.$t('message.confirm');
+              })
+            } else {
+              done();
+            }
+          }
+        }).catch(() => {
+        });
       },
       // 批量删除
       handleDeleteAll() {
         if (this.checkList.length <= 0) {
           return;
         }
-        this.listLoading = true;
         const ids = this.checkList.map((c) => {
           return c.id;
         });
         this.btnLoading = 'allDelete';
-        deleteAllData(ids).then(response => {
-          this.btnLoading = '';
-          this.$message({
-            message: this.$t('message.operSuccess'),
-            type: 'success'
-          });
-          this.getList()
+        const h = this.$createElement;
+        this.$msgbox({
+          title: this.$t('message.confirmTitle'),
+          type: 'warning',
+          message: h('p', null, [
+            h('span', null, '此操作将'),
+            h('span', { style: 'color: red' }, '删除'),
+            h('span', null, '勾选中的该资源类型，是否确认？'),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: this.$t('message.confirm'),
+          cancelButtonText: this.$t('message.cancel'),
+          beforeClose: (type, instance, done) => {
+            if (type === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = this.$t('message.doing');
+              deleteAllData(ids).then(response => {
+                this.$message({
+                  message: this.$t('message.operSuccess'),
+                  type: 'success'
+                });
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                  this.btnLoading = '';
+                  this.listLoading = true;
+                  this.getList();
+                }, 300);
+              }).catch(() => {
+                instance.confirmButtonLoading = false;
+                instance.confirmButtonText = this.$t('message.confirm');
+              })
+            } else {
+              this.btnLoading = '';
+              done();
+            }
+          }
         }).catch(() => {
-          this.btnLoading = '';
-        })
+        });
       },
       // 搜索
       handleFilter() {
