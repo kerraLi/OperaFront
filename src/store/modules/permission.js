@@ -50,8 +50,8 @@ const permission = {
     // 根据角色重置路由
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-        const { roles } = data
-        let accessedRouters
+         const { roles } = data;
+        let accessedRouters;
         if (roles.includes('admin')) {
           accessedRouters = asyncRouterMap
         } else {

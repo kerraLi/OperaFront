@@ -153,8 +153,8 @@ const user = {
     // 动态修改权限
     ChangeRoles({ commit, dispatch }, role) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', role)
-        setToken(role)
+        commit('SET_TOKEN', role);
+        setToken(role);
         getUserInfo(role).then(response => {
           const data = response.data;
           commit('SET_ID', data.id);

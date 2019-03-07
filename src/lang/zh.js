@@ -87,7 +87,12 @@ export default {
     MonitorPoint: '监控点',
     MonitorDomain: '监控域名',
     MonitorIndex: '实时监控',
-    SpeedTest: '速度检测'
+    SpeedTest: '速度检测',
+    User: '用户管理',
+    PasswordReset: '修改密码',
+    UserPermission: '权限管理',
+    UserRole: '角色管理',
+    UserIndex: '用户管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -190,6 +195,14 @@ export default {
     clear: '清 空',
     downloadExample: '下载示例',
     user: {
+      permission: {
+        menu: '菜单权限',
+        api: '接口权限',
+        name: '名 称',
+        action: '动 作',
+        type: '类 型',
+        refresh: '更新源数据'
+      },
       username: '用户名',
       oldPwd: '旧的密码',
       newPwd: '新的密码',

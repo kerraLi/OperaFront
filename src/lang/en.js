@@ -87,7 +87,12 @@ export default {
     MonitorPoint: 'MonitorPoint',
     MonitorDomain: 'MonitorDomain',
     MonitorIndex: 'Monitor',
-    SpeedTest: 'SpeedTest'
+    SpeedTest: 'SpeedTest',
+    User: 'UserManage',
+    PasswordReset: 'PasswordReset',
+    UserPermission: 'Permissions',
+    UserRole: 'Roles',
+    UserIndex: 'Users'
   },
   navbar: {
     logOut: 'Log Out',
@@ -190,6 +195,14 @@ export default {
     clear: 'Clear',
     downloadExample: 'Download Example',
     user: {
+      permission: {
+        menu: 'Menu Permission',
+        api: 'Api Permission',
+        name: 'Name',
+        action: 'Action',
+        type: 'Type',
+        refresh: 'Refresh Source Data'
+      },
       username: 'Username',
       oldPwd: 'Old Password',
       newPwd: 'New Password',

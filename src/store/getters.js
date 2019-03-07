@@ -20,5 +20,5 @@ const getters = {
   wsMsg: state => state.websocket.wsMsg,
   wsCount: state => state.websocket.wsCount,
   message: state => state.message.number
-}
+};
 export default getters

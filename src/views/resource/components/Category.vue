@@ -216,15 +216,15 @@
         let tmp = [];
         Array.from(data).forEach((v) => {
           if (v._expanded === undefined) {
-            v._expanded = true;
+            this.$set(v, '_expanded', true);
           }
           let _level = 1;
           if (level !== undefined && level !== null) {
             _level = level + 1
           }
-          v._level = _level;
+          this.$set(v, '_level', _level);
           if (parent) {
-            v.parent = parent
+            this.$set(v, 'parent', parent);
           }
           tmp.push(v);
           if (v.children && v.children.length > 0) {
@@ -248,10 +248,7 @@
       },
       // table-打开下一级 & 图标显示
       iconShow(record) {
-        let children = this.list.filter(v => {
-          return v.parentId === record.id;
-        });
-        return children.length > 0;
+        return (record.children && record.children.length > 0)
       },
       // table-下级展开
       toggleExpanded: function (trIndex) {

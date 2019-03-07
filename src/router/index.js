@@ -72,7 +72,16 @@ export const constantRouterMap = [
         meta: { title: 'dashboard', icon: 'dashboard' }
       }
     ]
-  },
+  }
+];
+
+export default new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/message',
     component: Layout,
@@ -87,43 +96,9 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/user/index'),
-        name: 'User',
-        meta: {
-          title: 'User'
-        }
-      },
-      {
-        path: 'reset/pwd',
-        component: () => import('@/views/user/password/reset'),
-        name: 'PasswordReset',
-        meta: {
-          title: 'PasswordReset'
-        }
-      }
-    ]
-  },
-];
-
-export default new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
-export const asyncRouterMap = [
-  {
     path: '/ali',
     component: Layout,
     redirect: '/ali/index',
-    alwaysShow: true,
     meta: {
       title: 'Ali',
       icon: 'ali',
@@ -133,7 +108,6 @@ export const asyncRouterMap = [
       {
         path: 'account/list',
         component: () => import('@/views/ali/account/list'),
-        name: 'AccountList',
         meta: {
           title: 'AccountList',
           roles: ['admin']
@@ -182,7 +156,6 @@ export const asyncRouterMap = [
     path: '/go',
     component: Layout,
     redirect: '/go/index',
-    alwaysShow: true,
     meta: {
       title: 'Godaddy',
       icon: 'guide',
@@ -192,7 +165,6 @@ export const asyncRouterMap = [
       {
         path: 'account/list',
         component: () => import('@/views/go/account/list'),
-        name: 'AccountList',
         meta: {
           title: 'AccountList',
           roles: ['admin']
@@ -223,7 +195,6 @@ export const asyncRouterMap = [
     path: '/aws',
     component: Layout,
     redirect: '/aws/index',
-    alwaysShow: true,
     meta: {
       title: 'Aws',
       icon: 'aws',
@@ -233,7 +204,6 @@ export const asyncRouterMap = [
       {
         path: 'account/list',
         component: () => import('@/views/aws/account/list'),
-        name: 'AccountList',
         meta: {
           title: 'AccountList',
           roles: ['admin']
@@ -255,7 +225,6 @@ export const asyncRouterMap = [
     path: '/monitor',
     component: Layout,
     redirect: '/monitor/index',
-    alwaysShow: true,
     meta: {
       title: 'Monitor',
       icon: 'monitor',
@@ -296,10 +265,52 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    meta: {
+      title: 'User',
+      icon: 'user',
+    },
+    children: [
+      {
+        path: 'reset/pwd',
+        component: () => import('@/views/user/password/reset'),
+        name: 'PasswordReset',
+        meta: {
+          title: 'PasswordReset'
+        }
+      },
+      {
+        path: 'permission',
+        component: () => import('@/views/user/permission'),
+        name: 'UserPermission',
+        meta: {
+          title: 'UserPermission',
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/system/parameter/index'),
+        name: 'UserRole',
+        meta: {
+          title: 'UserRole',
+        }
+      },
+      {
+        path: 'index',// 用户管理
+        component: () => import('@/views/system/parameter/index'),
+        name: 'UserIndex',
+        meta: {
+          title: 'UserIndex',
+        }
+      }
+    ]
+  },
+  {
     path: '/system',
     component: Layout,
     redirect: '/system/index',
-    alwaysShow: true, // will always show the root menu
     meta: {
       title: 'System',
       icon: 'setting',

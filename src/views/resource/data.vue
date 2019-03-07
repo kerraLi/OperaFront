@@ -226,6 +226,7 @@
                 done();
                 setTimeout(() => {
                   instance.confirmButtonLoading = false;
+                  instance.confirmButtonText = this.$t('message.confirm');
                 }, 300);
               }).catch(() => {
                 instance.confirmButtonLoading = false;
