@@ -57,22 +57,29 @@
           confirmButtonText: this.$t('message.confirm'),
           cancelButtonText: this.$t('message.cancel'),
           beforeClose: (type, instance, done) => {
-            instance.confirmButtonLoading = true;
-            instance.confirmButtonText = this.$t('message.doing');
-            this.fresh(freshType).then(() => {
-              this.$notify({
-                title: this.$t('message.success'),
-                message: this.$t('message.operSuccess'),
-                type: 'success',
-                duration: 2000
+            if (type === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = this.$t('message.doing');
+              this.fresh(freshType).then(() => {
+                this.$notify({
+                  title: this.$t('message.success'),
+                  message: this.$t('message.operSuccess'),
+                  type: 'success',
+                  duration: 2000
+                })
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                  instance.confirmButtonText = this.$t('message.confirm');
+                }, 300);
+              }).catch(() => {
+                instance.confirmButtonLoading = false;
+                instance.confirmButtonText = this.$t('message.confirm');
               })
-            });
-            done();
-            done();
-            setTimeout(() => {
-              instance.confirmButtonLoading = false;
-              instance.confirmButtonText = this.$t('message.confirm');
-            }, 300);
+            } else {
+              done();
+            }
+
           }
         }).catch(() => {
         });
