@@ -138,6 +138,7 @@ export default {
   table: {
     create: 'Create',
     update: 'Update',
+    save: 'Save',
     dynamicTips1: 'Fixed header, sorted by header order',
     dynamicTips2: 'Not fixed header, sorted by click order',
     dragTips1: 'The default order',
@@ -203,10 +204,19 @@ export default {
         type: 'Type',
         refresh: 'Refresh Source Data'
       },
+      role: {
+        role: 'Role',
+        code: 'Code',
+        name: 'Name'
+      },
       username: 'Username',
+      nickname: 'Nickname',
+      introduction: 'Introduction',
+      changePassword: 'Reset Password',
       oldPwd: 'Old Password',
       newPwd: 'New Password',
-      confirmPwd: 'Confirm Password'
+      confirmPwd: 'Confirm Password',
+      assignPermission: 'Permission'
     },
     ali: {
       username: 'NAME',

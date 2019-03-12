@@ -138,6 +138,7 @@ export default {
   table: {
     create: '创 建',
     update: '编 辑',
+    save: '保 存',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
@@ -203,10 +204,19 @@ export default {
         type: '类 型',
         refresh: '更新源数据'
       },
+      role: {
+        role: '角 色',
+        code: '代 码',
+        name: '名 称'
+      },
       username: '用户名',
+      nickname: '昵 称',
+      introduction: '介 绍',
+      changePassword: '重置密码',
       oldPwd: '旧的密码',
       newPwd: '新的密码',
-      confirmPwd: '确认密码'
+      confirmPwd: '确认密码',
+      assignPermission: '权 限'
     },
     ali: {
       username: '账户名',

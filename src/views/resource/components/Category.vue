@@ -112,7 +112,7 @@
 
   const checkAlpha = (rule, value, callback) => {
     if (value.length < 0 || value.length > 6) {
-      callback(new Error('分类编码在0至6个字符之间'))
+      callback(new Error('分类编码在1至6个字符之间'))
     } else {
       let reg = /^[a-z]+$/;
       if (!reg.test(value)) {

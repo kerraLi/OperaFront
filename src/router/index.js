@@ -291,7 +291,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'role',
-        component: () => import('@/views/system/parameter/index'),
+        component: () => import('@/views/user/role'),
         name: 'UserRole',
         meta: {
           title: 'UserRole',
@@ -299,7 +299,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'index',// 用户管理
-        component: () => import('@/views/system/parameter/index'),
+        component: () => import('@/views/user/index'),
         name: 'UserIndex',
         meta: {
           title: 'UserIndex',

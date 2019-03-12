@@ -96,7 +96,7 @@
         let tmp = [];
         Array.from(data).forEach((v) => {
           if (v._expanded === undefined) {
-            this.$set(v, '_expanded', this.expand);
+            this.$set(v, '_expanded', false);
           }
           let _level = 1;
           if (level !== undefined && level !== null) {
