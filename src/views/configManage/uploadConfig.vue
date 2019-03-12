@@ -1,5 +1,8 @@
 <template>
-  <div class="app-container">
+  <div 
+    v-loading="loading" 
+    class="app-container" 
+    element-loading-spinner="el-icon-loading">
     <div class="app-container">
       <input 
         ref="filElem" 
@@ -111,11 +114,20 @@
         map1: new Map([['http_proxy.conf', 'nginx-http'], ['https_proxy.conf', 'nginx-https'],
           ['cert.key', 'cert-key'], ['cert.crt', 'cert-crt'], ['rewrite-rule', 'rewrite-rule'],
           ['config.lua', 'config-lua'], ['filebeat.yaml', 'filebeat-yaml']]),
-        tableData: null
+        tableData: null,
+        timer: null,//定时刷新历史记录
+        loading:false,
       }
     },
     created() {
       this.getList();
+      clearInterval(this.timer)
+      this.timer = null
+      this.setTimer()
+    },
+    destroyed(){
+      clearInterval(this.timer)
+      this.timer = null
     },
     methods: {
       getList() {
@@ -156,6 +168,7 @@
           });
           return;
         }
+        this.loading = true;
         var name = this.fileName;
         var blob = new Blob([this.content], {type: "text/plain"});
         var file = new File([blob], name);
@@ -169,6 +182,7 @@
           param.append('file', this.file)
         }
         uploadFile(param).then(() => {
+          this.loading = false;
           this.getList();
           this.flg = true;
           this.$refs.filElem.value='';
@@ -196,6 +210,11 @@
           this.content = null;
           this.file = null;
         }
+      },
+      setTimer(){
+        this.timer = setInterval(() => {
+          this.getList()
+        },10000)
       }
     }
   }
