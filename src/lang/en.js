@@ -87,7 +87,9 @@ export default {
     MonitorPoint: 'MonitorPoint',
     MonitorDomain: 'MonitorDomain',
     MonitorIndex: 'Monitor',
-    SpeedTest: 'SpeedTest'
+    SpeedTest: 'SpeedTest',
+    configManage:'configManage',
+    uploadConfig:'uploadConfig'
   },
   navbar: {
     logOut: 'Log Out',
@@ -97,7 +99,7 @@ export default {
     github: 'Github',
     screenfull: 'Screenfull',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
   },
   login: {
     title: 'Login Form',
@@ -189,6 +191,7 @@ export default {
     upload: 'Upload',
     clear: 'Clear',
     downloadExample: 'Download Example',
+    HistoricalRecord:'HistoricalRecord',
     user: {
       username: 'Username',
       oldPwd: 'Old Password',
@@ -317,6 +320,20 @@ export default {
       headTime: 'Head Time',
       downloadSize: 'Download Size',
       downloadSpeed: 'Download Speed'
+    },
+    serverInfo:{
+      name:'Name',
+      ip:'Ip Address',
+      operator:'Operator',
+      state:'State',
+      createTime:'Create Time'
+    },
+    configManage: {
+      fileName:'fileName',
+      fileType:'fileType',
+      state:'state',
+      runResult:'runResult',
+      createTime:'createTime'
     }
   },
   errorLog: {

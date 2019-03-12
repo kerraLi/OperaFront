@@ -296,6 +296,38 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/configManage',
+    component: Layout,
+    redirect: '/configManage/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'configManage',
+      icon: 'international',
+      roles: ['admin'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'configManage',
+        component: () => import('@/views/configManage/serverInfo'),
+        name: 'configManage',
+        meta: {
+          title: 'configManage',
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'uploadConfig',
+        component: () => import('@/views/configManage/uploadConfig'),
+        name: 'uploadConfig',
+        hidden:true,
+        meta: {
+          title: 'uploadConfig',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
     path: '/system',
     component: Layout,
     redirect: '/system/index',

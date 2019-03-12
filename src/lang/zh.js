@@ -87,7 +87,9 @@ export default {
     MonitorPoint: '监控点',
     MonitorDomain: '监控域名',
     MonitorIndex: '实时监控',
-    SpeedTest: '速度检测'
+    SpeedTest: '速度检测',
+    configManage:'配置管理',
+    uploadConfig:'上传配置文件'
   },
   navbar: {
     logOut: '退出登录',
@@ -189,6 +191,7 @@ export default {
     upload: '上 传',
     clear: '清 空',
     downloadExample: '下载示例',
+    HistoricalRecord:'历史记录',
     user: {
       username: '用户名',
       oldPwd: '旧的密码',
@@ -317,6 +320,20 @@ export default {
       headTime: '首字节时间',
       downloadSize: '下载大小',
       downloadSpeed: '下载速度'
+    },
+    serverInfo:{
+      name:'名称',
+      ip:'Ip 地址',
+      operator:'运营商',
+      state:'状态',
+      createTime:'添加时间'
+    },
+    configManage: {
+      fileName:'文件名',
+      fileType:'文件类型',
+      state:'上传状态',
+      runResult:'运行结果',
+      createTime:'上传时间'
     }
   },
   errorLog: {
