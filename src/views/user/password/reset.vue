@@ -52,15 +52,19 @@
     name: "PasswordReset",
     data() {
       const validatePassword = (rule, value, callback) => {
-        if (value.length < 6) {
+        if (value && value.length < 6) {
           callback(new Error('The password can not be less than 6 digits'))
+        } else if (!value) {
+          callback(new Error('The password is required'))
         } else {
           callback()
         }
       };
       const validateNewPassword = (rule, value, callback) => {
-        if (value.length < 6) {
+        if (value && value.length < 6) {
           callback(new Error('The password can not be less than 6 digits'))
+        } else if (!value) {
+          callback(new Error('The password is required'))
         } else {
           if (this.operForm.confirmPwd !== '') {
             this.$refs.operForm.validateField('confirmPwd');

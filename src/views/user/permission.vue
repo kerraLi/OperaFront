@@ -66,7 +66,7 @@
                   message: this.$t('message.operSuccess'),
                   type: 'success',
                   duration: 2000
-                })
+                });
                 done();
                 setTimeout(() => {
                   instance.confirmButtonLoading = false;
