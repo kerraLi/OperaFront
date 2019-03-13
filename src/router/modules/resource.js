@@ -35,11 +35,10 @@ const componentsRouter = {
   path: '/resource',
   component: Layout,
   redirect: '/resource/index',
-  alwaysShow: true,
+  name: 'Resource',
   meta: {
     title: 'Resource',
     icon: 'resource',
-    roles: ['admin']
   },
   children: tmpTree
 };

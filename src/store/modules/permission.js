@@ -14,6 +14,14 @@ function hasPermission(roles, route) {
   }
 }
 
+function hasPermissionByMenus(menus, route) {
+  if (route.name) {
+    return menus.some(menu => route.name === menu)
+  } else {
+    return true;
+  }
+}
+
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  * @param routes asyncRouterMap
@@ -21,7 +29,6 @@ function hasPermission(roles, route) {
  */
 function filterAsyncRouter(routes, roles) {
   const res = [];
-
   routes.forEach(route => {
     const tmp = { ...route };
     if (hasPermission(roles, tmp)) {
@@ -31,7 +38,21 @@ function filterAsyncRouter(routes, roles) {
       res.push(tmp)
     }
   });
+  return res
+}
 
+function filterAsyncRouterByMenus(routes, menus) {
+  const res = [];
+  routes.forEach(route => {
+    const tmp = { ...route };
+    console.log(tmp);
+    if (hasPermissionByMenus(menus, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterAsyncRouterByMenus(tmp.children, menus)
+      }
+      res.push(tmp)
+    }
+  });
   return res
 }
 
@@ -50,16 +71,17 @@ const permission = {
     // 根据角色重置路由
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-        const { roles } = data;
+        const { roles, menus } = data;
         let accessedRouters;
+        // 过滤路由
         if (roles.includes('admin')) {
           accessedRouters = asyncRouterMap
         } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+          accessedRouters = filterAsyncRouterByMenus(asyncRouterMap, menus)
         }
         // 动态获取*资源*路由
         let resourceRoute = accessedRouters.filter((v) => (v.path === '/resource'))[0];
-        if (resourceRoute) {
+        if (resourceRoute && menus.some(menu => 'ResourceData' === menu)) {
           fetchCateList().then(response => {
             let tempList = response.data;
             // 按照id正序排序
@@ -86,6 +108,9 @@ const permission = {
                 parent.children.push(v);
               }
             });
+            commit('SET_ROUTERS', accessedRouters);
+            resolve()
+          }).catch(() => {
             commit('SET_ROUTERS', accessedRouters);
             resolve()
           });

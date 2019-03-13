@@ -41,7 +41,7 @@ service.interceptors.response.use(
   response => {
     // *** 特殊处理全局获取消息数量
     const res = response.data;
-    if (res.path === '/message/number/new') {
+    if (res.path === '/message/number/new' || res.path === '/resource/category/list') {
       return Promise.reject('error')
     }
     if (res.status && res.status === 'error') {

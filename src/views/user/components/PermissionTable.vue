@@ -40,6 +40,10 @@
         type: String,
         required: true,
       },
+      refresh_count: {
+        type: Number,
+        required: true,
+      }
     },
     filters: {
       typeFilter(type) {
@@ -56,6 +60,13 @@
         list: null,
         listTree: null,
         listLoading: true,
+      }
+    },
+    watch: {
+      refresh_count: {
+        handler() {
+          this.getList();
+        }
       }
     },
     created() {

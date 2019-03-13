@@ -106,9 +106,9 @@
       }
     },
     created() {
-      // this.refreshNum()
-      // this.refreshAccounts()
-      // this.refreshMessage()
+      this.refreshNum()
+      this.refreshAccounts()
+      this.refreshMessage()
     },
     methods: {
       refreshNum() {

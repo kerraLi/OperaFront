@@ -9,7 +9,7 @@
                      @click="handleFresh('menu')">{{ $t('table.user.permission.refresh') }}
           </el-button>
         </div>
-        <permission-table p_type="menu"/>
+        <permission-table :refresh_count="refreshMenu" p_type="menu"/>
       </el-tab-pane>
 
       <!--api log-->
@@ -19,7 +19,7 @@
                      @click="handleFresh('api')">{{ $t('table.user.permission.refresh') }}
           </el-button>
         </div>
-        <permission-table p_type="api"/>
+        <permission-table :refresh_count="refreshApi" p_type="api"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -40,11 +40,14 @@
       return {
         // oper
         tabActiveName: 'menu',
+        refreshMenu: 0,
+        refreshApi: 0,
       }
     },
     methods: {
       handleFresh(freshType) {
         const h = this.$createElement;
+        const self = this;
         this.$msgbox({
           title: this.$t('message.confirmTitle'),
           type: 'warning',
@@ -69,6 +72,12 @@
                 });
                 done();
                 setTimeout(() => {
+                  // 刷新界面
+                  if (freshType === 'api') {
+                    self.refreshApi++;
+                  } else if (freshType === 'menu') {
+                    self.refreshMenu++;
+                  }
                   instance.confirmButtonLoading = false;
                   instance.confirmButtonText = this.$t('message.confirm');
                 }, 300);
@@ -84,6 +93,7 @@
         }).catch(() => {
         });
       },
+      // 刷新操作
       fresh(freshType) {
         if (freshType === 'api') {
           return new Promise((resolve) => {
@@ -93,6 +103,7 @@
           });
         } else if (freshType === 'menu') {
           return new Promise((resolve) => {
+            console.log(asyncRouterMap);
             let routeArr = this.filterSpecial(this.treeToArr(asyncRouterMap));
             syncMenuPermission(routeArr).then(response => {
               resolve()
@@ -105,41 +116,42 @@
         }
       },
       // route树形转arr数组
-      treeToArr(routes, parentCode = '', parentPath = '') {
+      treeToArr(routes, parentCode = '', parentName = '') {
         let routeArr = [];
         routes.forEach((r) => {
           if (r['hidden'] === undefined || r['hidden'] === false) {
             if (!r.children || r.children.length === 0) {
-              let code = r['name'] ? r['name'] : r['meta']['title'];
+              // 无子节点
+              let code = r['name'];
+              let name = this.$t('route.' + r['meta']['title'], 'zh');
               routeArr.push({
                 'parentCode': parentCode,
-                'parentName': parentCode ? this.$t('route.' + parentCode, 'zh') : '',
+                'parentName': parentName,
                 'code': code,
-                'name': this.$t('route.' + code, 'zh'),
-                'path': parentPath ? (parentPath + '/' + r['path']) : r['path']
+                'name': name,
               });
             } else if (r.children && r.children.length === 1) {
-              let code = r['name'] ? r['name']
-                : (r['meta'] && r['meta']['title'] ? r['meta']['title']
-                  : (r.children[0]['name'] ? r.children[0]['name']
-                    : r.children[0]['meta']['title']));
+              // 只有一个子节点
+              let code = r['name'] ? r['name'] : r.children[0]['name'];
+              let temp = (r['meta'] !== undefined) ? r['meta']['title'] : r.children[0]['meta']['title'];
+              let name = this.$t('route.' + temp, 'zh');
               routeArr.push({
                 'parentCode': parentCode,
-                'parentName': parentCode ? this.$t('route.' + parentCode, 'zh') : '',
+                'parentName': parentName,
                 'code': code,
-                'name': this.$t('route.' + code, 'zh'),
-                'path': parentPath ? (parentPath + '/' + r['path'] + '/' + r.children[0]['path']) : (r['path'] + '/' + r.children[0]['path'])
+                'name': name,
               });
             } else {
-              let code = r['name'] ? r['name'] : r['meta']['title'];
+              // 多个子节点
+              let code = r['name'];
+              let name = this.$t('route.' + r['meta']['title'], 'zh');
               routeArr.push({
                 'parentCode': parentCode,
-                'parentName': parentCode ? this.$t('route.' + parentCode, 'zh') : '',
+                'parentName': parentName,
                 'code': code,
-                'name': this.$t('route.' + code, 'zh'),
-                'path': parentPath ? (parentPath + '/' + r['path']) : r['path']
+                'name': name,
               });
-              routeArr = routeArr.concat(this.treeToArr(r.children, code, (parentPath ? (parentPath + '/' + r['path']) : r['path'])));
+              routeArr = routeArr.concat(this.treeToArr(r.children, code, name));
             }
           }
         });
@@ -155,7 +167,6 @@
           'parentName': this.$t('route.Resource', 'zh'),
           'code': 'ResourceData',
           'name': '资源数据',
-          'path': '/resource/{data}'
         });
         return tempArr;
       },
