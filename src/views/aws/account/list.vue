@@ -153,11 +153,13 @@
       getList() {
         this.listLoading = true
         fetchAccountList().then(response => {
-          this.list = response.data
-          this.total = response.data.length
+          this.list = response.data;
+          this.total = response.data.length;
 
           // Just to simulate the time of the request
           this.listLoading = false
+        }).catch(() => {
+          this.listLoading = false;
         })
       },
       handleFilter() {
