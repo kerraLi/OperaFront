@@ -39,7 +39,11 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
-    const res = response.data
+    // *** 特殊处理全局获取消息数量
+    const res = response.data;
+    if (res.path === '/message/number/new') {
+      return Promise.reject('error')
+    }
     if (res.status && res.status === 'error') {
       Message({
         message: res.message,
@@ -57,6 +61,8 @@ service.interceptors.response.use(
             location.reload() // 为了重新实例化vue-router对象 避免bug
           })
         })
+      } else if (res.message === '403') {
+        MessageBox.alert('你无权操作该内容，请确认后再进行操作.')
       }
       return Promise.reject('error')
     } else {

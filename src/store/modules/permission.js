@@ -50,7 +50,7 @@ const permission = {
     // 根据角色重置路由
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-         const { roles } = data;
+        const { roles } = data;
         let accessedRouters;
         if (roles.includes('admin')) {
           accessedRouters = asyncRouterMap
@@ -59,35 +59,40 @@ const permission = {
         }
         // 动态获取*资源*路由
         let resourceRoute = accessedRouters.filter((v) => (v.path === '/resource'))[0];
-        fetchCateList().then(response => {
-          let tempList = response.data;
-          // 按照id正序排序
-          tempList.sort((a, b) => {
-            return a.id - b.id;
+        if (resourceRoute) {
+          fetchCateList().then(response => {
+            let tempList = response.data;
+            // 按照id正序排序
+            tempList.sort((a, b) => {
+              return a.id - b.id;
+            });
+            // 数据排序格式化（按id排序后）
+            tempList.forEach((v) => {
+              v.component = () => import('@/views/resource/data');
+              v.name = v.pathName;
+              v.meta = {
+                title: v.pathName
+              };
+            });
+            // 数据树形格式化(按照父子关系)
+            tempList.forEach((v) => {
+              v.children = [];
+              if (v.parentId === 0) {
+                resourceRoute.children.unshift(v);
+              } else {
+                let parent = tempList.find((c) => {
+                  return c.id === v.parentId;
+                });
+                parent.children.push(v);
+              }
+            });
+            commit('SET_ROUTERS', accessedRouters);
+            resolve()
           });
-          // 数据排序格式化（按id排序后）
-          tempList.forEach((v) => {
-            v.component = () => import('@/views/resource/data');
-            v.name = v.pathName;
-            v.meta = {
-              title: v.pathName
-            };
-          });
-          // 数据树形格式化(按照父子关系)
-          tempList.forEach((v) => {
-            v.children = [];
-            if (v.parentId === 0) {
-              resourceRoute.children.unshift(v);
-            } else {
-              let parent = tempList.find((c) => {
-                return c.id === v.parentId;
-              });
-              parent.children.push(v);
-            }
-          });
+        } else {
           commit('SET_ROUTERS', accessedRouters);
           resolve()
-        });
+        }
       })
     }
   }

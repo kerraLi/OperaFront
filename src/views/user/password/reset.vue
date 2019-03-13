@@ -66,9 +66,6 @@
         } else if (!value) {
           callback(new Error('The password is required'))
         } else {
-          if (this.operForm.confirmPwd !== '') {
-            this.$refs.operForm.validateField('confirmPwd');
-          }
           callback()
         }
       };

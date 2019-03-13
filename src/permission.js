@@ -54,6 +54,8 @@ router.beforeEach((to, from, next) => {
     // 获取消息message
     store.dispatch('GetMessageNum').then(() => {
       next();
+    }).catch(() => {
+      next();
     });
   } else {
     next();

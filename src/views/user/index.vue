@@ -137,9 +137,6 @@
         } else if (!value) {
           callback(new Error('The password is required'))
         } else {
-          if (this.temp.confirmPwd !== '') {
-            this.$refs.dataForm.validateField('newPwd');
-          }
           callback()
         }
       };
