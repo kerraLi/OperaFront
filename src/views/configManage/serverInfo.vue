@@ -377,7 +377,7 @@
         });
       },
       toUpload(row) {
-        this.$router.push({path: 'ConfigManageUpload', query: {id: row}});
+        this.$router.push({path: '/configManage/upload', query: {id: row}});
       }
     }
   }
