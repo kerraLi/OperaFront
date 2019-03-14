@@ -1,18 +1,22 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input placeholder="Key" v-model="listQuery.key" style="width: 200px;" class="filter-item"
+      <el-input placeholder="Key" v-model="listQuery.key" clearable style="width: 200px;" class="filter-item"
                 @keyup.enter.native="handleFilter"/>
       <el-select v-model="listQuery.status" placeholder="Status" clearable class="filter-item"
                  style="width: 130px">
         <el-option v-for="item in statusOptionsChoice" :key="item.key" :label="item.display_name"
                    :value="item.key"/>
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{
-        $t('table.search') }}
+      <el-select v-model="listQuery.theme" placeholder="Theme" clearable class="filter-item">
+        <el-option v-for="item in themeOptionsChoice" :key="item" :label="item"
+                   :value="item"/>
+      </el-select>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        {{ $t('table.search') }}
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-check" @click="modifyAllStatus('finish')">{{
-        $t('table.allFinish') }}
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-check" @click="modifyAllStatus('finish')">
+        {{ $t('table.allFinish') }}
       </el-button>
     </div>
 
@@ -129,7 +133,7 @@
 </template>
 
 <script>
-  import { fetchList, modifyStatus, modifyAllStatus } from '@/api/message'
+  import { fetchList, fetchTypes, modifyStatus, modifyAllStatus } from '@/api/message'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -175,8 +179,10 @@
           limit: 20,
           key: undefined,
           status: undefined,
+          theme: undefined
         },
         statusOptionsChoice,
+        themeOptionsChoice: null,
         showReviewer: false,
         pvData: [],
         downloadLoading: false,
@@ -186,29 +192,34 @@
     },
     created() {
       // 单独调用方法 设置then
-      this.listLoading = true
+      this.listLoading = true;
       if (this.$route.params.themeId !== undefined) {
         this.listQuery.key = this.$route.params.themeId
       }
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-        const openId = this.$route.params.openId;
-        if (openId !== undefined) {
-          // list
-          this.expands.push(openId)
-        }
-      })
+      this.getList();
+      // 初始化types
+      if (!this.themeOptionsChoice) {
+        fetchTypes().then(response => {
+          console.log(response.data);
+          this.themeOptionsChoice = response.data;
+        })
+      }
     },
     methods: {
       getList() {
-        this.listLoading = true
+        this.listLoading = true;
         fetchList(this.listQuery).then(response => {
-          this.$store.dispatch('GetMessageNum');
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
+          this.total = response.data.total;
+          this.list = response.data.items;
+          this.listLoading = false;
+          // 展开
+          const openId = this.$route.params.openId;
+          if (openId !== undefined) {
+            // list
+            this.expands.push(openId)
+          } else {
+            this.$store.dispatch('GetMessageNum');
+          }
         })
       },
       // 切换标记

@@ -15,6 +15,13 @@ export function fetchList(data) {
   })
 }
 
+export function fetchTypes() {
+  return request({
+    url: '/message/types',
+    method: 'get',
+  })
+}
+
 export function modifyStatus(status, id) {
   return request({
     url: '/message/status/' + status + '/' + id,
