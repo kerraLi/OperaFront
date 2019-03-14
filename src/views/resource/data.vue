@@ -8,14 +8,19 @@
                  @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                  @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
+      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
                  :loading="btnLoading === 'allDelete'"
                  @click="handleDeleteAll">
         {{ $t('table.allDelete') }}
+      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-download"
+                 :loading="btnLoading === 'download'"
+                 @click="handleDownload">
+        {{ $t('table.export') }}
       </el-button>
     </div>
 
@@ -80,7 +85,7 @@
 <script>
   import {
     getCateInfo, getTypeInfo,
-    fetchDataList, deleteData, deleteAllData, saveData
+    fetchDataList, fetchDataDownload, deleteData, deleteAllData, saveData
   } from '@/api/resource'
   import waves from '@/directive/waves' // Waves directive
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -342,6 +347,31 @@
           tmpData.push(this.temp[value] ? this.temp[value] : '');
         });
         this.temp.data = JSON.stringify(tmpData);
+      },
+      // 导出
+      handleDownload() {
+        this.btnLoading = 'download';
+        import('@/vendor/Export2Excel').then(excel => {
+          fetchDataDownload(this.cateId, {}).then((response) => {
+            const tHeader = this.columns;
+            const filterVal = this.columns;
+            console.log(response.data);
+            const data = this.formatJson(filterVal, response.data);
+            console.log(data)
+            excel.export_json_to_excel({
+              header: tHeader,
+              data,
+              filename: this.cate.pathName
+            });
+            this.btnLoading = ''
+          });
+        })
+      },
+      formatJson(filterVal, jsonData) {
+        return jsonData.map(v => filterVal.map((j, index) => {
+          let tmp = JSON.parse(v.data);
+          return tmp[index]
+        }))
       }
     }
   }

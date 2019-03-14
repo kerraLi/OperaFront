@@ -8,7 +8,7 @@
         <el-option v-for="item in statusOptionsChoice" :key="item.key" :label="item.display_name"
                    :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.theme" placeholder="Theme" clearable class="filter-item">
+      <el-select v-model="listQuery.title" placeholder="Title" clearable class="filter-item">
         <el-option v-for="item in themeOptionsChoice" :key="item" :label="item"
                    :value="item"/>
       </el-select>
@@ -81,7 +81,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('table.type')" width="100" align="center"
+        :label="$t('table.type')" width="150" align="center"
         prop="title">
         <template slot-scope="scope">
           <el-tag :type="scope.row.title | typeFilter">{{ scope.row.title }}</el-tag>
@@ -179,7 +179,7 @@
           limit: 20,
           key: undefined,
           status: undefined,
-          theme: undefined
+          title: undefined
         },
         statusOptionsChoice,
         themeOptionsChoice: null,
@@ -200,7 +200,6 @@
       // 初始化types
       if (!this.themeOptionsChoice) {
         fetchTypes().then(response => {
-          console.log(response.data);
           this.themeOptionsChoice = response.data;
         })
       }
