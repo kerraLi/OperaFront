@@ -165,6 +165,25 @@ code {
   }
 }
 
+.sub-sticky {
+  height: 3rem;
+  line-height: 3rem;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  padding: 5px 20px;
+  transition: 600ms ease position;
+  background: oldlace;
+  color: #606266;
+  button {
+    height: 2rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-left: 15px;
+  }
+}
+
 .link-type,
 .link-type:focus {
   color: #337ab7;

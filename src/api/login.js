@@ -6,7 +6,7 @@ export function loginByUsername(username, password) {
     password
   }
   return request({
-    url: '/user/login',
+    url: '/auth/login',
     method: 'post',
     params: data
     // data: Object.entries(data).map(el => el.join('=')).join('&'),
@@ -16,14 +16,14 @@ export function loginByUsername(username, password) {
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/auth/logout',
     method: 'get'
   })
 }
 
 export function getUserInfo() {
   return request({
-    url: '/user/info',
+    url: '/auth/info',
     method: 'get',
   })
 }
@@ -33,7 +33,7 @@ export function resetPassword(oldPwd, newPwd) {
   data.append('oldPwd', oldPwd);
   data.append('newPwd', newPwd);
   return request({
-    url: '/user/reset/password',
+    url: '/auth/reset/password',
     method: 'post',
     data
   })

@@ -89,7 +89,12 @@ export default {
     MonitorIndex: '实时监控',
     SpeedTest: '速度检测',
     configManage:'配置管理',
-    uploadConfig:'上传配置文件'
+    uploadConfig:'上传配置文件',
+    User: '用户管理',
+    PasswordReset: '修改密码',
+    UserPermission: '权限管理',
+    UserRole: '角色管理',
+    UserIndex: '用户管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -135,6 +140,7 @@ export default {
   table: {
     create: '创 建',
     update: '编 辑',
+    save: '保 存',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
@@ -193,10 +199,27 @@ export default {
     downloadExample: '下载示例',
     HistoricalRecord:'历史记录',
     user: {
+      permission: {
+        menu: '菜单权限',
+        api: '接口权限',
+        name: '名 称',
+        action: '动 作',
+        type: '类 型',
+        refresh: '更新源数据'
+      },
+      role: {
+        role: '角 色',
+        code: '代 码',
+        name: '名 称'
+      },
       username: '用户名',
+      nickname: '昵 称',
+      introduction: '介 绍',
+      changePassword: '重置密码',
       oldPwd: '旧的密码',
       newPwd: '新的密码',
-      confirmPwd: '确认密码'
+      confirmPwd: '确认密码',
+      assignPermission: '权 限'
     },
     ali: {
       username: '账户名',
@@ -307,6 +330,7 @@ export default {
       location: '地区',
       address: '地理位置',
       path: '调用路由',
+      domain: '域 名',
       operator: '运营商',
       inputFindPath: '请输入查询域名.',
       point: '监测点',
@@ -333,7 +357,10 @@ export default {
       fileType:'文件类型',
       state:'上传状态',
       runResult:'运行结果',
-      createTime:'上传时间'
+      createTime:'上传时间',
+      downloadSpeed: '下载速度',
+      buildButton: '如何部署',
+      buildInfo: '部署说明'
     }
   },
   errorLog: {

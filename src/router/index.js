@@ -28,6 +28,14 @@ import resourceRouter from './modules/resource'
     breadcrumb: false            if false, the item will hidden in breadcrumb(default is true)
   }
  **/
+
+/**
+ * name:'router-name'             路由名称！必须设置！
+ * meta : {
+    title: 'title'                标题名称！必须设置！（菜单权限根据此生成）
+  }
+ * @type {*[]}
+ */
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -72,7 +80,16 @@ export const constantRouterMap = [
         meta: { title: 'dashboard', icon: 'dashboard' }
       }
     ]
-  },
+  }
+];
+
+export default new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/message',
     component: Layout,
@@ -87,92 +104,53 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/user/index'),
-        name: 'User',
-        meta: {
-          title: 'User'
-        }
-      },
-      {
-        path: 'reset/pwd',
-        component: () => import('@/views/user/password/reset'),
-        name: 'PasswordReset',
-        meta: {
-          title: 'PasswordReset'
-        }
-      }
-    ]
-  },
-];
-
-export default new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
-export const asyncRouterMap = [
-  {
     path: '/ali',
     component: Layout,
     redirect: '/ali/index',
-    alwaysShow: true,
+    name: 'Ali',
     meta: {
       title: 'Ali',
       icon: 'ali',
-      roles: ['admin']
     },
     children: [
       {
         path: 'account/list',
         component: () => import('@/views/ali/account/list'),
-        name: 'AccountList',
+        name: 'AliAccountList',
         meta: {
           title: 'AccountList',
-          roles: ['admin']
         }
       },
       {
         path: 'ecs/list',
         component: () => import('@/views/ali/ecs/list'),
-        name: 'EcsList',
+        name: 'AliEcsList',
         meta: {
           title: 'EcsList',
-          roles: ['admin']
         }
       },
       // {
       //   path: 'ecs/buy',
       //   component: () => import('@/views/ali/ecs/buy'),
-      //   name: 'EcsBuy',
+      //   name: 'AliEcsBuy',
       //   meta: {
       //     title: 'EcsBuy',
-      //     roles: ['admin']
       //   }
       // },
       {
         path: 'cdn/list',
         component: () => import('@/views/ali/cdn/list'),
-        name: 'CdnList',
+        name: 'AliCdnList',
         meta: {
           title: 'CdnList',
-          roles: ['admin']
         }
       },
       {
         path: 'cdn/refresh',
         component: () => import('@/views/ali/cdn/refresh'),
-        name: 'CdnRefresh',
+        name: 'AliCdnRefresh',
         meta: {
           title: 'CdnRefresh',
-          roles: ['admin']
         }
       }
     ]
@@ -182,38 +160,34 @@ export const asyncRouterMap = [
     path: '/go',
     component: Layout,
     redirect: '/go/index',
-    alwaysShow: true,
+    name: 'Godaddy',
     meta: {
       title: 'Godaddy',
       icon: 'guide',
-      roles: ['admin']
     },
     children: [
       {
         path: 'account/list',
         component: () => import('@/views/go/account/list'),
-        name: 'AccountList',
+        name: 'GoAccountList',
         meta: {
           title: 'AccountList',
-          roles: ['admin']
         }
       },
       {
         path: 'domain/list',
         component: () => import('@/views/go/domain/list'),
-        name: 'DomainList',
+        name: 'GoDomainList',
         meta: {
           title: 'DomainList',
-          roles: ['admin']
         }
       },
       {
         path: 'certificate/list',
         component: () => import('@/views/go/certificate/list'),
-        name: 'CertificateList',
+        name: 'GoCertificateList',
         meta: {
           title: 'CertificateList',
-          roles: ['admin']
         }
       }
     ]
@@ -223,29 +197,26 @@ export const asyncRouterMap = [
     path: '/aws',
     component: Layout,
     redirect: '/aws/index',
-    alwaysShow: true,
+    name: 'Aws',
     meta: {
       title: 'Aws',
       icon: 'aws',
-      roles: ['admin']
     },
     children: [
       {
         path: 'account/list',
         component: () => import('@/views/aws/account/list'),
-        name: 'AccountList',
+        name: 'AwsAccountList',
         meta: {
           title: 'AccountList',
-          roles: ['admin']
         }
       },
       {
         path: 'ec2/list',
         component: () => import('@/views/aws/ec2/list'),
-        name: 'Ec2List',
+        name: 'AwsEc2List',
         meta: {
           title: 'Ec2List',
-          roles: ['admin']
         }
       },
     ]
@@ -255,7 +226,7 @@ export const asyncRouterMap = [
     path: '/monitor',
     component: Layout,
     redirect: '/monitor/index',
-    alwaysShow: true,
+    name: 'Monitor',
     meta: {
       title: 'Monitor',
       icon: 'monitor',
@@ -271,7 +242,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'domain',
-        component: () => import('@/views/system/parameter/index'),
+        component: () => import('@/views/monitor/domain'),
         name: 'MonitorDomain',
         meta: {
           title: 'MonitorDomain',
@@ -279,7 +250,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'index',
-        component: () => import('@/views/system/parameter/index'),
+        component: () => import('@/views/monitor/monitor'),
         name: 'MonitorIndex',
         meta: {
           title: 'MonitorIndex',
@@ -299,30 +270,71 @@ export const asyncRouterMap = [
     path: '/configManage',
     component: Layout,
     redirect: '/configManage/index',
-    alwaysShow: true, // will always show the root menu
+    name: 'ConfigManage',
     meta: {
       title: 'configManage',
       icon: 'international',
-      roles: ['admin'] // you can set roles in root nav
     },
     children: [
       {
-        path: 'configManage',
+        path: 'index',
         component: () => import('@/views/configManage/serverInfo'),
-        name: 'configManage',
+        name: 'ConfigManageIndex',
         meta: {
           title: 'configManage',
-          roles: ['admin']
         }
       },
       {
-        path: 'uploadConfig',
+        path: 'upload',
         component: () => import('@/views/configManage/uploadConfig'),
-        name: 'uploadConfig',
-        hidden:true,
+        name: 'ConfigManageUpload',
+        hidden: true,
         meta: {
           title: 'uploadConfig',
-          roles: ['admin']
+        }
+      },
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    name: 'User',
+    meta: {
+      title: 'User',
+      icon: 'user',
+    },
+    children: [
+      {
+        path: 'reset/pwd',
+        component: () => import('@/views/user/password/reset'),
+        name: 'PasswordReset',
+        meta: {
+          title: 'PasswordReset'
+        }
+      },
+      {
+        path: 'permission',
+        component: () => import('@/views/user/permission'),
+        name: 'UserPermission',
+        meta: {
+          title: 'UserPermission',
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/user/role'),
+        name: 'UserRole',
+        meta: {
+          title: 'UserRole',
+        }
+      },
+      {
+        path: 'index',// 用户管理
+        component: () => import('@/views/user/index'),
+        name: 'UserIndex',
+        meta: {
+          title: 'UserIndex',
         }
       }
     ]
@@ -331,11 +343,10 @@ export const asyncRouterMap = [
     path: '/system',
     component: Layout,
     redirect: '/system/index',
-    alwaysShow: true, // will always show the root menu
+    name: 'System',
     meta: {
       title: 'System',
       icon: 'setting',
-      roles: ['admin'] // you can set roles in root nav
     },
     children: [
       {
@@ -344,7 +355,6 @@ export const asyncRouterMap = [
         name: 'Parameter',
         meta: {
           title: 'Parameter',
-          roles: ['admin']
         }
       },
       {
@@ -353,7 +363,6 @@ export const asyncRouterMap = [
         name: 'LogHandle',
         meta: {
           title: 'LogHandle',
-          roles: ['admin']
         }
       }
     ]

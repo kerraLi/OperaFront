@@ -12,7 +12,7 @@
   const animationDuration = 2000;
 
   export default {
-    name: "MapDomainChart",
+    name: "MapChartDomains",
     props: {
       className: {
         type: String,
@@ -27,7 +27,7 @@
         default: '500px'
       },
       chartData: {
-        type: Object,
+        type: Array,
         required: true
       }
     },
@@ -72,22 +72,52 @@
         this.chart = echarts.init(this.$el, 'macarons');
         this.setOptions(this.chartData)
       },
-      setOptions({ url, list } = {}) {
+      setOptions(list) {
+        let series = [];
+        let self = this;
+        list.forEach((v) => {
+          let temp = {
+            name: v.url,
+            type: 'map',
+            mapType: 'china',
+            roam: false,
+            label: {
+              normal: {
+                show: true
+              }
+            },
+            data: v.data
+          };
+          series.push(temp)
+        });
         this.chart.setOption({
           title: {
-            text: url,
-            subtext: '网站速度测试',
+            text: '网站速度监控',
             left: 'center'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
           },
           tooltip: {
             trigger: 'item',
-            formatter: function (params, b) {
+            formatter: function (params) {
               if (params.name === '') {
                 return '-'
               }
-
+              let selects = self.chart.getOption().legend[0].selected;
               let value = (params.value === undefined || params.value === '-') ? '-' : params.value.toFixed(2);
-              return params.name + '<br/>测试时间:' + value + ' ms'
+              let res = params.name + '<br/>平均时间:' + value + ' ms<br/>';
+              for (let i = 0; i < series.length; i++) {
+                for (let j = 0; j < series[i].data.length; j++) {
+                  if (series[i].data[j].name === params.name
+                    && (selects[series[i].name] === undefined || selects[series[i].name])
+                  ) {
+                    res += series[i].name + ' : ' + series[i].data[j].value + ' ms</br>';
+                  }
+                }
+              }
+              return res;
             }
           },
           visualMap: {
@@ -99,7 +129,7 @@
               { min: 3000, max: 5000, label: '3000-5000ms', color: 'rgb(246, 152, 51)' },
               { min: 2000, max: 3000, label: '2000-3000ms', color: 'rgb(246, 237, 68)' },
               { min: 1000, max: 2000, label: '1000-2000ms', color: 'rgb(190, 246, 99)' },
-              { min: 400, max: 1000, label: '400-800ms', color: 'rgb(66, 221, 63)' },
+              { min: 400, max: 1000, label: '400-1000ms', color: 'rgb(66, 221, 63)' },
               { max: 400, label: '<400ms', color: 'rgb(36, 170, 29)' },
             ]
           },
@@ -107,20 +137,7 @@
           mapValuePrecision: 2,
           animationEasing: 'cubicInOut',
           animationDuration: animationDuration,
-          series: [
-            {
-              name: url,
-              type: 'map',
-              mapType: 'china',
-              roam: false,
-              label: {
-                normal: {
-                  show: true
-                }
-              },
-              data: list
-            }
-          ]
+          series: series
         })
       }
     }

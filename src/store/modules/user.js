@@ -151,23 +151,23 @@ const user = {
     },
 
     // 动态修改权限
-    ChangeRoles({ commit, dispatch }, role) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', role)
-        setToken(role)
-        getUserInfo(role).then(response => {
-          const data = response.data;
-          commit('SET_ID', data.id);
-          commit('SET_ROLES', data.roles);
-          commit('SET_NAME', data.username);
-          commit('SET_NICKNAME', data.nickname);
-          commit('SET_AVATAR', data.avatar);
-          commit('SET_INTRODUCTION', data.introduction);
-          dispatch('GenerateRoutes', data); // 动态修改权限后 重绘侧边菜单
-          resolve()
-        })
-      })
-    }
+    // ChangeRoles({ commit, dispatch }, role) {
+    //   return new Promise(resolve => {
+    //     commit('SET_TOKEN', role);
+    //     setToken(role);
+    //     getUserInfo(role).then(response => {
+    //       const data = response.data;
+    //       commit('SET_ID', data.id);
+    //       commit('SET_ROLES', data.roles);
+    //       commit('SET_NAME', data.username);
+    //       commit('SET_NICKNAME', data.nickname);
+    //       commit('SET_AVATAR', data.avatar);
+    //       commit('SET_INTRODUCTION', data.introduction);
+    //       dispatch('GenerateRoutes', data); // 动态修改权限后 重绘侧边菜单
+    //       resolve()
+    //     })
+    //   })
+    // }
   }
 }
 

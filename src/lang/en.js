@@ -89,7 +89,12 @@ export default {
     MonitorIndex: 'Monitor',
     SpeedTest: 'SpeedTest',
     configManage:'configManage',
-    uploadConfig:'uploadConfig'
+    uploadConfig:'uploadConfig',
+    User: 'UserManage',
+    PasswordReset: 'PasswordReset',
+    UserPermission: 'Permissions',
+    UserRole: 'Roles',
+    UserIndex: 'Users'
   },
   navbar: {
     logOut: 'Log Out',
@@ -135,6 +140,7 @@ export default {
   table: {
     create: 'Create',
     update: 'Update',
+    save: 'Save',
     dynamicTips1: 'Fixed header, sorted by header order',
     dynamicTips2: 'Not fixed header, sorted by click order',
     dragTips1: 'The default order',
@@ -193,10 +199,27 @@ export default {
     downloadExample: 'Download Example',
     HistoricalRecord:'HistoricalRecord',
     user: {
+      permission: {
+        menu: 'Menu Permission',
+        api: 'Api Permission',
+        name: 'Name',
+        action: 'Action',
+        type: 'Type',
+        refresh: 'Refresh Source Data'
+      },
+      role: {
+        role: 'Role',
+        code: 'Code',
+        name: 'Name'
+      },
       username: 'Username',
+      nickname: 'Nickname',
+      introduction: 'Introduction',
+      changePassword: 'Reset Password',
       oldPwd: 'Old Password',
       newPwd: 'New Password',
-      confirmPwd: 'Confirm Password'
+      confirmPwd: 'Confirm Password',
+      assignPermission: 'Permission'
     },
     ali: {
       username: 'NAME',
@@ -308,6 +331,7 @@ export default {
       address: 'Address',
       operator: 'Operator',
       path: 'Path',
+      domain: 'Domain',
       inputFindPath: 'Please input path.',
       point: 'Monitor Point',
       parseIP: 'Parse IP',
@@ -333,7 +357,10 @@ export default {
       fileType:'fileType',
       state:'state',
       runResult:'runResult',
-      createTime:'createTime'
+      createTime:'createTime',
+      downloadSpeed: 'Download Speed',
+      buildButton: 'Build Information',
+      buildInfo: 'Build Information'
     }
   },
   errorLog: {
