@@ -11,7 +11,8 @@
       <el-button
         type="primary"
         size="mini"
-        @click="uploadFile">{{ $t('table.upload') }}</el-button>
+        @click="uploadFile">{{ $t('table.upload') }}
+      </el-button>
     </div>
 
     <el-row :gutter="24">
@@ -98,12 +99,12 @@
 </template>
 
 <script>
-  import {uploadFile, list} from '@/api/configManage'
+  import { uploadFile, list } from '@/api/configManage'
   import MarkdownEditor from '@/components/MarkdownEditor'
 
   export default {
     name: "UploadConfig",
-    components: {MarkdownEditor},
+    components: { MarkdownEditor },
     data() {
       return {
         id: this.$route.query.id,
@@ -116,16 +117,27 @@
           ['config.lua', 'config-lua'], ['filebeat.yml', 'filebeat-yml']]),
         tableData: null,
         timer: null,//定时刷新历史记录
-        loading:false,
+        loading: false,
       }
     },
     created() {
+      if (!this.$route.query.id) {
+        const self = this;
+        this.$message({
+          message: '请选择指定服务器进行上传',
+          type: 'warning',
+          onClose() {
+            self.$router.push({ path: '/config/index' });
+          }
+        });
+        return;
+      }
       this.getList();
       clearInterval(this.timer)
       this.timer = null
       this.setTimer()
     },
-    destroyed(){
+    destroyed() {
       clearInterval(this.timer)
       this.timer = null
     },
@@ -141,7 +153,7 @@
       addFile(file) {
         return new Promise(function (resolve) {
           let reader = new FileReader()
-          reader.readAsText(file,'utf-8')
+          reader.readAsText(file, 'utf-8')
           reader.onload = function () {
             resolve(this.result)
           }
@@ -170,7 +182,7 @@
         }
         this.loading = true;
         var name = this.fileName;
-        var blob = new Blob([this.content], {type: "text/plain"});
+        var blob = new Blob([this.content], { type: "text/plain" });
         var file = new File([blob], name);
         let param = new FormData();
         param.append("fileType", this.map1.get(name));
@@ -185,7 +197,7 @@
           this.loading = false;
           this.getList();
           this.flg = true;
-          this.$refs.filElem.value='';
+          this.$refs.filElem.value = '';
           this.content = null;
           this.file = null;
           this.$notify({
@@ -204,17 +216,17 @@
           this.content = str2;
           this.fileName = row.fileName;
           this.flg = false;
-        }else {
+        } else {
           this.flg = true;
-          this.$refs.filElem.value='';
+          this.$refs.filElem.value = '';
           this.content = null;
           this.file = null;
         }
       },
-      setTimer(){
+      setTimer() {
         this.timer = setInterval(() => {
           this.getList()
-        },10000)
+        }, 10000)
       }
     }
   }

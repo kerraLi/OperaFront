@@ -88,8 +88,8 @@ export default {
     MonitorDomain: 'MonitorDomain',
     MonitorIndex: 'Monitor',
     SpeedTest: 'SpeedTest',
-    configManage:'configManage',
-    uploadConfig:'uploadConfig',
+    ConfigManage: 'ConfigManage',
+    ConfigUpload: 'ConfigUpload',
     User: 'UserManage',
     PasswordReset: 'PasswordReset',
     UserPermission: 'Permissions',
@@ -197,7 +197,7 @@ export default {
     upload: 'Upload',
     clear: 'Clear',
     downloadExample: 'Download Example',
-    HistoricalRecord:'HistoricalRecord',
+    HistoricalRecord: 'HistoricalRecord',
     user: {
       permission: {
         menu: 'Menu Permission',
@@ -345,19 +345,19 @@ export default {
       downloadSize: 'Download Size',
       downloadSpeed: 'Download Speed'
     },
-    serverInfo:{
-      name:'Name',
-      ip:'Ip Address',
-      operator:'Operator',
-      state:'State',
-      createTime:'Create Time'
+    serverInfo: {
+      name: 'Name',
+      ip: 'Ip Address',
+      operator: 'Operator',
+      state: 'State',
+      createTime: 'Create Time'
     },
     configManage: {
-      fileName:'fileName',
-      fileType:'fileType',
-      state:'state',
-      runResult:'runResult',
-      createTime:'createTime',
+      fileName: 'fileName',
+      fileType: 'fileType',
+      state: 'state',
+      runResult: 'runResult',
+      createTime: 'createTime',
       downloadSpeed: 'Download Speed',
       buildButton: 'Build Information',
       buildInfo: 'Build Information'
