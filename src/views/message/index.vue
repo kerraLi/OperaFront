@@ -53,10 +53,10 @@
               <span>{{ props.row.themeId }}</span>
             </el-form-item>
             <el-button v-if="props.row.status ==='new'" size="mini" type="primary"
-                       @click="modifyStatus(scope.row,'active')">开始
+                       @click="modifyStatus(props.row,'active')">开始
             </el-button>
             <el-button v-if="props.row.status !=='finish'" size="mini" type="success"
-                       @click="modifyStatus(scope.row,'finish')">完成
+                       @click="modifyStatus(props.row,'finish')">完成
             </el-button>
           </el-form>
         </template>
