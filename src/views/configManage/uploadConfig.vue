@@ -36,7 +36,9 @@
             fit
             style="width: 100%"
             @row-click="show">
-            <el-table-column :label="$t('table.HistoricalRecord')">
+            <el-table-column 
+              :label="$t('table.HistoricalRecord')" 
+              align="center">
               <el-table-column 
                 :label="$t('table.id')" 
                 prop="id" 
@@ -112,8 +114,8 @@
         fileName: null,
         flg: true,
         map1: new Map([['http_proxy.conf', 'nginx-http'], ['https_proxy.conf', 'nginx-https'],
-          ['cert.key', 'cert-key'], ['cert.crt', 'cert-crt'], ['rewrite-rule', 'rewrite-rule'],
-          ['config.lua', 'config-lua'], ['filebeat.yaml', 'filebeat-yaml']]),
+          ['cert.key', 'cert-key'], ['cert.crt', 'cert-crt'], ['rewrite.rule', 'rewrite-rule'],
+          ['config.lua', 'config-lua'], ['filebeat.yml', 'filebeat-yml']]),
         tableData: null,
         timer: null,//定时刷新历史记录
         loading:false,
