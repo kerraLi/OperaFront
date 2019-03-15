@@ -94,7 +94,8 @@ export default {
     PasswordReset: '修改密码',
     UserPermission: '权限管理',
     UserRole: '角色管理',
-    UserIndex: '用户管理'
+    UserIndex: '用户管理',
+    DataRefresh: '数据刷新'
   },
   navbar: {
     logOut: '退出登录',

@@ -94,7 +94,8 @@ export default {
     PasswordReset: 'PasswordReset',
     UserPermission: 'Permissions',
     UserRole: 'Roles',
-    UserIndex: 'Users'
+    UserIndex: 'Users',
+    DataRefresh:'DataFresh'
   },
   navbar: {
     logOut: 'Log Out',

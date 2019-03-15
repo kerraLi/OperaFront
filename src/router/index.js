@@ -363,6 +363,14 @@ export const asyncRouterMap = [
         meta: {
           title: 'LogHandle',
         }
+      },
+      {
+        path: 'data',
+        component: () => import('@/views/system/refresh'),
+        name: 'DataRefresh',
+        meta: {
+          title: 'DataRefresh',
+        }
       }
     ]
   },
