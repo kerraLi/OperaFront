@@ -90,13 +90,14 @@ export default {
     MonitorDomain: 'MonitorDomain',
     MonitorIndex: 'Monitor',
     SpeedTest: 'SpeedTest',
-    configManage:'configManage',
-    uploadConfig:'uploadConfig',
+    ConfigManage: 'ConfigManage',
+    ConfigUpload: 'ConfigUpload',
     User: 'UserManage',
     PasswordReset: 'PasswordReset',
     UserPermission: 'Permissions',
     UserRole: 'Roles',
-    UserIndex: 'Users'
+    UserIndex: 'Users',
+    DataRefresh: 'DataFresh'
   },
   navbar: {
     logOut: 'Log Out',
@@ -199,7 +200,7 @@ export default {
     upload: 'Upload',
     clear: 'Clear',
     downloadExample: 'Download Example',
-    HistoricalRecord:'HistoricalRecord',
+    HistoricalRecord: 'HistoricalRecord',
     user: {
       permission: {
         menu: 'Menu Permission',
@@ -257,15 +258,15 @@ export default {
         ifForce: 'Force Mode',
         forceTip: 'Forced mode causes data that is not currently saved by the cloud server instance to be lost.',
       },
-      scdn:{
-        domainName:'domainName',
-        cname:'cname',
-        domainStatus:'domainStatus',
-        gmtCreated:'gmtCreated',
-        gmtModified:'gmtModified',
-        description:'description',
-        sslProtocol:'sslProtocol',
-        resourceGroupId:'resourceGroupId',
+      scdn: {
+        domainName: 'domainName',
+        cname: 'cname',
+        domainStatus: 'domainStatus',
+        gmtCreated: 'gmtCreated',
+        gmtModified: 'gmtModified',
+        description: 'description',
+        sslProtocol: 'sslProtocol',
+        resourceGroupId: 'resourceGroupId',
       }
     },
     aws: {
@@ -359,19 +360,19 @@ export default {
       buildButton: 'Build Information',
       buildInfo: 'Build Information'
     },
-    serverInfo:{
-      name:'Name',
-      ip:'Ip Address',
-      operator:'Operator',
-      state:'State',
-      createTime:'Create Time'
+    serverInfo: {
+      name: 'Name',
+      ip: 'Ip Address',
+      operator: 'Operator',
+      state: 'State',
+      createTime: 'Create Time'
     },
     configManage: {
-      fileName:'fileName',
-      fileType:'fileType',
-      state:'state',
-      runResult:'runResult',
-      createTime:'createTime',
+      fileName: 'fileName',
+      fileType: 'fileType',
+      state: 'state',
+      runResult: 'runResult',
+      createTime: 'createTime',
       downloadSpeed: 'Download Speed',
     }
   },

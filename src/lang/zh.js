@@ -90,13 +90,14 @@ export default {
     MonitorDomain: '监控域名',
     MonitorIndex: '实时监控',
     SpeedTest: '速度检测',
-    configManage:'配置管理',
-    uploadConfig:'上传配置文件',
+    ConfigManage: '配置管理',
+    ConfigUpload: '配置上传',
     User: '用户管理',
     PasswordReset: '修改密码',
     UserPermission: '权限管理',
     UserRole: '角色管理',
-    UserIndex: '用户管理'
+    UserIndex: '用户管理',
+    DataRefresh: '数据刷新'
   },
   navbar: {
     logOut: '退出登录',
@@ -257,15 +258,15 @@ export default {
         ifForce: '强制模式',
         forceTip: '强制模式，会导致云服务器实例当前未保存的数据丢失。',
       },
-      scdn:{
-        domainName:'域名',
-        cname:'CNAME域名',
-        domainStatus:'域名状态',
-        gmtCreated:'创建时间',
-        gmtModified:'修改时间',
-        description:'描述',
-        sslProtocol:'ssl协议',
-        resourceGroupId:'资源组id',
+      scdn: {
+        domainName: '域名',
+        cname: 'CNAME域名',
+        domainStatus: '域名状态',
+        gmtCreated: '创建时间',
+        gmtModified: '修改时间',
+        description: '描述',
+        sslProtocol: 'ssl协议',
+        resourceGroupId: '资源组id',
       }
     },
     aws: {
