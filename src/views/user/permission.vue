@@ -103,8 +103,7 @@
           });
         } else if (freshType === 'menu') {
           return new Promise((resolve) => {
-            console.log(asyncRouterMap);
-            let routeArr = this.filterSpecial(this.treeToArr(asyncRouterMap));
+            let routeArr = this.pushSpecial(this.treeToArr(this.filterSpecial(asyncRouterMap)));
             syncMenuPermission(routeArr).then(response => {
               resolve()
             });
@@ -159,16 +158,24 @@
       },
       // filter过滤单独处理路由（资源-data）
       filterSpecial(routeArr) {
-        let tempArr = routeArr.filter((r) => {
-          return !(r.parentCode === 'Resource' && r.code !== 'ResourceUpload' && r.code !== 'ResourceCate')
+        routeArr.forEach((i, c) => {
+          if (c.name === 'Resource' && c.children !== undefined && c.children.length > 0) {
+            routeArr[i] = c.children.filter((r) => {
+              return !(r.code !== 'ResourceUpload' && r.code !== 'ResourceCate')
+            });
+          }
         });
-        tempArr.push({
+        return routeArr
+      },
+      // push过滤单独处理路由（资源-data）
+      pushSpecial(routeArr) {
+        routeArr.push({
           'parentCode': 'Resource',
           'parentName': this.$t('route.Resource', 'zh'),
           'code': 'ResourceData',
           'name': '资源数据',
         });
-        return tempArr;
+        return routeArr;
       },
       // 切换tab
       handleTabs(tab) {
