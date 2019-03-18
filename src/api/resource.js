@@ -19,6 +19,14 @@ export function fetchDataList(cateId, data) {
   })
 }
 
+export function fetchDataDownload(cateId, data) {
+  return request({
+    url: '/resource/data/download/' + cateId,
+    method: 'post',
+    params: data
+  })
+}
+
 export function saveData(data) {
   return request({
     url: '/resource/data/save',

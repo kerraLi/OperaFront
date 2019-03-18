@@ -8,6 +8,26 @@ export function fetchHandleLog(data) {
   })
 }
 
+/**
+ * refresh
+ */
+export function fetchRefreshList() {
+  return request({
+    url: '/refresh/list',
+    method: 'get',
+  })
+}
+
+export function refreshData(type) {
+  return request({
+    url: '/refresh/data/' + type,
+    method: 'post'
+  })
+}
+
+/**
+ * parameter
+ */
 // 数据量少&去掉分页参数
 export function fetchList() {
   return request({
@@ -15,7 +35,6 @@ export function fetchList() {
     method: 'post'
   })
 }
-
 
 export function create(key, value, introduce) {
   let data = new URLSearchParams();
