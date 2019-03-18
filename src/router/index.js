@@ -282,30 +282,29 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/configManage',
+    path: '/config',
     component: Layout,
-    redirect: '/configManage/index',
-    name: 'ConfigManage',
+    redirect: '/config/index',
+    name: 'Config',
     meta: {
-      title: 'configManage',
+      title: 'ConfigManage',
       icon: 'international',
     },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/configManage/serverInfo'),
-        name: 'ConfigManageIndex',
+        component: () => import('@/views/config/serverInfo'),
+        name: 'ConfigIndex',
         meta: {
-          title: 'configManage',
+          title: 'ConfigManage',
         }
       },
       {
         path: 'upload',
-        component: () => import('@/views/configManage/uploadConfig'),
-        name: 'ConfigManageUpload',
-        hidden: true,
+        component: () => import('@/views/config/uploadConfig'),
+        name: 'ConfigUpload',
         meta: {
-          title: 'uploadConfig',
+          title: 'ConfigUpload',
         }
       },
     ]
@@ -378,6 +377,14 @@ export const asyncRouterMap = [
         name: 'LogHandle',
         meta: {
           title: 'LogHandle',
+        }
+      },
+      {
+        path: 'data',
+        component: () => import('@/views/system/refresh'),
+        name: 'DataRefresh',
+        meta: {
+          title: 'DataRefresh',
         }
       }
     ]

@@ -199,7 +199,7 @@ export default {
     upload: '上 传',
     clear: '清 空',
     downloadExample: '下载示例',
-    HistoricalRecord:'历史记录',
+    HistoricalRecord: '历史记录',
     user: {
       permission: {
         menu: '菜单权限',
@@ -357,19 +357,19 @@ export default {
       downloadSize: '下载大小',
       downloadSpeed: '下载速度'
     },
-    serverInfo:{
-      name:'名称',
-      ip:'Ip 地址',
-      operator:'运营商',
-      state:'状态',
-      createTime:'添加时间'
+    serverInfo: {
+      name: '名称',
+      ip: 'Ip 地址',
+      operator: '运营商',
+      state: '状态',
+      createTime: '添加时间'
     },
     configManage: {
-      fileName:'文件名',
-      fileType:'文件类型',
-      state:'上传状态',
-      runResult:'运行结果',
-      createTime:'上传时间',
+      fileName: '文件名',
+      fileType: '文件类型',
+      state: '上传状态',
+      runResult: '运行结果',
+      createTime: '上传时间',
       downloadSpeed: '下载速度',
       buildButton: '如何部署',
       buildInfo: '部署说明'
