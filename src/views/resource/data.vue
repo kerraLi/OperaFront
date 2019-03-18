@@ -1,60 +1,99 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input placeholder="Key" v-model="listQuery.key" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search"
-                 :loading="btnLoading === 'search'"
-                 @click="handleFilter">
+      <el-input 
+        v-model="listQuery.key" 
+        placeholder="Key" 
+        style="width: 200px;" 
+        class="filter-item"
+        @keyup.enter.native="handleFilter"/>
+      <el-button 
+        v-waves 
+        :loading="btnLoading === 'search'" 
+        class="filter-item" 
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                 @click="handleCreate">
+      <el-button 
+        v-waves 
+        class="filter-item" 
+        style="margin-left: 10px;" 
+        type="primary" 
+        icon="el-icon-edit"
+        @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
-                 :loading="btnLoading === 'allDelete'"
-                 @click="handleDeleteAll">
+      <el-button 
+        v-waves 
+        :loading="btnLoading === 'allDelete'" 
+        class="filter-item" 
+        style="margin-left: 10px;" 
+        type="primary"
+        icon="el-icon-delete"
+        @click="handleDeleteAll">
         {{ $t('table.allDelete') }}
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-download"
-                 :loading="btnLoading === 'download'"
-                 @click="handleDownload">
+      <el-button 
+        v-waves 
+        :loading="btnLoading === 'download'" 
+        class="filter-item" 
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload">
         {{ $t('table.export') }}
       </el-button>
     </div>
 
     <el-table v-if="this.typeCode==='menu'"/>
     <el-table
-      v-else
       v-loading="listLoading"
+      v-else
       :key="tableKey"
       :data="list"
       border
       fit
       highlight-current-row
       row-key="id"
-      @selection-change="handleChecked"
-      style="width: 100%;">
+      style="width: 100%;"
+      @selection-change="handleChecked">
       <el-table-column
         type="selection"
         width="40"/>
-      <el-table-column :label="$t('table.id')" prop="id" align="center" width="65" type="index"/>
-      <el-table-column :label="$t('table.actions')" align="center" width="100" class-name="small-padding fixed-width">
+      <el-table-column 
+        :label="$t('table.id')" 
+        prop="id" 
+        align="center" 
+        width="65" 
+        type="index"/>
+      <el-table-column 
+        :label="$t('table.actions')" 
+        align="center" 
+        width="100" 
+        class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <span @click="handleDelete(scope.row)"
-                style="cursor: pointer;margin-right: 10px;">
+          <span 
+            style="cursor: pointer;margin-right: 10px;"
+            @click="handleDelete(scope.row)">
             <svg-icon icon-class="delete"/>
           </span>
-          <span @click="handleUpdate(scope.row)"
-                style="cursor: pointer;">
+          <span 
+            style="cursor: pointer;"
+            @click="handleUpdate(scope.row)">
             <svg-icon icon-class="edit"/>
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-for="item of columns" :prop="item" :label="item" :key="item">
+      <el-table-column 
+        v-for="item of columns" 
+        :prop="item" 
+        :label="item" 
+        :key="item">
         <template slot-scope="scope">
-          <el-tag v-if="item === '状态' && scope.row[item]!==''" :type="scope.row[item] | statusFilter">
+          <el-tag 
+            v-if="item === '状态' && scope.row[item]!==''" 
+            :type="scope.row[item] | statusFilter">
             {{ scope.row[item] }}
           </el-tag>
           <span v-else>{{ scope.row[item] }}</span>
@@ -62,19 +101,38 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
-                @pagination="getList"/>
+    <pagination 
+      v-show="total>0" 
+      :total="total" 
+      :page.sync="listQuery.page" 
+      :limit.sync="listQuery.limit"
+      @pagination="getList"/>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px"
-               style="width: 800px; margin-left:50px;">
-        <el-form-item v-for="item of columns" :label="item" :prop="item">
+    <el-dialog 
+      :title="textMap[dialogStatus]" 
+      :visible.sync="dialogFormVisible">
+      <el-form 
+        ref="dataForm" 
+        :rules="rules" 
+        :model="temp" 
+        label-position="left" 
+        label-width="150px"
+        style="width: 800px; margin-left:50px;">
+        <el-form-item 
+          v-for="item of columns" 
+          :label="item" 
+          :prop="item">
           <el-input v-model="temp[item]"/>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div 
+        slot="footer" 
+        class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button :loading="loading" type="primary" @click="saveData()">
+        <el-button 
+          :loading="loading" 
+          type="primary" 
+          @click="saveData()">
           {{ $t('table.confirm') }}
         </el-button>
       </div>

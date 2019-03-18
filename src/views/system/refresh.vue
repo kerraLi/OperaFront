@@ -1,12 +1,20 @@
 <template>
   <div class="app-container">
     <el-row :gutter="32">
-      <el-col v-for="item in list" :xs="24" :sm="24" :lg="8">
+      <el-col 
+        v-for="item in list" 
+        :xs="24" 
+        :sm="24" 
+        :lg="8">
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
+          <div 
+            slot="header" 
+            class="clearfix">
             <span>{{ item.name }}</span>
-            <el-button style="float: right; padding: 3px 0" type="text"
-                       @click="handleRefresh(item.type)">
+            <el-button 
+              style="float: right; padding: 3px 0" 
+              type="text"
+              @click="handleRefresh(item.type)">
               刷新数据
             </el-button>
           </div>

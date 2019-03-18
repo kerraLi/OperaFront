@@ -9,16 +9,16 @@
         @click="add">{{ $t('table.add') }}
       </el-button>
       <el-input
-        class="filter-item"
         v-model="temp.name"
         :placeholder="$t('table.serverInfo.name')"
-        style="width: 200px; margin-left:30px"
-        @keyup.enter.native="search"
-        clearable/>
-      <el-select
         class="filter-item"
+        style="width: 200px; margin-left:30px"
+        clearable
+        @keyup.enter.native="search"/>
+      <el-select
         v-model="temp.operator"
         :placeholder="$t('table.serverInfo.operator')"
+        class="filter-item"
         clearable>
         <el-option
           v-for="item in options"
@@ -120,8 +120,12 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
-                @pagination="getList"/>
+    <pagination 
+      v-show="total>0" 
+      :total="total" 
+      :page.sync="listQuery.page" 
+      :limit.sync="listQuery.limit"
+      @pagination="getList"/>
 
     <el-dialog
       :title="textMap[dialogStatus]"

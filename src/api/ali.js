@@ -150,3 +150,47 @@ export function updateCdnRefreshTask(id) {
     method: 'get'
   })
 }
+//查询scdn列表
+export function scdnList(data) {
+  return request({
+    url: '/ali/scdn/list/' + data.page+"/"+data.limit,
+    method: 'post',
+    data,
+  })
+}
+//更新弃用状态
+export function scdnUpdateAbandon(data) {
+  return request({
+    url: '/ali/scdn/updateAbandon',
+    method: 'post',
+    data,
+  })
+}
+//刷新任务
+export function createScdnRefresh(data) {
+  return request({
+    url: '/ali/scdn/addRefresh',
+    method: 'post',
+    data,
+  })
+}
+
+//获取刷新纪录列表
+export function refreshScdnList(data) {
+  data.startTime = data.startTime.format("yyyy-MM-dd");
+  data.endTime = data.endTime.format("yyyy-MM-dd");
+
+  return request({
+    url: '/ali/scdn/refreshList',
+    method: 'post',
+    data,
+  })
+}
+
+//获取阿里最新刷新（预热）状态
+export function updateScdnRefreshTask(data) {
+  return request({
+    url: '/ali/scdn/updateScdn/'+data,
+    method: 'post',
+  })
+}
