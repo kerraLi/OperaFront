@@ -70,6 +70,8 @@ export default {
     EcsBuy: 'EcsBuy',
     CdnList: 'CdnList',
     CdnRefresh: 'CdnRefresh',
+    ScdnList: 'ScdnList',
+    ScdnRefresh: 'ScdnRefresh',
     Godaddy: 'Godaddy',
     DomainList: 'DomainList',
     CertificateList: 'CertificateList',
@@ -254,6 +256,16 @@ export default {
         actionConfirmT2: ' the ECS ?',
         ifForce: 'Force Mode',
         forceTip: 'Forced mode causes data that is not currently saved by the cloud server instance to be lost.',
+      },
+      scdn:{
+        domainName:'domainName',
+        cname:'cname',
+        domainStatus:'domainStatus',
+        gmtCreated:'gmtCreated',
+        gmtModified:'gmtModified',
+        description:'description',
+        sslProtocol:'sslProtocol',
+        resourceGroupId:'resourceGroupId',
       }
     },
     aws: {

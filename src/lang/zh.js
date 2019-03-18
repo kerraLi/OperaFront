@@ -70,6 +70,8 @@ export default {
     EcsBuy: 'ECS购买',
     CdnList: 'CDN列表',
     CdnRefresh: 'CDN刷新',
+    ScdnList: 'SCDN列表',
+    ScdnRefresh: 'SCDN刷新',
     Godaddy: 'GODADDY',
     DomainList: '域名列表',
     CertificateList: '证书列表',
@@ -254,6 +256,16 @@ export default {
         actionConfirmT2: ' 该ECS服务器, 是否继续?',
         ifForce: '强制模式',
         forceTip: '强制模式，会导致云服务器实例当前未保存的数据丢失。',
+      },
+      scdn:{
+        domainName:'域名',
+        cname:'CNAME域名',
+        domainStatus:'域名状态',
+        gmtCreated:'创建时间',
+        gmtModified:'修改时间',
+        description:'描述',
+        sslProtocol:'ssl协议',
+        resourceGroupId:'资源组id',
       }
     },
     aws: {

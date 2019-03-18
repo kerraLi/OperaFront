@@ -152,9 +152,24 @@ export const asyncRouterMap = [
         meta: {
           title: 'CdnRefresh',
         }
-      }
+      },
+      {
+        path: 'scdn/list',
+        component: () => import('@/views/ali/scdn/list'),
+        name: 'ScdnList',
+        meta: {
+          title: 'ScdnList',
+        }
+      },
+      {
+        path: 'scdn/refresh',
+        component: () => import('@/views/ali/scdn/refresh'),
+        name: 'ScdnRefresh',
+        meta: {
+          title: 'ScdnRefresh',
+        }
+      },
     ]
-
   },
   {
     path: '/go',
