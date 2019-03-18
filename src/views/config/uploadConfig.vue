@@ -1,16 +1,16 @@
 <template>
-  <div 
-    v-loading="loading" 
-    class="app-container" 
+  <div
+    v-loading="loading"
+    class="app-container"
     element-loading-spinner="el-icon-loading">
     <div class="app-container">
-      <input 
-        ref="filElem" 
-        type="file" 
+      <input
+        ref="filElem"
+        type="file"
         @change="fileChange">
-      <el-button 
-        type="primary" 
-        size="mini" 
+      <el-button
+        type="primary"
+        size="mini"
         @click="uploadFile">{{ $t('table.upload') }}</el-button>
     </div>
 
@@ -20,9 +20,9 @@
           <div
             v-if="!flg"
             class="editor-container">
-            <markdown-editor 
-              v-model="content" 
-              :options="{hideModeSwitch:true,previewStyle:'tab'}" 
+            <markdown-editor
+              v-model="content"
+              :options="{hideModeSwitch:true,previewStyle:'tab'}"
               height="300px"/>
           </div>
         </div>
@@ -36,56 +36,56 @@
             fit
             style="width: 100%"
             @row-click="show">
-            <el-table-column 
-              :label="$t('table.HistoricalRecord')" 
+            <el-table-column
+              :label="$t('table.HistoricalRecord')"
               align="center">
-              <el-table-column 
-                :label="$t('table.id')" 
-                prop="id" 
-                align="center" 
-                width="65" 
+              <el-table-column
+                :label="$t('table.id')"
+                prop="id"
+                align="center"
+                width="65"
                 type="index"/>
-              <el-table-column 
-                :label="$t('table.configManage.fileName')" 
-                min-width="50px" 
+              <el-table-column
+                :label="$t('table.configManage.fileName')"
+                min-width="50px"
                 min-hi>
                 <template slot-scope="scope">
                   <span>{{ scope.row.fileName }}</span>
                 </template>
               </el-table-column>
-              <el-table-column 
-                :label="$t('table.configManage.fileType')" 
+              <el-table-column
+                :label="$t('table.configManage.fileType')"
                 min-width="40px">
                 <template slot-scope="scope">
                   <span>{{ scope.row.fileType }}</span>
                 </template>
               </el-table-column>
-              <el-table-column 
-                :label="$t('table.configManage.state')" 
+              <el-table-column
+                :label="$t('table.configManage.state')"
                 min-width="30px">
                 <template slot-scope="scope">
-                  <span 
-                    v-if="scope.row.state===1" 
+                  <span
+                    v-if="scope.row.state===1"
                     class=" el-icon-circle-check-outline "/>
-                  <span 
-                    v-else 
+                  <span
+                    v-else
                     class=" el-icon-circle-close-outline"/>
                 </template>
               </el-table-column>
-              <el-table-column 
-                :label="$t('table.configManage.runResult')" 
+              <el-table-column
+                :label="$t('table.configManage.runResult')"
                 min-width="35px">
                 <template slot-scope="scope">
-                  <span 
-                    v-if="scope.row.runResult===1" 
+                  <span
+                    v-if="scope.row.runResult===1"
                     class=" el-icon-circle-check-outline "/>
-                  <span 
-                    v-else 
+                  <span
+                    v-else
                     class=" el-icon-circle-close-outline"/>
                 </template>
               </el-table-column>
-              <el-table-column 
-                :label="$t('table.configManage.createTime')" 
+              <el-table-column
+                :label="$t('table.configManage.createTime')"
                 min-width="70px">
                 <template slot-scope="scope">
                   <span>{{ scope.row.createTime }}</span>
@@ -122,6 +122,17 @@
       }
     },
     created() {
+      if (!this.$route.query.id) {
+        const self = this;
+        this.$message({
+          message: '请选择指定服务器进行上传',
+          type: 'warning',
+          onClose() {
+            self.$router.push({ path: '/config/index' });
+          }
+        });
+        return;
+      }
       this.getList();
       clearInterval(this.timer)
       this.timer = null
@@ -216,7 +227,7 @@
       setTimer(){
         this.timer = setInterval(() => {
           this.getList()
-        },10000)
+        }, 10000)
       }
     }
   }
