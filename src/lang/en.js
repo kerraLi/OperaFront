@@ -344,7 +344,9 @@ export default {
       downloadTime: 'Download Time',
       headTime: 'Head Time',
       downloadSize: 'Download Size',
-      downloadSpeed: 'Download Speed'
+      downloadSpeed: 'Download Speed',
+      buildButton: 'Build Information',
+      buildInfo: 'Build Information'
     },
     serverInfo: {
       name: 'Name',
@@ -360,8 +362,6 @@ export default {
       runResult: 'runResult',
       createTime: 'createTime',
       downloadSpeed: 'Download Speed',
-      buildButton: 'Build Information',
-      buildInfo: 'Build Information'
     }
   },
   errorLog: {

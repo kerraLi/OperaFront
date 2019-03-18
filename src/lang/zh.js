@@ -344,7 +344,9 @@ export default {
       downloadTime: '下载时间',
       headTime: '首字节时间',
       downloadSize: '下载大小',
-      downloadSpeed: '下载速度'
+      downloadSpeed: '下载速度',
+      buildButton: '如何部署',
+      buildInfo: '部署说明'
     },
     serverInfo: {
       name: '名称',
@@ -360,8 +362,6 @@ export default {
       runResult: '运行结果',
       createTime: '上传时间',
       downloadSpeed: '下载速度',
-      buildButton: '如何部署',
-      buildInfo: '部署说明'
     }
   },
   errorLog: {
