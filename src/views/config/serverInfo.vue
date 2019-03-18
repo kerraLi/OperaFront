@@ -1,32 +1,37 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button 
-        class="filter-item" 
-        style="margin-left: 10px;" 
-        type="primary" 
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
         icon="el-icon-edit"
         @click="add">{{ $t('table.add') }}
       </el-button>
-      <el-input 
-        v-model="temp.name" 
-        :placeholder="$t('table.serverInfo.name')" 
-        style="width: 200px; margin-left:30px" 
+      <el-input
+        v-model="temp.name"
+        :placeholder="$t('table.serverInfo.name')"
+        class="filter-item"
+        style="width: 200px; margin-left:30px"
+        clearable
         @keyup.enter.native="search"/>
-      <span>{{ $t('table.serverInfo.operator') }} :</span>
-      <el-select 
-        v-model="temp.operator" 
-        clearable >
+      <el-select
+        v-model="temp.operator"
+        :placeholder="$t('table.serverInfo.operator')"
+        class="filter-item"
+        clearable>
         <el-option
           v-for="item in options"
           :key="item.value"
           :label="item.label"
           :value="item.value"/>
       </el-select>
-      <el-button 
-        type="primary" 
-        icon="el-icon-search" 
-        @click="search" >{{ $t('table.search') }}</el-button>
+      <el-button
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="search">{{ $t('table.search') }}
+      </el-button>
     </div>
 
     <el-table
@@ -38,50 +43,50 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column 
-        :label="$t('table.id')" 
-        prop="id" 
-        align="center" 
-        width="65" 
+      <el-table-column
+        :label="$t('table.id')"
+        prop="id"
+        align="center"
+        width="65"
         type="index"/>
-      <el-table-column 
-        :label="$t('table.serverInfo.name')" 
+      <el-table-column
+        :label="$t('table.serverInfo.name')"
         min-width="80px">
         <template slot-scope="scope">
-          <span 
-            class="link-type" 
+          <span
+            class="link-type"
             @click="update(scope.row)">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.serverInfo.ip')" 
+      <el-table-column
+        :label="$t('table.serverInfo.ip')"
         min-width="80px">
         <template slot-scope="scope">
-          <span >{{ scope.row.ip }}</span>
+          <span>{{ scope.row.ip }}</span>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.serverInfo.operator')" 
+      <el-table-column
+        :label="$t('table.serverInfo.operator')"
         min-width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.operator }}</span>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.serverInfo.state')" 
-        min-width="100px" >
+      <el-table-column
+        :label="$t('table.serverInfo.state')"
+        min-width="100px">
         <template slot-scope="scope">
-          <span 
-            v-if="scope.row.state===1" 
-            class=" el-icon-circle-check-outline " />
-          <span 
-            v-else 
+          <span
+            v-if="scope.row.state===1"
+            class=" el-icon-circle-check-outline "/>
+          <span
+            v-else
             class=" el-icon-circle-close-outline"/>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.serverInfo.createTime')" 
-        class-name="status-col" 
+      <el-table-column
+        :label="$t('table.serverInfo.createTime')"
+        class-name="status-col"
         min-width="100">
         <template slot-scope="scope">
           <!--<span>{{ scope.row.balanceData ? scope.row.balanceData.availableAmount : '-' }}</span>-->
@@ -89,65 +94,64 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.actions')" 
-        align="center" 
-        width="300" 
+      <el-table-column
+        :label="$t('table.actions')"
+        align="center"
+        width="300"
         class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button 
-            type="primary" 
-            size="mini" 
-            @click="update(scope.row)">{{ $t('table.edit') }}</el-button>
-          <el-button 
-            :loading="btnLoading === 'delete-'+ scope.row.id" 
+          <el-button
+            type="primary"
+            size="mini"
+            @click="update(scope.row)">{{ $t('table.edit') }}
+          </el-button>
+          <el-button
+            :loading="btnLoading === 'delete-'+ scope.row.id"
             size="mini"
             type="danger"
             @click="handleDelete(scope.row)">{{ $t('table.delete') }}
           </el-button>
-          <el-button 
-            type="primary" 
-            size="mini" 
-            @click="toUpload(scope.row.id)">{{ $t('table.upload') }}</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="toUpload(scope.row.id)">{{ $t('table.upload') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      :total="total"
-      :page-size="limit"
-      :current-page="page"
-      background
-      layout="total,prev, pager, next"
-      @current-change="handleCurrentChange"
-    />
+    <pagination 
+      v-show="total>0" 
+      :total="total" 
+      :page.sync="listQuery.page" 
+      :limit.sync="listQuery.limit"
+      @pagination="getList"/>
 
-
-    <el-dialog 
-      :title="textMap[dialogStatus]" 
+    <el-dialog
+      :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible">
-      <el-form 
-        ref="dataForm" 
-        :rules="rules" 
-        :model="temp" 
-        label-position="left" 
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
         label-width="150px"
         style="width: 800px; margin-left:50px;">
-        <el-form-item 
-          :label="$t('table.serverInfo.name')" 
+        <el-form-item
+          :label="$t('table.serverInfo.name')"
           prop="userName">
           <el-input v-model="temp.name"/>
         </el-form-item>
-        <el-form-item 
-          :label="$t('table.serverInfo.ip')" 
+        <el-form-item
+          :label="$t('table.serverInfo.ip')"
           prop="accessKeyId">
           <el-input v-model="temp.ip"/>
         </el-form-item>
-        <el-form-item 
-          :label="$t('table.serverInfo.operator')" 
+        <el-form-item
+          :label="$t('table.serverInfo.operator')"
           prop="accessKeySecret">
-          <el-select 
-            v-model="temp.operator" 
+          <el-select
+            v-model="temp.operator"
             :placeholder="temp.operator">
             <el-option
               v-for="item in options"
@@ -157,13 +161,13 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div 
-        slot="footer" 
+      <div
+        slot="footer"
         class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button 
-          :loading="loading" 
-          type="primary" 
+        <el-button
+          :loading="loading"
+          type="primary"
           @click="dialogStatus==='create'?createData():updateData()">
           {{ $t('table.confirm') }}
         </el-button>
@@ -174,16 +178,14 @@
 </template>
 
 
-
-
-
-
 <script>
-  import { serverList,addOrupdate, deleted } from '@/api/configManage'
+  import { serverList, addOrupdate, deleted } from '@/api/configManage'
   import waves from '@/directive/waves' // Waves directive
+  import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
   export default {
     name: 'ConfigManage',
+    components: { Pagination },
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -199,8 +201,12 @@
         tableKey: 0,
         list: null,
         total: 0,
-        page: 1,
-        limit: 10,
+        listQuery: {
+          page: 1,
+          limit: 10,
+          name: undefined,
+          operator: undefined
+        },
         listLoading: true,
         loading: false,
         btnLoading: '',
@@ -221,17 +227,17 @@
         },
         // 校验规则
         rules: {
-          name: [{required: true, message: 'name is required', trigger: 'change'}],
-          ip: [{required: true, message: 'ip is required', trigger: 'change'}],
-          operator: [{required: true, message: 'operator is required', trigger: 'change'}],
+          name: [{ required: true, message: 'name is required', trigger: 'change' }],
+          ip: [{ required: true, message: 'ip is required', trigger: 'change' }],
+          operator: [{ required: true, message: 'operator is required', trigger: 'change' }],
         },
         options: [{
           value: 'AliCloud',
           label: 'AliCloud'
-        },{
+        }, {
           value: 'GodAddy',
           label: 'GodAddy'
-        },{
+        }, {
           value: 'AwsCloud',
           label: 'AwsCloud'
         }],
@@ -244,14 +250,8 @@
     },
     methods: {
       getList() {
-        let pageInfo = {
-          page: this.page,
-          limit: this.limit,
-          name: this.temp.name,
-          operator: this.temp.operator
-        };
         this.listLoading = true;
-        serverList(pageInfo).then(response => {
+        serverList(this.listQuery).then(response => {
           this.list = response.data.result.content;
           this.total = response.data.result.totalElements;
           this.page = parseInt(response.data.result.number) + 1;
@@ -259,14 +259,6 @@
           this.listLoading = false
         })
       },
-      //分页
-      handleCurrentChange: function (currentPage) {
-        this.page = currentPage;
-        this.getList()
-      },
-      // handleFilter() {
-      //   this.getList()
-      // },
       resetTemp() {
         this.temp = {
           id: undefined,
@@ -377,7 +369,7 @@
         });
       },
       toUpload(row) {
-        this.$router.push({path: '/configManage/upload', query: {id: row}});
+        this.$router.push({ path: '/config/upload', query: { id: row } });
       }
     }
   }
