@@ -81,7 +81,7 @@ const permission = {
         }
         // 动态获取*资源*路由
         let resourceRoute = accessedRouters.filter((v) => (v.path === '/resource'))[0];
-        if (resourceRoute && menus.some(menu => 'ResourceData' === menu)) {
+        if (resourceRoute && (roles.includes('admin') || menus.some(menu => 'ResourceData' === menu))) {
           fetchCateList().then(response => {
             let tempList = response.data;
             // 按照id正序排序
