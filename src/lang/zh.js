@@ -90,8 +90,8 @@ export default {
     MonitorDomain: '监控域名',
     MonitorIndex: '实时监控',
     SpeedTest: '速度检测',
-    configManage:'配置管理',
-    uploadConfig:'上传配置文件',
+    ConfigManage:'配置管理',
+    ConfigUpload:'上传配置文件',
     User: '用户管理',
     PasswordReset: '修改密码',
     UserPermission: '权限管理',
@@ -200,6 +200,7 @@ export default {
     clear: '清 空',
     downloadExample: '下载示例',
     HistoricalRecord: '历史记录',
+    Execution:'执行中',
     user: {
       permission: {
         menu: '菜单权限',
@@ -422,6 +423,9 @@ export default {
       fileTooMuch: '请不要上传1M以上大小得文件.',
       dataEmpty: '数据为空,请上传文件.',
       needCabinet: '机柜号不能为空.'
+    },
+    fileUpload:{
+      fileTypeError:'文件类型错误，请重新选择。'
     }
   }
 }

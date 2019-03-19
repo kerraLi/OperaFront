@@ -90,8 +90,8 @@ export default {
     MonitorDomain: 'MonitorDomain',
     MonitorIndex: 'Monitor',
     SpeedTest: 'SpeedTest',
-    configManage:'configManage',
-    uploadConfig:'uploadConfig',
+    ConfigManage:'configManage',
+    ConfigUpload:'uploadConfig',
     User: 'UserManage',
     PasswordReset: 'PasswordReset',
     UserPermission: 'Permissions',
@@ -200,6 +200,7 @@ export default {
     clear: 'Clear',
     downloadExample: 'Download Example',
     HistoricalRecord:'HistoricalRecord',
+    Execution:'Execution',
     user: {
       permission: {
         menu: 'Menu Permission',
@@ -422,6 +423,9 @@ export default {
       fileTooMuch: 'Please do not upload files larger than 1m in size.',
       dataEmpty: 'Hardware data is empty, please upload.',
       needCabinet: 'Cabinet can not be empty.'
+    },
+    fileUpload:{
+      fileTypeError:'File type error, please re-select.'
     }
   }
 }

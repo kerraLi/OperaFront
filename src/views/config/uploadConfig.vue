@@ -12,6 +12,15 @@
         type="primary"
         size="mini"
         @click="uploadFile">{{ $t('table.upload') }}</el-button>
+
+      <el-select v-model="fileType" placeholder="请选择文件类型" class="app-container">
+        <el-option
+          v-for="item in typeOptions"
+          :key="item.fileType"
+          :label="item.label"
+          :value="item.fileType">
+        </el-option>
+      </el-select>
     </div>
 
     <el-row :gutter="24">
@@ -67,8 +76,11 @@
                   <span
                     v-if="scope.row.state===1"
                     class=" el-icon-circle-check-outline "/>
+                  <el-tag type="info"
+                    v-if="scope.row.state===2"
+                  >{{$t('table.Execution')}}</el-tag>
                   <span
-                    v-else
+                    v-if="scope.row.state===0"
                     class=" el-icon-circle-close-outline"/>
                 </template>
               </el-table-column>
@@ -79,8 +91,11 @@
                   <span
                     v-if="scope.row.runResult===1"
                     class=" el-icon-circle-check-outline "/>
+                  <el-tag type="info"
+                          v-if="scope.row.runResult===2"
+                  >{{$t('table.Execution')}}</el-tag>
                   <span
-                    v-else
+                    v-if="scope.row.runResult===0"
                     class=" el-icon-circle-close-outline"/>
                 </template>
               </el-table-column>
@@ -103,9 +118,33 @@
   import {uploadFile, list} from '@/api/configManage'
   import MarkdownEditor from '@/components/MarkdownEditor'
 
+  const typeOptions = [{
+    fileType: 'nginx-http',
+      label: 'nginx-http'
+    }, {
+    fileType: 'nginx-https',
+      label: 'nginx-https'
+    }, {
+    fileType: 'cert-key',
+      label: 'cert-key'
+    }, {
+    fileType: 'cert-crt',
+      label: 'cert-crt'
+    }, {
+    fileType: 'rewrite-rule',
+      label: 'rewrite-rule'
+    }, {
+    fileType: 'config-lua',
+    label: 'config-lua'
+    }, {
+    fileType: 'filebeat-yml',
+    label: 'filebeat-yml'
+    }];
+
   export default {
     name: "UploadConfig",
     components: {MarkdownEditor},
+
     data() {
       return {
         id: this.$route.query.id,
@@ -113,9 +152,11 @@
         content: null,
         fileName: null,
         flg: true,
-        map1: new Map([['http_proxy.conf', 'nginx-http'], ['https_proxy.conf', 'nginx-https'],
-          ['cert.key', 'cert-key'], ['cert.crt', 'cert-crt'], ['rewrite.rule', 'rewrite-rule'],
-          ['config.lua', 'config-lua'], ['filebeat.yml', 'filebeat-yml']]),
+        typeOptions,
+        fileType:null,
+        map1: new Map([['nginx-http','conf'], ['nginx-https','conf'],
+          ['cert-key','key'], ['cert-crt','crt'], ['rewrite-rule','rule'],
+          ['config-lua','lua'], ['filebeat-yml','yml']]),
         tableData: null,
         timer: null,//定时刷新历史记录
         loading:false,
@@ -134,27 +175,27 @@
         return;
       }
       this.getList();
-      clearInterval(this.timer)
-      this.timer = null
+      clearInterval(this.timer);
+      this.timer = null;
       this.setTimer()
     },
     destroyed(){
-      clearInterval(this.timer)
+      clearInterval(this.timer);
       this.timer = null
     },
     methods: {
       getList() {
         let data = {
           serverId: this.id
-        }
+        };
         list(data).then(response => {
           this.tableData = response.data.result
         })
       },
       addFile(file) {
         return new Promise(function (resolve) {
-          let reader = new FileReader()
-          reader.readAsText(file,'utf-8')
+          let reader = new FileReader();
+          reader.readAsText(file,'utf-8');
           reader.onload = function () {
             resolve(this.result)
           }
@@ -165,9 +206,11 @@
         // console.log(this.map1.get('Michael'))
         let self = this;
         this.addFile(this.file).then(function (result) {
-          self.fileName = self.file.name;
-          if (self.fileName == "filebeat.yaml" || self.fileName == "config.lua" || self.fileName == "https_proxy.conf" || self.fileName == "proxy.conf" || self.fileName == "rewrite.rule" || self.fileName == "http_proxy.conf") {
-            self.flg = false
+          self.fileName =self.file.name;
+          let suffix = self.file.name.split(".")[1];
+          console.log(suffix);
+          if (suffix == "yaml" || suffix == "lua" || suffix == "conf" || suffix == "rule") {
+            self.flg = false;
             self.content = result;
           } else {
             self.flg = true
@@ -186,9 +229,19 @@
         var blob = new Blob([this.content], {type: "text/plain"});
         var file = new File([blob], name);
         let param = new FormData();
-        param.append("fileType", this.map1.get(name));
+        let suffix = name.split(".")[1];
+        console.log(suffix);
+        console.log(this.fileType);
+        if(suffix != this.map1.get(this.fileType)){
+          this.$alert(this.$t('message.fileUpload.fileTypeError'), this.$t('message.confirmTitle'), {
+            confirmButtonText: this.$t('message.confirm'),
+          });
+          this.loading = false;
+          return;
+        }
+        param.append("fileType", this.fileType);
         param.append("id", this.id);
-        if (name == "filebeat.yaml" || name == "config.lua" || name == "https_proxy.conf" || name == "proxy.conf" || name == "rewrite.rule" || name == "http_proxy.conf") {
+        if (this.fileType == "nginx-http" || this.fileType == "nginx-https") {
           param.append('file', file);
           this.flg = false;
         } else {
