@@ -76,9 +76,8 @@
                   <span
                     v-if="scope.row.state===1"
                     class=" el-icon-circle-check-outline "/>
-                  <el-tag type="info"
-                    v-if="scope.row.state===2"
-                  >{{$t('table.Execution')}}</el-tag>
+                  <el-tag v-if="scope.row.state===2" type="info"
+                  >{{ $t('table.Execution') }}</el-tag>
                   <span
                     v-if="scope.row.state===0"
                     class=" el-icon-circle-close-outline"/>
@@ -91,9 +90,8 @@
                   <span
                     v-if="scope.row.runResult===1"
                     class=" el-icon-circle-check-outline "/>
-                  <el-tag type="info"
-                          v-if="scope.row.runResult===2"
-                  >{{$t('table.Execution')}}</el-tag>
+                  <el-tag v-if="scope.row.runResult===2" type="info"
+                  >{{ $t('table.Execution') }}</el-tag>
                   <span
                     v-if="scope.row.runResult===0"
                     class=" el-icon-circle-close-outline"/>
@@ -208,7 +206,6 @@
         this.addFile(this.file).then(function (result) {
           self.fileName =self.file.name;
           let suffix = self.file.name.split(".")[1];
-          console.log(suffix);
           if (suffix == "yaml" || suffix == "lua" || suffix == "conf" || suffix == "rule") {
             self.flg = false;
             self.content = result;
@@ -230,8 +227,6 @@
         var file = new File([blob], name);
         let param = new FormData();
         let suffix = name.split(".")[1];
-        console.log(suffix);
-        console.log(this.fileType);
         if(suffix != this.map1.get(this.fileType)){
           this.$alert(this.$t('message.fileUpload.fileTypeError'), this.$t('message.confirmTitle'), {
             confirmButtonText: this.$t('message.confirm'),
