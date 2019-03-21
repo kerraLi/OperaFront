@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input placeholder="Key" v-model="listQuery.key" style="width: 200px;" class="filter-item"
+      <el-input placeholder="Key" v-model="listQuery.key" style="width: 200px;" clearable class="filter-item"
                 @keyup.enter.native="handleFilter"/>
       <el-select v-model="listQuery.status" placeholder="Status" clearable class="filter-item"
                  style="width: 130px">
@@ -20,12 +20,12 @@
         {{ $t('table.search') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-check"
-                 :loading="btnLoading === 'allDeprecated'"
+                 :loading="btnLoading === 'allmark'"
                  @click="handleModifyMarkedAll(true)">
         {{ $t('table.allDeprecated') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-close"
-                 :loading="btnLoading === 'allNoDeprecated'"
+                 :loading="btnLoading === 'allunmark'"
                  @click="handleModifyMarkedAll(false)">
         {{ $t('table.allNoDeprecated') }}
       </el-button>
@@ -86,7 +86,7 @@
           <el-tag type="danger" v-if="scope.row.alertMarked">弃用数据</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.status')" width="100px">
+      <el-table-column :label="$t('table.status')" min-width="100px" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
@@ -113,7 +113,7 @@
 
 <script>
   import { fetchDomainList } from '@/api/go'
-  import { mark, unmark, markAll, unmarkAll } from '@/api/common'
+  import { ignoreSet, ignoreSetBatch } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -121,7 +121,7 @@
   const statusOptionsChoice = [
     { key: 'ACTIVE', display_name: 'ACTIVE' },
     { key: 'OTHERS', display_name: 'OTHERS' }
-  ]
+  ];
 
   export default {
     name: 'ComplexTable',
@@ -139,7 +139,7 @@
       statusFilter(status) {
         const statusMap = {
           ACTIVE: 'success',
-        }
+        };
         return statusMap[status] || 'danger'
       }
     },
@@ -179,67 +179,57 @@
       },
       // 列表数据
       getList() {
-        this.listLoading = true
+        this.listLoading = true;
         fetchDomainList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
+          let res = response.data;
+          this.list = res.result.content;
+          this.total = res.result.totalElements;
+
+          this.listLoading = false;
           this.btnLoading = '';
         })
       },
       // 标记弃用
       handleModifyMarked(row, ifMarked) {
-        if (ifMarked) {
-          this.btnLoading = 'deprecated-' + row.id;
-          mark('go', 'domain', row.id).then(response => {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            })
-            row.alertMarked = ifMarked;
-            setTimeout(() => {
-              this.btnLoading = '';
-            }, 1000);
-          })
-        } else {
-          this.btnLoading = 'noDeprecated-' + row.id;
-          unmark('go', 'domain', row.id).then(response => {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-            row.alertMarked = ifMarked;
-            setTimeout(() => {
-              this.btnLoading = '';
-            }, 1000);
-          })
-        }
+        let status = ifMarked ? 'mark' : 'unmark';
+        let tmp = {
+          'domain': 'GodaddyDomain',
+          'markKey': 'domainId',
+          'markValue': row['domainId'],
+        };
+        this.btnLoading = status + '-' + row.id;
+        ignoreSet(status, tmp).then(response => {
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+          row.alertMarked = ifMarked;
+          setTimeout(() => {
+            this.btnLoading = '';
+          }, 1000);
+        })
       },
       // 批量标记
       handleModifyMarkedAll(ifMarked) {
-        this.listLoading = true
-        const ids = this.checkList.map((c) => {
-          return c.id;
+        this.listLoading = true;
+        const tmps = this.checkList.map((c) => {
+          return {
+            'domain': 'GodaddyDomain',
+            'markKey': 'domainId',
+            'markValue': c['domainId'],
+          };
         });
-        if (ifMarked) {
-          this.btnLoading = 'allDeprecated';
-          markAll('go', 'domain', ids).then(response => {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-            this.getList()
-          })
-        } else {
-          this.btnLoading = 'allNoDeprecated';
-          unmarkAll('go', 'domain', ids).then(response => {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-            this.getList()
-          })
-        }
+        let status = ifMarked ? 'mark' : 'unmark';
+        this.btnLoading = 'all' + status;
+        ignoreSetBatch(status, tmps).then(response => {
+          this.$notify({
+            title: this.$t('message.success'),
+            message: this.$t('message.operSuccess'),
+            type: 'success',
+            duration: 2000
+          });
+          this.getList()
+        });
       },
       // 搜索
       handleFilter() {

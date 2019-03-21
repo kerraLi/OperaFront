@@ -244,8 +244,9 @@
       getList() {
         this.listLoading = true;
         fetchCdnRefreshList(this.listQuery).then(response => {
-          this.list = response.data.items;
-          this.total = response.data.total;
+          let res = response.data;
+          this.list = res.result.content;
+          this.total = res.result.totalElements;
           this.listLoading = false;
           this.btnLoading = '';
         })

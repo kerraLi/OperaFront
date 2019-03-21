@@ -150,14 +150,16 @@ export function updateCdnRefreshTask(id) {
     method: 'get'
   })
 }
+
 //查询scdn列表
 export function scdnList(data) {
   return request({
-    url: '/ali/scdn/list/' + data.page+"/"+data.limit,
+    url: '/ali/scdn/list/' + data.page + "/" + data.limit,
     method: 'post',
     data,
   })
 }
+
 //更新弃用状态
 export function scdnUpdateAbandon(data) {
   return request({
@@ -166,6 +168,7 @@ export function scdnUpdateAbandon(data) {
     data,
   })
 }
+
 //刷新任务
 export function createScdnRefresh(data) {
   return request({
@@ -190,7 +193,7 @@ export function refreshScdnList(data) {
 //获取阿里最新刷新（预热）状态
 export function updateScdnRefreshTask(data) {
   return request({
-    url: '/ali/scdn/updateScdn/'+data,
+    url: '/ali/scdn/updateScdn/' + data,
     method: 'post',
   })
 }

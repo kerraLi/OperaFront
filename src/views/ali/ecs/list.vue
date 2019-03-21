@@ -8,7 +8,7 @@
         <el-option v-for="item in statusOptionsChoice" :key="item.key" :label="item.display_name"
                    :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.lockReason" multiple placeholder="LockReason" class="filter-item">
+      <el-select v-model="listQuery.lockReason" placeholder="LockReason" class="filter-item">
         <el-option
           v-for="item in lockReasonOptionsChoice"
           :key="item.key"
@@ -27,12 +27,12 @@
         {{ $t('table.search') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-check"
-                 :loading="btnLoading === 'allDeprecated'"
+                 :loading="btnLoading === 'allmark'"
                  @click="handleModifyMarkedAll(true)">
         {{ $t('table.allDeprecated') }}
       </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-close"
-                 :loading="btnLoading === 'allNoDeprecated'"
+                 :loading="btnLoading === 'allunmark'"
                  @click="handleModifyMarkedAll(false)">
         {{ $t('table.allNoDeprecated') }}
       </el-button>
@@ -104,7 +104,7 @@
           </p>
           <p v-if="scope.row.lockReason" v-for="lock in scope.row.lockReason.split('|')">
             <el-tag type="danger">
-            {{ lock }}
+              {{ lock }}
             </el-tag>
           </p>
         </template>
@@ -238,7 +238,7 @@
 
 <script>
   import { fetchEcsList, actionEcsStatus, updateEcsStatue, perPayEcs } from '@/api/ali'
-  import { mark, unmark, markAll, unmarkAll } from '@/api/common'
+  import { ignoreSet, ignoreSetBatch } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -354,21 +354,13 @@
       // 列表数据
       getList() {
         this.listLoading = true;
-        fetchEcsList(this.beforeFetch(this.listQuery)).then(response => {
-          this.list = response.data.items;
-          this.total = response.data.total;
+        fetchEcsList(this.listQuery).then(response => {
+          let res = response.data;
+          this.list = res.result.content;
+          this.total = res.result.totalElements;
           this.listLoading = false;
           this.btnLoading = '';
         })
-      },
-      // 数据转换
-      beforeFetch(obj) {
-        // 深度赋值：解决引用赋值问题=》不改变原有this.listQuery
-        let tmp = Object.assign({}, obj);
-        if (tmp.lockReason) {
-          tmp.lockReason = tmp.lockReason.join(',');
-        }
-        return tmp;
       },
       // 费用信息窗口
       handlePayInfo(row) {
@@ -438,57 +430,47 @@
       },
       // 标记弃用
       handleModifyMarked(row, ifMarked) {
-        if (ifMarked) {
-          this.btnLoading = 'deprecated-' + row.id;
-          mark('ali', 'ecs', row.id).then(response => {
-            this.$message({
-              message: this.$t('message.operSuccess'),
-              type: 'success'
-            });
-            row.alertMarked = ifMarked;
-            setTimeout(() => {
-              this.btnLoading = '';
-            }, 1000);
-          })
-        } else {
-          this.btnLoading = 'noDeprecated-' + row.id;
-          unmark('ali', 'ecs', row.id).then(response => {
-            this.$message({
-              message: this.$t('message.operSuccess'),
-              type: 'success'
-            });
-            row.alertMarked = ifMarked;
-            setTimeout(() => {
-              this.btnLoading = '';
-            }, 1000);
-          })
-        }
+        let status = ifMarked ? 'mark' : 'unmark';
+        let tmp = {
+          'domain': 'AliEcs',
+          'markKey': 'instanceId',
+          'markValue': row['instanceId'],
+        };
+        this.btnLoading = status + '-' + row.id;
+        ignoreSet(status, tmp).then(response => {
+          this.$notify({
+            title: this.$t('message.success'),
+            message: this.$t('message.operSuccess'),
+            type: 'success',
+            duration: 2000
+          });
+          row.alertMarked = ifMarked;
+          setTimeout(() => {
+            this.btnLoading = '';
+          }, 1000);
+        });
       },
       // 批量标记
       handleModifyMarkedAll(ifMarked) {
         this.listLoading = true;
-        const ids = this.checkList.map((c) => {
-          return c.id;
+        const tmps = this.checkList.map((c) => {
+          return {
+            'domain': 'AliEcs',
+            'markKey': 'instanceId',
+            'markValue': c['instanceId'],
+          };
         });
-        if (ifMarked) {
-          this.btnLoading = 'allDeprecated';
-          markAll('ali', 'ecs', ids).then(response => {
-            this.$message({
-              message: this.$t('message.operSuccess'),
-              type: 'success'
-            });
-            this.getList()
-          })
-        } else {
-          this.btnLoading = 'allNoDeprecated';
-          unmarkAll('ali', 'ecs', ids).then(response => {
-            this.$message({
-              message: this.$t('message.operSuccess'),
-              type: 'success'
-            });
-            this.getList()
-          })
-        }
+        let status = ifMarked ? 'mark' : 'unmark';
+        this.btnLoading = 'all' + status;
+        ignoreSetBatch(status, tmps).then(response => {
+          this.$notify({
+            title: this.$t('message.success'),
+            message: this.$t('message.operSuccess'),
+            type: 'success',
+            duration: 2000
+          });
+          this.getList()
+        });
       },
       // 启动 & 重启 & 停止 & 释放
       handleStatus(row, action) {

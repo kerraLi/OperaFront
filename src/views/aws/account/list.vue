@@ -151,11 +151,11 @@
         this.passwordType = this.passwordType === 'password' ? '' : 'password';
       },
       getList() {
-        this.listLoading = true
+        this.listLoading = true;
         fetchAccountList().then(response => {
-          this.list = response.data;
-          this.total = response.data.length;
-
+          let res = response.data;
+          this.list = res.result;
+          this.total = res.result.length;
           // Just to simulate the time of the request
           this.listLoading = false
         }).catch(() => {

@@ -94,7 +94,7 @@
 
 <script>
   import { fetchAccountList, createAliAccount, updateAliAccount, deleteAliAccount } from '@/api/ali'
-  import { mark, unmark } from '@/api/common'
+  import { ignoreSet } from '@/api/common'
   import waves from '@/directive/waves' // Waves directive
 
   export default {
@@ -175,8 +175,9 @@
       getList() {
         this.listLoading = true
         fetchAccountList().then(response => {
-          this.list = response.data
-          this.total = response.data.length
+          let res = response.data;
+          this.list = res.result;
+          this.total = res.result.length;
           this.listLoading = false
         })
       },
@@ -195,8 +196,8 @@
       // 新建窗口
       handleCreate() {
         this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
+        this.dialogStatus = 'create';
+        this.dialogFormVisible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -278,35 +279,24 @@
       // 报警开关
       handleSwitchMark(row) {
         this.listLoading = true;
-        if (row.alertMarked) {
-          //打开报警=》删除mark
-          unmark('ali', 'account', row.id).then(response => {
-            this.$notify({
-              title: this.$t('message.success'),
-              message: this.$t('message.operSuccess'),
-              type: 'success',
-              duration: 2000
-            });
-            row.alertMarked = !row.alertMarked;
-            setTimeout(() => {
-              this.listLoading = false;
-            }, 1000);
-          })
-        } else {
-          //关闭报警=》设置mark
-          mark('ali', 'account', row.id).then(response => {
-            this.$notify({
-              title: this.$t('message.success'),
-              message: this.$t('message.operSuccess'),
-              type: 'success',
-              duration: 2000
-            });
-            row.alertMarked = !row.alertMarked;
-            setTimeout(() => {
-              this.listLoading = false;
-            }, 1000);
-          })
-        }
+        let status = row.alertMarked ? 'unmark' : 'mark';
+        let tmp = {
+          'domain': 'AliAccount',
+          'markKey': 'accessKeyId',
+          'markValue': row['accessKeyId'],
+        };
+        ignoreSet(status, tmp).then(response => {
+          this.$notify({
+            title: this.$t('message.success'),
+            message: this.$t('message.operSuccess'),
+            type: 'success',
+            duration: 2000
+          });
+          row.alertMarked = !row.alertMarked;
+          setTimeout(() => {
+            this.listLoading = false;
+          }, 1000);
+        });
       }
     }
   }

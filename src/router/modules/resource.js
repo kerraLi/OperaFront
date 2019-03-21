@@ -4,14 +4,6 @@ import Layout from '@/views/layout/Layout'
 // import { fetchCateList } from '@/api/resource'
 
 let tmpTree = [];
-// tmpTree.push({
-//   path: 'hardware/list',
-//   component: () => import('@/views/resource/hardware'),
-//   name: 'Hardware',
-//   meta: {
-//     title: 'Hardware',
-//   }
-// });
 
 tmpTree.push({
   path: 'cate',
