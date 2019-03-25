@@ -248,35 +248,43 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'point',
-        component: () => import('@/views/monitor/point'),
-        name: 'MonitorPoint',
+        path: 'time/point',
+        component: () => import('@/views/monitor/time/point'),
+        name: 'TimeMonitorPoint',
         meta: {
-          title: 'MonitorPoint',
+          title: 'TimeMonitorPoint',
         }
       },
       {
-        path: 'domain',
-        component: () => import('@/views/monitor/domain'),
-        name: 'MonitorDomain',
+        path: 'domain/point',
+        component: () => import('@/views/monitor/domain/point'),
+        name: 'DomainMonitorPoint',
         meta: {
-          title: 'MonitorDomain',
+          title: 'DomainMonitorPoint',
         }
       },
       {
-        path: 'index',
-        component: () => import('@/views/monitor/monitor'),
-        name: 'MonitorIndex',
+        path: 'domain/domain',
+        component: () => import('@/views/monitor/domain/domain'),
+        name: 'DomainMonitorDomain',
         meta: {
-          title: 'MonitorIndex',
+          title: 'DomainMonitorDomain',
         }
       },
       {
-        path: 'speed',
-        component: () => import('@/views/monitor/speed'),
-        name: 'SpeedTest',
+        path: 'domain/index',
+        component: () => import('@/views/monitor/domain/monitor'),
+        name: 'DomainMonitorIndex',
         meta: {
-          title: 'SpeedTest',
+          title: 'DomainMonitorIndex',
+        }
+      },
+      {
+        path: 'domain/speed',
+        component: () => import('@/views/monitor/domain/speed'),
+        name: 'DomainSpeedTest',
+        meta: {
+          title: 'DomainSpeedTest',
         }
       }
     ]
