@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 不再使用
+ */
 export function fetchNum() {
   return request({
     url: '/dash/number',

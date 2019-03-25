@@ -31,24 +31,21 @@ function message(data) {
       "</div>";
   }
   // Notification =》 this.$notify
-  dialogArr.push(Vue.prototype.$notify({
+  Vue.prototype.$notify({
     title: data.title,
     position: 'bottom-right',
-    duration: 0,
+    duration: 3000,
     // 点击事件
     dangerouslyUseHTMLString: true,
     message: mHtml,
     // * 对比redirectMessage(data.id, data.themeId)
     onClick: redirectMessage.bind(this, data.id, data.themeId)
-  }));
+  });
   // 增加消息数量
   store.dispatch('AddMessageNum', 1);
 }
 
 function redirectMessage(id, themeId) {
-  for (let i = 0; i < dialogArr.length; i++) {
-    dialogArr[i].close();
-  }
   // params 注意大小写正确
   Vue.prototype.$nextTick(() => {
     router.push({
@@ -62,7 +59,6 @@ function redirectMessage(id, themeId) {
   })
 }
 
-const dialogArr = [];
 const messageMusic = new Audio("../../static/audio/message.mp3");
 
 const websocket = {

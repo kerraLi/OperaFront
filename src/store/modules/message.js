@@ -20,8 +20,8 @@ const message = {
     GetMessageNum({ commit }) {
       return new Promise((resolve, reject) => {
         getNewNumber().then(response => {
-          const data = response.data;
-          commit('SET_NUM', data.number);
+          let res = response.data;
+          commit('SET_NUM', res.result);
           resolve(response)
         }).catch(error => {
           reject(error)

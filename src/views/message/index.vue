@@ -1,49 +1,49 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input 
-        v-model="listQuery.key" 
-        placeholder="Key" 
-        clearable 
-        style="width: 200px;" 
+      <el-input
+        v-model="listQuery.key"
+        placeholder="Key"
+        clearable
+        style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"/>
-      <el-select 
-        v-model="listQuery.status" 
-        placeholder="Status" 
-        clearable 
+      <el-select
+        v-model="listQuery.status"
+        placeholder="Status"
+        clearable
         class="filter-item"
         style="width: 130px">
-        <el-option 
-          v-for="item in statusOptionsChoice" 
-          :key="item.key" 
+        <el-option
+          v-for="item in statusOptionsChoice"
+          :key="item.key"
           :label="item.display_name"
           :value="item.key"/>
       </el-select>
-      <el-select 
-        v-model="listQuery.title" 
-        placeholder="Title" 
-        clearable 
+      <el-select
+        v-model="listQuery.title"
+        placeholder="Title"
+        clearable
         class="filter-item">
-        <el-option 
-          v-for="item in themeOptionsChoice" 
-          :key="item" 
+        <el-option
+          v-for="item in themeOptionsChoice"
+          :key="item"
           :label="item"
           :value="item"/>
       </el-select>
-      <el-button 
-        v-waves 
-        class="filter-item" 
-        type="primary" 
-        icon="el-icon-search" 
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
         @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button 
-        v-waves 
-        class="filter-item" 
-        type="primary" 
-        icon="el-icon-check" 
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-check"
         @click="modifyAllStatus('finish')">
         {{ $t('table.allFinish') }}
       </el-button>
@@ -64,12 +64,12 @@
       />
       <el-table-column type="expand">
         <template slot-scope="props">
-          <div 
-            style="line-height: 30px;font-size: initial;" 
+          <div
+            style="line-height: 30px;font-size: initial;"
             v-html="props.row.message"/>
-          <el-form 
-            label-position="left" 
-            inline 
+          <el-form
+            label-position="left"
+            inline
             class="demo-table-expand">
             <el-form-item label="消息ID">
               <span>{{ props.row.id }}</span>
@@ -89,30 +89,30 @@
             <el-form-item label="主体数据">
               <span>{{ props.row.themeId }}</span>
             </el-form-item>
-            <el-button 
-              v-if="props.row.status ==='new'" 
-              size="mini" 
+            <el-button
+              v-if="props.row.status ==='new'"
+              size="mini"
               type="primary"
               @click="modifyStatus(props.row,'active')">开始
             </el-button>
-            <el-button 
-              v-if="props.row.status !=='finish'" 
-              size="mini" 
+            <el-button
+              v-if="props.row.status !=='finish'"
+              size="mini"
               type="success"
               @click="modifyStatus(props.row,'finish')">完成
             </el-button>
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column 
-        :label="$t('table.id')" 
-        prop="id" 
-        align="center" 
-        width="65" 
+      <el-table-column
+        :label="$t('table.id')"
+        prop="id"
+        align="center"
+        width="65"
         type="index"/>
       <el-table-column
-        label="CreatedTime" 
-        width="200" 
+        label="CreatedTime"
+        width="200"
         align="center"
         prop="createdTime">
         <template slot-scope="scope">
@@ -120,8 +120,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="ModifyTime" 
-        width="200" 
+        label="ModifyTime"
+        width="200"
         align="center"
         prop="modifyTime">
         <template slot-scope="scope">
@@ -129,8 +129,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$t('table.type')" 
-        width="150" 
+        :label="$t('table.type')"
+        width="150"
         align="center"
         prop="title">
         <template slot-scope="scope">
@@ -138,13 +138,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Theme" 
-        width="100" 
+        label="Theme"
+        width="100"
         align="center"
         prop="theme"/>
       <el-table-column
-        label="ThemeId" 
-        width="300" 
+        label="ThemeId"
+        width="300"
         align="center"
         prop="themeId"/>
       <el-table-column
@@ -158,7 +158,7 @@
       </el-table-column>
       <el-table-column
         :label="$t('table.status')"
-        width="100" 
+        width="100"
         align="center"
         prop="status">
         <template slot-scope="scope">
@@ -167,18 +167,18 @@
       </el-table-column>
       <el-table-column
         :label="$t('table.actions')"
-        width="200" 
+        width="200"
         align="center">
         <template slot-scope="scope">
-          <el-button 
-            v-if="scope.row.status ==='new'" 
-            size="mini" 
+          <el-button
+            v-if="scope.row.status ==='new'"
+            size="mini"
             type="primary"
             @click="modifyStatus(scope.row,'active')">开始
           </el-button>
-          <el-button 
-            v-if="scope.row.status !=='finish'" 
-            size="mini" 
+          <el-button
+            v-if="scope.row.status !=='finish'"
+            size="mini"
             type="success"
             @click="modifyStatus(scope.row,'finish')">完成
           </el-button>
@@ -186,10 +186,10 @@
       </el-table-column>
     </el-table>
 
-    <pagination 
-      v-show="total>0" 
-      :total="total" 
-      :page.sync="listQuery.page" 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
       @pagination="getList"/>
 
@@ -205,7 +205,7 @@
   const statusOptionsChoice = [
     { key: 'new', display_name: 'new' },
     { key: 'active', display_name: 'active' },
-    { key: 'finished', display_name: 'finished' },
+    { key: 'finish', display_name: 'finish' },
   ];
 
   export default {
@@ -264,7 +264,7 @@
       // 初始化types
       if (!this.themeOptionsChoice) {
         fetchTypes().then(response => {
-          this.themeOptionsChoice = response.data;
+          this.themeOptionsChoice = response.data.result;
         })
       }
     },
@@ -272,8 +272,9 @@
       getList() {
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {
-          this.total = response.data.total;
-          this.list = response.data.items;
+          let res = response.data;
+          this.list = res.result.content;
+          this.total = res.result.totalElements;
           this.listLoading = false;
           // 展开
           const openId = this.$route.params.openId;
