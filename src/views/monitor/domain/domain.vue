@@ -4,6 +4,11 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                  @click="handleCreate">{{ $t('table.add') }}
       </el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-upload"
+                 :loading="btnLoading === 'upload'"
+                 @click="handleSelectFileBefore">
+        {{ $t('table.upload') }}
+      </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
                  :loading="btnLoading === 'allDelete'"
                  @click="handleDeleteAll">
@@ -30,6 +35,11 @@
           <span>{{ scope.row.path }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('table.name')" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
@@ -48,6 +58,9 @@
         <el-form-item :label="$t('table.monitor.domain')" prop="path">
           <el-input v-model="temp.path" placeholder="http://www.baidu.com"/>
         </el-form-item>
+        <el-form-item :label="$t('table.name')" prop="name">
+          <el-input v-model="temp.name" placeholder="域名描述，可为空。"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
@@ -59,19 +72,65 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
                 @pagination="getList"/>
+
+    <el-dialog :title="$t('table.resource.selectFile')" :visible.sync="uploadVisible" width="40%">
+      <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload"/>
+      <el-table
+        :data="uploadList"
+        border
+        fit
+        highlight-current-row
+        row-key="id"
+        style="width: 100%; margin-top: 20px;">
+        <el-table-column :label="$t('table.id')" prop="id" align="center" width="65" type="index"/>
+        <el-table-column :label="$t('table.monitor.domain')" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row['域名'] }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.name')" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row['名称'] }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div
+        slot="footer"
+        class="dialog-footer">
+        <el-button @click="uploadVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button
+          :loading="uploadLoading"
+          type="primary"
+          @click="handleUpload()">
+          {{ $t('table.upload') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { fetchDomainList, saveDomain, deleteDomain, deleteAllDomain } from '@/api/monitor'
+  import { fetchDomainList, uploadDomain, saveDomain, deleteDomain, deleteAllDomain } from '@/api/monitor'
   import waves from '@/directive/waves' // Waves directive
   import Pagination from '@/components/Pagination'
   import Icons from "@/views/svg-icons/index"; // Secondary package based on el-pagination
   import MarkdownViewer from '@/components/MarkdownViewer'
+  import UploadExcelComponent from '@/components/UploadExcel/index.vue'
+
+  const tableHeader = ['域名', '名称'];
+  const tableHeaderColumn = [
+    {
+      old: '域名',
+      new: 'path'
+    }, {
+      old: '名称',
+      new: 'name'
+    }
+  ];
 
   export default {
     name: "MonitorDomain",
-    components: { Icons, Pagination, MarkdownViewer },
+    components: { Icons, Pagination, MarkdownViewer, UploadExcelComponent },
     directives: { waves },
     filters: {
       statusFilter(status) {
@@ -114,6 +173,10 @@
         },
         // 多选标记
         checkList: [],
+        // upload
+        uploadList: [],
+        uploadVisible: false,
+        uploadLoading: false
       }
     },
     created() {
@@ -220,6 +283,73 @@
           this.btnLoading = '';
         })
       },
+      // upload-选择文件窗口
+      handleSelectFileBefore() {
+        this.uploadList = [];
+        this.uploadVisible = true;
+      },
+      // upload-文件上传前校验
+      beforeUpload(file) {
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        if (isLt1M) {
+          return true
+        }
+        this.$message({
+          message: this.$t('message.hardware.fileTooMuch'),
+          type: 'warning'
+        });
+        return false
+      },
+      // upload-文件上传成功后
+      handleSuccess({ results, header }) {
+        // 过滤字段
+        results = results.map((obj) => {
+          let param = {};
+          for (let key in obj) {
+            if (tableHeader.indexOf(key) >= 0) {
+              param[key] = obj[key];
+            }
+          }
+          return param
+        });
+        this.uploadList = results;
+      },
+      // upload-确认上传
+      handleUpload() {
+        if (this.uploadList.length === 0) {
+          this.$message({
+            message: this.$t('message.hardware.dataEmpty'),
+            type: 'warning'
+          });
+          return false
+        }
+        let data = this.handleDataUpload();
+        // 上传数据库
+        this.uploadLoading = true;
+        uploadDomain(data).then(response => {
+          this.$message({
+            message: this.$t('message.operSuccess'),
+            type: 'success'
+          });
+          this.uploadLoading = false;
+          this.uploadVisible = false;
+          this.getList();
+        }).catch(() => {
+          this.uploadLoading = false;
+        })
+      },
+      handleDataUpload() {
+        let tmp = [];
+        this.uploadList.forEach((data) => {
+          let tmpData = {};
+          tableHeaderColumn.forEach((value) => {
+            tmpData[value['new']] = data[value['old']]
+          });
+          tmp.push(tmpData);
+        });
+        console.log(tmp);
+        return tmp;
+      }
     }
   }
 </script>

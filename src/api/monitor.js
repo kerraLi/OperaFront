@@ -52,6 +52,14 @@ export function deleteAllPoint(ids) {
 /**
  * domain
  */
+export function uploadDomain(data) {
+  return request({
+    url: '/monitor/domain/domain/upload',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchDomainList(data) {
   return request({
     url: '/monitor/domain/domain/list',

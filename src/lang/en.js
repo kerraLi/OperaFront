@@ -203,7 +203,8 @@ export default {
     clear: 'Clear',
     downloadExample: 'Download Example',
     HistoricalRecord: 'HistoricalRecord',
-    Execution:'Execution',
+    Execution: 'Execution',
+    name: 'Name',
     user: {
       permission: {
         menu: 'Menu Permission',
@@ -430,8 +431,8 @@ export default {
       dataEmpty: 'Hardware data is empty, please upload.',
       needCabinet: 'Cabinet can not be empty.'
     },
-    fileUpload:{
-      fileTypeError:'File type error, please re-select.'
+    fileUpload: {
+      fileTypeError: 'File type error, please re-select.'
     }
   }
 }
