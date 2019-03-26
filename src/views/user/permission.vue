@@ -158,14 +158,15 @@
       },
       // filter过滤单独处理路由（资源-data）
       filterSpecial(routeArr) {
-        routeArr.forEach((i, c) => {
+        const tempData = Object.assign([], routeArr);
+        tempData.forEach((c, i) => {
           if (c.name === 'Resource' && c.children !== undefined && c.children.length > 0) {
-            routeArr[i] = c.children.filter((r) => {
-              return !(r.code !== 'ResourceUpload' && r.code !== 'ResourceCate')
+            tempData[i]['children'] = c.children.filter((r) => {
+              return !(r.name !== 'ResourceUpload' && r.name !== 'ResourceCate')
             });
           }
         });
-        return routeArr
+        return tempData
       },
       // push过滤单独处理路由（资源-data）
       pushSpecial(routeArr) {
