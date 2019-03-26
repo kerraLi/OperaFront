@@ -273,8 +273,10 @@
         this.dialogStatus = 'create';
         this.dialogFormVisible = true;
         this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys([]);
-          this.$refs['dataForm'].clearValidate()
+          if (this.$refs.tree) {
+            this.$refs.tree.setCheckedKeys([]);
+            this.$refs['dataForm'].clearValidate()
+          }
         })
       },
       // dialog-新建窗口
