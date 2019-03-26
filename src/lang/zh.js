@@ -203,6 +203,7 @@ export default {
     clear: '清 空',
     downloadExample: '下载示例',
     HistoricalRecord: '历史记录',
+    Execution:'执行中',
     user: {
       permission: {
         menu: '菜单权限',
@@ -428,6 +429,9 @@ export default {
       fileTooMuch: '请不要上传1M以上大小得文件.',
       dataEmpty: '数据为空,请上传文件.',
       needCabinet: '机柜号不能为空.'
+    },
+    fileUpload:{
+      fileTypeError:'文件类型错误，请重新选择。'
     }
   }
 }
