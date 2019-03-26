@@ -21,6 +21,11 @@
         </div>
         <permission-table :refresh_count="refreshApi" p_type="api"/>
       </el-tab-pane>
+
+      <!--special log-->
+      <el-tab-pane lazy :label="$t('table.user.permission.special')" name="special">
+        <permission-table :refresh_count="refreshApi" p_type="special"/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>

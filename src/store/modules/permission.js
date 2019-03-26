@@ -15,7 +15,7 @@ function hasPermission(roles, route) {
 }
 
 function hasPermissionByMenus(menus, route) {
-  if (route.name) {
+  if (route.name || (route.children && route.children.length <= 1)) {
     return menus.some(menu => route.name === menu)
   } else {
     return true;
@@ -45,7 +45,6 @@ function filterAsyncRouterByMenus(routes, menus) {
   const res = [];
   routes.forEach(route => {
     const tmp = { ...route };
-    console.log(tmp);
     if (hasPermissionByMenus(menus, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRouterByMenus(tmp.children, menus)

@@ -209,6 +209,7 @@ export default {
       permission: {
         menu: '菜单权限',
         api: '接口权限',
+        special: '特殊权限',
         name: '名 称',
         action: '动 作',
         type: '类 型',

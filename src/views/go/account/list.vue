@@ -25,7 +25,9 @@
           <span>{{ scope.row.accessKeyId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ali.accessKeySecret')" min-width="100px" :render-header="secretHeaderRender">
+      <el-table-column v-if="isShowSecrete"
+                       :label="$t('table.ali.accessKeySecret')" min-width="100px"
+                       :render-header="secretHeaderRender">
         <template slot-scope="scope">
           <span v-if="seeSecret">{{ scope.row.accessKeySecret }}</span>
           <span v-if="!seeSecret">************************</span>
@@ -57,7 +59,9 @@
         <el-form-item :label="$t('table.ali.accessKeyId')" prop="accessKeyId">
           <el-input v-model="temp.accessKeyId"/>
         </el-form-item>
-        <el-form-item :label="$t('table.ali.accessKeySecret')" prop="accessKeySecret">
+        <el-form-item v-if="dialogStatus=== 'create' || isShowSecrete"
+                      :label="$t('table.ali.accessKeySecret')"
+                      prop="accessKeySecret">
           <el-input :type="passwordType" v-model="temp.accessKeySecret">
             <i slot="suffix" class="el-icon-view" @click="openSeeSecret" style="margin-right:10px;cursor:pointer;"></i>
           </el-input>
@@ -99,8 +103,10 @@
         showReviewer: false,
         loading: false,
         btnLoading: '',
+        // 密钥
         seeSecret: false,
         passwordType: 'password',
+        isShowSecrete: false,
         // 新增&编辑 对象
         temp: {
           id: undefined,
@@ -156,9 +162,9 @@
         this.listLoading = true
         fetchAccountList().then(response => {
           let res = response.data;
-          this.list = res.result;
-          this.total = res.result.length;
-
+          this.list = res.result.list;
+          this.total = res.result.list.length;
+          this.isShowSecrete = res.result.isShowSecrete;
           // Just to simulate the time of the request
           this.listLoading = false
         })

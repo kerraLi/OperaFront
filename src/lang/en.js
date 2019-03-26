@@ -209,6 +209,7 @@ export default {
       permission: {
         menu: 'Menu Permission',
         api: 'Api Permission',
+        special: 'Special Permission',
         name: 'Name',
         action: 'Action',
         type: 'Type',

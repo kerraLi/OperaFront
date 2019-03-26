@@ -25,7 +25,9 @@
           <span>{{ scope.row.accessKeyId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ali.accessKeySecret')" min-width="100px" :render-header="secretHeaderRender">
+      <el-table-column v-if="isShowSecrete" column-key="3"
+                       :label="$t('table.ali.accessKeySecret')"
+                       min-width="100px" :render-header="secretHeaderRender">
         <template slot-scope="scope">
           <span v-if="seeSecret">{{ scope.row.accessKeySecret }}</span>
           <span v-if="!seeSecret">************************</span>
@@ -34,7 +36,7 @@
       <el-table-column label="Money" class-name="status-col" min-width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.balanceData ? scope.row.balanceData.availableAmount : '-' }}</span>
-          <el-tag type="danger" v-if="scope.row.alertBalance">{{ $t('table.ali.account.noMoney') }}</el-tag>
+          <el-tag type="danger" v-if="scope.row.isAlertBalance">{{ $t('table.ali.account.noMoney') }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
@@ -44,9 +46,9 @@
       </el-table-column>
       <el-table-column :label="$t('table.alarm')" class-name="status-col" width="100">
         <template slot-scope="scope">
-          <el-tooltip :content="alertFilter(scope.row.alertMarked)" placement="top">
+          <el-tooltip :content="alertFilter(scope.row.isAlertMarked)" placement="top">
             <el-switch
-              :value="!scope.row.alertMarked"
+              :value="!scope.row.isAlertMarked"
               @change="handleSwitchMark(scope.row)"
               active-color="#13ce66"
               inactive-color="#ff4949">
@@ -75,7 +77,9 @@
         <el-form-item :label="$t('table.ali.accessKeyId')" prop="accessKeyId">
           <el-input v-model="temp.accessKeyId"/>
         </el-form-item>
-        <el-form-item :label="$t('table.ali.accessKeySecret')" prop="accessKeySecret">
+        <el-form-item v-if="dialogStatus=== 'create' || isShowSecrete"
+                      :label="$t('table.ali.accessKeySecret')"
+                      prop="accessKeySecret">
           <el-input :type="passwordType" v-model="temp.accessKeySecret">
             <i slot="suffix" class="el-icon-view" @click="openSeeSecret" style="margin-right:10px;cursor:pointer;"></i>
           </el-input>
@@ -117,8 +121,10 @@
         listLoading: true,
         loading: false,
         btnLoading: '',
+        // 密钥
         seeSecret: false,
         passwordType: 'password',
+        isShowSecrete: false,
         // 新增&编辑 对象
         temp: {
           id: undefined,
@@ -128,7 +134,7 @@
           balanceData: {
             availableAmount: 0.00
           },
-          alertBalance: false,
+          isAlertBalance: false,
           status: 'normal',
         },
         dialogFormVisible: false,
@@ -176,8 +182,9 @@
         this.listLoading = true
         fetchAccountList().then(response => {
           let res = response.data;
-          this.list = res.result;
-          this.total = res.result.length;
+          this.list = res.result.list;
+          this.total = res.result.list.length;
+          this.isShowSecrete = res.result.isShowSecrete;
           this.listLoading = false
         })
       },
@@ -279,7 +286,7 @@
       // 报警开关
       handleSwitchMark(row) {
         this.listLoading = true;
-        let status = row.alertMarked ? 'unmark' : 'mark';
+        let status = row.isAlertMarked ? 'unmark' : 'mark';
         let tmp = {
           'domain': 'AliAccount',
           'markKey': 'accessKeyId',
@@ -292,7 +299,7 @@
             type: 'success',
             duration: 2000
           });
-          row.alertMarked = !row.alertMarked;
+          row.isAlertMarked = !row.isAlertMarked;
           setTimeout(() => {
             this.listLoading = false;
           }, 1000);
