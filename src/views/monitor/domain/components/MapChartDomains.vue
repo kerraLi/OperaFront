@@ -70,6 +70,7 @@
       // 初始化
       initChart() {
         this.chart = echarts.init(this.$el, 'macarons');
+        console.log(this.chartData);
         this.setOptions(this.chartData)
       },
       setOptions(list) {
@@ -95,28 +96,14 @@
             text: '网站速度监控',
             left: 'center'
           },
-          legend: {
-            orient: 'vertical',
-            left: 'left',
-          },
           tooltip: {
             trigger: 'item',
             formatter: function (params) {
               if (params.name === '') {
                 return '-'
               }
-              let selects = self.chart.getOption().legend[0].selected;
               let value = (params.value === undefined || params.value === '-') ? '-' : params.value.toFixed(2);
               let res = params.name + '<br/>平均时间:' + value + ' ms<br/>';
-              for (let i = 0; i < series.length; i++) {
-                for (let j = 0; j < series[i].data.length; j++) {
-                  if (series[i].data[j].name === params.name
-                    && (selects[series[i].name] === undefined || selects[series[i].name])
-                  ) {
-                    res += series[i].name + ' : ' + series[i].data[j].value + ' ms</br>';
-                  }
-                }
-              }
               return res;
             }
           },

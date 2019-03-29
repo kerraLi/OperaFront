@@ -347,7 +347,7 @@ export default {
     monitor: {
       location: '地区',
       address: '地理位置',
-      path: '调用路由',
+      path: '地 址',
       domain: '域 名',
       operator: '运营商',
       inputFindPath: '请输入查询域名.',

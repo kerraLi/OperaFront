@@ -2,7 +2,7 @@
   <div class="app-container">
     <div v-if="!hasResult" class="page-center">
       <div class="bullshit">
-        <div class="bullshit__oops">{{ $t('route.SpeedTest') }}</div>
+        <div class="bullshit__oops">{{ $t('route.DomainSpeedTest') }}</div>
         <div class="bullshit__input">
           <el-input :placeholder="$t('table.monitor.inputFindPath')"
                     v-model="url"
@@ -20,7 +20,7 @@
     <div v-else>
       <div style="width: 50%;margin: 0 auto 40px auto;">
         <div class="bullshit">
-          <div class="bullshit__oops">{{ $t('route.SpeedTest') }}</div>
+          <div class="bullshit__oops">{{ $t('route.DomainSpeedTest') }}</div>
           <div class="bullshit__input">
             <el-input class="bullshit__input-put" v-model="url" :placeholder="$t('table.monitor.inputFindPath')"
                       @keyup.enter.native="handleFindUrl">
@@ -295,7 +295,7 @@
           for (const v of this.list) {
             if (v.id === pointId) {
               let temp = Object.assign({}, v, JSON.parse(data.result));
-              if (temp['speed_msg'] !== 'success' || temp['parse_msg'] !== 'success') {
+              if (temp['status'] !== 'success') {
                 temp.type = 'error'
               } else {
                 temp.type = 'normal';

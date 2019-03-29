@@ -185,7 +185,7 @@
     methods: {
       getList() {
         this.listLoading = true;
-        fetchDomainList().then(response => {
+        fetchDomainList(this.listQuery).then(response => {
           this.list = response.data.items;
           this.total = response.data.total;
           // Just to simulate the time of the request
