@@ -64,34 +64,7 @@
   import MarkdownViewer from '@/components/MarkdownViewer'
 
   const content = `
-
-### **环境要求**
-* python 2.7.12
-* linux
-* 防火墙开启端口：2019
-### **git**
-\`\`\`
-sudo apt-get update
-sudo apt-get install git
-git clone http://git.laji.in/kerra/testspeed.git
-\`\`\`
-### **建议安装目录**
-\`\`\`
-/var/www/testspeed
-\`\`\`
-### **安装pycurl模块**
-\`\`\`
-sudo apt-get install libssl-dev libcurl4-openssl-dev python-dev
-pip install pycurl
-\`\`\`
-### **安装geoip2**
-\`\`\`
-pip install geoip2
-\`\`\`
-### **后台执行命令**
-\`\`\`
-pip install geoip2
-\`\`\`
+**具体见：**[http://10.10.25.83/devops/yunweiplatform](http://10.10.25.83/devops/yunweiplatform)
 `;
 
   export default {
